@@ -14,6 +14,7 @@ ZENITH_HEADER
 
 class Z80{
 	public:
+		typedef void (Z80::*opcode)(uint8_t);
 		Z80(Z80Memory * ram,Z80Device * io);
 		void executeOneInstruction();
 		void executeXInstructions(int x);
@@ -53,7 +54,8 @@ class Z80{
 		vector<uint16_t*>* regsQQ;
 		bool IFF1,IFF2;
 	private:
-		void extended_operations(uint8_t);
+		opcode * opcodes;
+		#include <CPU/opcodes.hpp>
 		void setC();
 		void setS();
 		void setZ();

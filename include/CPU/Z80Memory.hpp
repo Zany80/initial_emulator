@@ -8,6 +8,7 @@ ZENITH_HEADER
 
 class Z80Memory{
 	public:
+		virtual uint8_t getOpcode(uint16_t address)=0;
 		virtual uint8_t getByte(uint16_t address)=0;
 		virtual void setByte(uint16_t address,uint8_t value)=0;
 		virtual uint16_t getWord(uint16_t address)=0;

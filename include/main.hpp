@@ -16,12 +16,15 @@ class Main{
 		~Main();
 		static int main(int argc,char** argv);
 		int run(int argc,char ** argv);
-	private:
+		static Main * instance;
 		Z80 * cpu;
+	private:
 		RenderWindow * window;
 		Color background;
 		void processEvents();
 };
+
+Main* Main::instance;
 
 ZENITH_FOOTER
 

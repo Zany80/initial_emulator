@@ -16,6 +16,7 @@ class Z80{
 	public:
 		typedef void (Z80::*opcode)(uint8_t);
 		Z80(Z80Memory * ram,Z80Device * io);
+		~Z80();
 		void executeOneInstruction();
 		void executeXInstructions(int x);
 		word getAF();
@@ -32,6 +33,9 @@ class Z80{
 		word getPC();
 		uint8_t getR();
 		uint8_t getI();
+		uint64_t getTStates();
+		friend uint8_t Z80Memory::getByte(uint16_t address);
+		void add_tstates(uint64_t tstates);
 	private:
 		Z80Memory * ram;
 		Z80Device * io;
@@ -53,9 +57,14 @@ class Z80{
 		vector<uint16_t*>* regsDD;
 		vector<uint16_t*>* regsQQ;
 		bool IFF1,IFF2;
-	private:
 		opcode * opcodes;
+		opcode * opcodes_dd;
+		opcode * opcodes_fd;
+		opcode * opcodes_ed;
 		#include <CPU/opcodes.hpp>
+	public:
+		uint64_t tstates;
+	private:
 		void setC();
 		void setS();
 		void setZ();

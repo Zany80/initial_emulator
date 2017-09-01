@@ -39,6 +39,7 @@ int Main::main(int argc,char **argv){
 class DummyMemory : public Z80Memory{
 	public:
 		DummyMemory();
+		uint8_t getOpcode(uint16_t address) override;
 		uint8_t getByte(uint16_t address) override;
 		void setByte(uint16_t address,uint8_t value) override;
 		uint16_t getWord(uint16_t address) override;
@@ -58,11 +59,17 @@ DummyMemory::DummyMemory(){
 
 	};*/
 	memory=new uint8_t[65536]{
-		0x00
+		0x00,0x78,0x3E,0x84
 	};
 }
 
 uint8_t DummyMemory::getByte(uint16_t address){
+	Main::instance->cpu->tstates+=3;
+	return memory[address];
+}
+
+uint8_t DummyMemory::getOpcode(uint16_t address){
+	Main::instance->cpu->tstates+=4;
 	return memory[address];
 }
 
@@ -73,12 +80,13 @@ uint16_t DummyMemory::getWord(uint16_t address){
 }
 
 void DummyMemory::setByte(uint16_t address,uint8_t value){
+	Main::instance->cpu->tstates+=3;
 	memory[address]=value;
 }
 
 void DummyMemory::setWord(uint16_t address,uint16_t value){
-	memory[address]=value&0xFF;
-	memory[address+1]=value>>8;
+	setByte(address,value&0xFF);
+	setByte(address+1,value>>8);
 }
 
 class DummyDevice : public Z80Device{
@@ -88,6 +96,7 @@ class DummyDevice : public Z80Device{
 };
 
 void DummyDevice::out(uint8_t port,uint8_t value){
+	Main::instance->cpu->tstates+=4;
 	if(port==0)
 		cout<<value;
 	else if(port==1)
@@ -97,13 +106,16 @@ void DummyDevice::out(uint8_t port,uint8_t value){
 }
 
 uint8_t DummyDevice::in(uint8_t port){
+	Main::instance->cpu->tstates+=4;
 	return 0;
 };
 
 Main::Main(){
 	window=new RenderWindow(VideoMode(800,600),"Zenith-80");
+	window->setVerticalSyncEnabled(true);
 	background=Color(255,255,255);
 	cpu=new Z80(new DummyMemory(),new DummyDevice());
+	Main::instance=this;
 }
 
 Main::~Main(){
@@ -112,10 +124,10 @@ Main::~Main(){
 
 int Main::run(int argc,char ** argv){
 	while(window->isOpen()){
-		this->processEvents();
 		window->clear(this->background);
 		window->display();
-		cpu->executeXInstructions(100);
+		cpu->executeXInstructions(2000*1000*1000/60);
+		this->processEvents();
 	}
 	return 0;
 }
@@ -126,6 +138,7 @@ void Main::processEvents(){
 		switch(e.type){
 			case Event::Closed:
 				window->close();
+				cout<<cpu->getTStates()<<endl;
 				break;
 			default:
 			//	cout<<"[Event Manager] Received event of type "<<e.type<<endl;

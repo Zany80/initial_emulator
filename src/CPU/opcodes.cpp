@@ -191,45 +191,137 @@ void Z80::ld_NN_DD(uint8_t opcode){
 }
 
 void Z80::ld_NN_IX(uint8_t opcode){
-
+	ram->setWord(ram->getWord(PC.word),IX.word);
+	PC.word+=2;
 }
 
 void Z80::ld_NN_IY(uint8_t opcode){
-
+	ram->setWord(ram->getWord(PC.word),IY.word);
+	PC.word+=2;
 }
 
 void Z80::ldSPHL(uint8_t opcode){
-
+	//takes 6 tstates for some reason. Since 4 are needed for opcode fetch, add 2
+	tstates+=2;
+	SP.word=HL.word;
 }
 
 void Z80::ldSPIX(uint8_t opcode){
-
+	//takes 6 tstates for some reason. Since 4 are needed for opcode fetch, add 2
+	tstates+=2;
+	SP.word=IX.word;
 }
 
 void Z80::ldSPIY(uint8_t opcode){
-
+	//takes 6 tstates for some reason. Since 4 are needed for opcode fetch, add 2
+	tstates+=2;
+	SP.word=IY.word;
 }
 
 void Z80::pushQQ(uint8_t opcode){
-
+	//takes 11 tstates. opcode fetch=4, push=ram->setWord=2x ram->setByte=6, add 1
+	tstates++;
+	push(*((*regsQQ)[(opcode&0x30)>>4]));
 }
 
 void Z80::pushIX(uint8_t opcode){
-
+	//takes 15 tstates. 2x opcode fetch=8, push=ram->setWord=2x ram->setByte=6, add 1
+	tstates++;
+	push(IX.word);
 }
 
 void Z80::pushIY(uint8_t opcode){
-
+	//takes 15 tstates. 2x opcode fetch=8, push=ram->setWord=2x ram->setByte=6, add 1
+	tstates++;
+	push(IY.word);
 }
 
 void Z80::popQQ(uint8_t opcode){
-
+	*((*regsQQ)[(opcode&0x30)>>4])=pop();
 }
 
 void Z80::popIX(uint8_t opcode){
-
+	IX.word=pop();
 }
 
 void Z80::popIY(uint8_t opcode){
+	IY.word=pop();
+}
 
+//exchange, block transfer, and search group
+
+void Z80::exDEHL(uint8_t opcode){
+
+}
+
+void Z80::exAFAF2(uint8_t opcode){
+
+}
+
+void Z80::exx(uint8_t opcode){
+
+}
+
+void Z80::ex_SP_HL(uint8_t opcode){
+
+}
+
+void Z80::ex_SP_IX(uint8_t opcode){
+
+}
+
+void Z80::ex_SP_IY(uint8_t opcode){
+
+}
+
+void Z80::ldi(uint8_t opcode){
+
+}
+
+void Z80::ldir(uint8_t opcode){
+
+}
+
+void Z80::ldd(uint8_t opcode){
+
+}
+
+void Z80::lddr(uint8_t opcode){
+
+}
+
+void Z80::cpi(uint8_t opcode){
+
+}
+
+void Z80::cpir(uint8_t opcode){
+
+}
+
+void Z80::cpd(uint8_t opcode){
+
+}
+
+void Z80::cpdr(uint8_t opcode){
+
+}
+
+
+//input and output group
+
+void Z80::out_N_A(uint8_t opcode){
+	io->out(ram->getByte(PC.word++),AF.B.h);
+}
+
+//convenience functions
+
+inline void Z80::push(uint16_t value){
+	SP.word-=2;
+	ram->setWord(SP.word,value);
+}
+
+inline uint16_t Z80::pop(){
+	uint16_t v=ram->getWord(SP.word);
+	SP.word+=2;
+	return v;
 }

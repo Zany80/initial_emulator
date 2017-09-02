@@ -46,3 +46,24 @@ void pushIY(uint8_t opcode);
 void popQQ(uint8_t opcode);
 void popIX(uint8_t opcode);
 void popIY(uint8_t opcode);
+//exchange, block transfer, and search group
+void exDEHL(uint8_t opcode);
+void exAFAF2(uint8_t opcode);
+void exx(uint8_t opcode);
+void ex_SP_HL(uint8_t opcode);
+void ex_SP_IX(uint8_t opcode);
+void ex_SP_IY(uint8_t opcode);
+void ldi(uint8_t opcode);
+void ldir(uint8_t opcode);
+void ldd(uint8_t opcode);
+void lddr(uint8_t opcode);
+void cpi(uint8_t opcode);
+void cpir(uint8_t opcode);
+void cpd(uint8_t opcode);
+void cpdr(uint8_t opcode);
+//input and output group
+void out_N_A(uint8_t opcode);
+//convenience functions - not opcodes per se, but used exclusively by them to prevent typing the same commands repeatedly
+//these don't have to have the signature `void opcode(uint8_t)`.
+inline void push(uint16_t value);
+inline uint16_t pop();

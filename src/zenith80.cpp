@@ -59,8 +59,18 @@ DummyMemory::DummyMemory(){
 
 	};*/
 	memory=new uint8_t[65536]{
-		0x00,0x78,0x3E,0x84
+		//ld bc, 0xD300 (0xD300 is the opcode for `out(0), A`)
+		0x01,0xD3,0x00,
+		//ld sp, 1024
+		0x31,0x00,0x04,
+		//push bc
+		0xC5,
+		//ld a, 72 (ASCII 'H')
+		0x3E,0x48,
 	};
+	//memory=new uint8_t[65536]{
+		//0x00
+	//};
 }
 
 uint8_t DummyMemory::getByte(uint16_t address){
@@ -93,12 +103,17 @@ class DummyDevice : public Z80Device{
 	public:
 		void out(uint8_t port,uint8_t value) override;
 		uint8_t in(uint8_t port) override;
+	private:
+		uint8_t amount=0;
 };
 
 void DummyDevice::out(uint8_t port,uint8_t value){
 	Main::instance->cpu->tstates+=4;
-	if(port==0)
+	if(port==0){
 		cout<<value;
+		if((amount++)%10==0)
+			cout.flush();
+	}
 	else if(port==1)
 		cout<<(int)value;
 	else

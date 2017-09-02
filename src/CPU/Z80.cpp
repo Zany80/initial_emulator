@@ -25,9 +25,6 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	opcodes_dd=new opcode[0xFF];
 	opcodes_fd=new opcode[0xFF];
 	opcodes_ed=new opcode[0xFF];
-	//clear all opcodes (set to nop) so that valid z80 code doesn't cause an error before all opcodes are implemented
-	for(int i=0;i<256;i++)
-		opcodes[i]=opcodes_dd[i]=opcodes_ed[i]=opcodes_fd[i]=&Z80::nop;
 	opcodes[0xDD]=&Z80::DD;
 	opcodes[0xFD]=&Z80::FD;
 	opcodes[0xED]=&Z80::ED;
@@ -60,6 +57,7 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	opcodes_fd[0xE5]=&Z80::pushIY;
 	opcodes_dd[0xE1]=&Z80::popIX;
 	opcodes_fd[0xE1]=&Z80::popIY;
+	opcodes[0xD3]=&Z80::out_N_A;
 	for(int i=0;i<255;i++){
 		if((i&0xC0)==0x40
 			&& ((i&38)>>3)!=6

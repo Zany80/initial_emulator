@@ -52,14 +52,14 @@ void Z80::ld_HL_R(uint8_t opcode){
 }
 
 void Z80::ld_IXd_R(uint8_t opcode){
-	uint8_t * reg=(*regs)[(opcode&0x38)>>3];
+	uint8_t * reg=(*regs)[opcode&0x07];
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	tstates+=5;
 	ram->setByte(IX.word+d,*reg);
 }
 
 void Z80::ld_IYd_R(uint8_t opcode){
-	uint8_t * reg=(*regs)[(opcode&0x38)>>3];
+	uint8_t * reg=(*regs)[opcode&0x07];
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	tstates+=5;
 	ram->setByte(IY.word+d,*reg);
@@ -251,47 +251,91 @@ void Z80::popIY(uint8_t opcode){
 //exchange, block transfer, and search group
 
 void Z80::exDEHL(uint8_t opcode){
-
+	uint16_t t=DE.word;
+	DE.word=HL.word;
+	HL.word=t;
 }
 
 void Z80::exAFAF2(uint8_t opcode){
-
+	uint16_t t=AF.word;
+	AF.word=AF2.word;
+	AF2.word=t;
 }
 
 void Z80::exx(uint8_t opcode){
-
+	uint16_t t1=BC.word,t2=DE.word,t3=HL.word;
+	BC.word=BC2.word;DE.word=DE2.word;HL.word=HL2.word;
+	HL2.word=t1;DE2.word=t2;HL2.word=t3;
 }
 
 void Z80::ex_SP_HL(uint8_t opcode){
-
+	word t=HL;
+	HL.word=ram->getWord(SP.word);
+	ram->setWord(SP.word,t.word);
+	tstates+=3;
 }
 
 void Z80::ex_SP_IX(uint8_t opcode){
-
+	word t=IX;
+	IX.word=ram->getWord(SP.word);
+	ram->setWord(SP.word,t.word);
+	tstates+=3;
 }
 
 void Z80::ex_SP_IY(uint8_t opcode){
-
+	word t=IY;
+	IY.word=ram->getWord(SP.word);
+	ram->setWord(SP.word,t.word);
+	tstates+=3;
 }
 
 void Z80::ldi(uint8_t opcode){
-
+	ram->setByte(DE.word,ram->getByte(HL.word));
+	DE.word++;HL.word++;
+	BC.word--;
+	tstates+=2;
+	resetH();
+	setPV(BC.word!=0);
+	resetN();
 }
 
 void Z80::ldir(uint8_t opcode){
-
+	ram->setByte(DE.word,ram->getByte(HL.word));
+	DE.word++;HL.word++;
+	BC.word--;
+	if(BC.word!=0)
+		PC.word-=2;
+	tstates+=7;
+	resetH();
+	setPV(BC.word!=0);
+	resetN();
 }
 
 void Z80::ldd(uint8_t opcode){
-
+	ram->setByte(DE.word,ram->getByte(HL.word));
+	DE.word--;HL.word--;
+	BC.word--;
+	tstates+=2;
+	resetH();
+	setPV(BC.word!=0);
+	resetN();
 }
 
 void Z80::lddr(uint8_t opcode){
-
+	ram->setByte(DE.word,ram->getByte(HL.word));
+	DE.word--;HL.word--;
+	BC.word--;
+	if(BC.word!=0)
+		PC.word-=2;
+	tstates+=7;
+	resetH();
+	resetPV();
+	resetN();
 }
 
 void Z80::cpi(uint8_t opcode){
-
+	cp(ram->getByte(HL.word++),false);
+	BC.word--;
 }
 
 void Z80::cpir(uint8_t opcode){
@@ -324,4 +368,23 @@ inline uint16_t Z80::pop(){
 	uint16_t v=ram->getWord(SP.word);
 	SP.word+=2;
 	return v;
+}
+
+inline void Z80::cp(uint8_t value,bool regular){
+	/* Regular cp:
+		P/V is set if overflow; otherwise, it is reset.
+		C is set if borrow; otherwise, it is reset.
+	*/
+	/* CPI:
+		P/V is set if BC – 1 is not 0; otherwise, it is reset.
+		C is not affected.
+	*/
+	uint8_t r=AF.B.h-value;
+	setS(r&0x80==0x80);
+	setZ(r==0);
+	setN();
+	setH((((AF.B.h&0x0F)-(value&0x0F))&0x10)==0x10);
+	if(regular){
+		setPV((AF.B.h&0x80)!=(value&0x80)&&(AF.B.h&0x80)!=(r&0x80));
+	}
 }

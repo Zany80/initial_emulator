@@ -1,0 +1,4 @@
+#!/bin/bash
+file=$1
+dest=$2
+zmac $file && mv zout/${file/.z80}.hex . && rm -r zout && srec_cat ${file/.z80}.hex -intel -o $dest/zenith.bin -binary && rm ${file/.z80}.hex

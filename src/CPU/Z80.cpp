@@ -21,10 +21,13 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	R=I=0;
 	IFF1=IFF2=0;
 	tstates=0;
-	opcodes=new opcode[0xFF];
-	opcodes_dd=new opcode[0xFF];
-	opcodes_fd=new opcode[0xFF];
-	opcodes_ed=new opcode[0xFF];
+	opcodes=new opcode[256];
+	opcodes_dd=new opcode[256];
+	opcodes_fd=new opcode[256];
+	opcodes_ed=new opcode[256];
+	for(int i=0x00;i<=0xFF;i++)
+		opcodes[i]=opcodes_dd[i]=opcodes_fd[i]=opcodes_ed[i]=&Z80::nop;
+	opcodes[0x00]=&Z80::nop;
 	opcodes[0xDD]=&Z80::DD;
 	opcodes[0xFD]=&Z80::FD;
 	opcodes[0xED]=&Z80::ED;
@@ -57,6 +60,20 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	opcodes_fd[0xE5]=&Z80::pushIY;
 	opcodes_dd[0xE1]=&Z80::popIX;
 	opcodes_fd[0xE1]=&Z80::popIY;
+	opcodes[0xEB]=&Z80::exDEHL;
+	opcodes[0x08]=&Z80::exAFAF2;
+	opcodes[0xD9]=&Z80::exx;
+	opcodes[0xE3]=&Z80::ex_SP_HL;
+	opcodes_dd[0xE3]=&Z80::ex_SP_IX;
+	opcodes_fd[0xE3]=&Z80::ex_SP_IY;
+	opcodes_ed[0xA0]=&Z80::ldi;
+	opcodes_ed[0xB0]=&Z80::ldir;
+	opcodes_ed[0xA8]=&Z80::ldd;
+	opcodes_ed[0xB8]=&Z80::lddr;
+	opcodes_ed[0xA1]=&Z80::cpi;
+	opcodes_ed[0xB1]=&Z80::cpir;
+	opcodes_ed[0xA9]=&Z80::cpd;
+	opcodes_ed[0xB9]=&Z80::cpdr;
 	opcodes[0xD3]=&Z80::out_N_A;
 	for(int i=0;i<255;i++){
 		if((i&0xC0)==0x40

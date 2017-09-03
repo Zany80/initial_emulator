@@ -25,6 +25,11 @@ using sf::Event;
 using std::cout;
 using std::endl;
 
+#include <fstream>
+using std::ifstream;
+using std::streampos;
+using std::ios;
+
 int main(int argc,char ** argv){
 	return Zenith80::Main::main(argc,argv);
 }
@@ -58,19 +63,32 @@ DummyMemory::DummyMemory(){
 		0x3E,0x0A,0xD3,0x00,
 
 	};*/
-	memory=new uint8_t[65536]{
-		//ld bc, 0xD300 (0xD300 is the opcode for `out(0), A`)
-		0x01,0xD3,0x00,
-		//ld sp, 1024
-		0x31,0x00,0x04,
-		//push bc
-		0xC5,
-		//ld a, 72 (ASCII 'H')
-		0x3E,0x48,
-	};
 	//memory=new uint8_t[65536]{
 		//0x00
 	//};
+
+	//load data from zenith.bin
+	ifstream f("zenith.bin", ios::in | ios::binary | ios::ate);
+    if (!f.is_open()){
+		cout<<"Failed to load data from file, using compiled in program."<<endl;
+		memory=new uint8_t[65536]{
+			//ld bc, 0xD300 (0xD300 is the opcode for `out(0), A`)
+			0x01,0xD3,0x00,
+			//ld sp, 1024
+			0x31,0x00,0x04,
+			//push bc
+			0xC5,
+			//ld a, 72 (ASCII 'H')
+			0x3E,0x48,
+		};
+		return;
+	}
+	memory=new uint8_t[65536];
+	cout<<"Loading program from zenith.bin .."<<endl;
+	streampos size=f.tellg();
+    f.seekg(0, ios::beg);
+    f.read((char	*)memory,size);
+    f.close();
 }
 
 uint8_t DummyMemory::getByte(uint16_t address){
@@ -101,17 +119,19 @@ void DummyMemory::setWord(uint16_t address,uint16_t value){
 
 class DummyDevice : public Z80Device{
 	public:
-		void out(uint8_t port,uint8_t value) override;
-		uint8_t in(uint8_t port) override;
+		void out(uint16_t port,uint8_t value) override;
+		uint8_t in(uint16_t port) override;
 	private:
-		uint8_t amount=0;
+		uint16_t amount=0;
+		uint8_t ports[65536];
 };
 
-void DummyDevice::out(uint8_t port,uint8_t value){
+void DummyDevice::out(uint16_t port,uint8_t value){
 	Main::instance->cpu->tstates+=4;
+	ports[port]=value;
 	if(port==0){
 		cout<<value;
-		if((amount++)%10==0)
+		if((amount++)%1024==0)
 			cout.flush();
 	}
 	else if(port==1)
@@ -120,13 +140,13 @@ void DummyDevice::out(uint8_t port,uint8_t value){
 		cout<<(int)value<<" written to port "<<(int)port<<endl;
 }
 
-uint8_t DummyDevice::in(uint8_t port){
+uint8_t DummyDevice::in(uint16_t port){
 	Main::instance->cpu->tstates+=4;
-	return 0;
+	return ports[port];
 };
 
 Main::Main(){
-	window=new RenderWindow(VideoMode(800,600),"Zenith-80");
+	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setVerticalSyncEnabled(true);
 	background=Color(255,255,255);
 	cpu=new Z80(new DummyMemory(),new DummyDevice());
@@ -141,7 +161,7 @@ int Main::run(int argc,char ** argv){
 	while(window->isOpen()){
 		window->clear(this->background);
 		window->display();
-		cpu->executeXInstructions(2000*1000*1000/60);
+		cpu->executeXInstructions(1.5*1000*1000/60);
 		this->processEvents();
 	}
 	return 0;
@@ -153,7 +173,7 @@ void Main::processEvents(){
 		switch(e.type){
 			case Event::Closed:
 				window->close();
-				cout<<cpu->getTStates()<<endl;
+				cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
 				break;
 			default:
 			//	cout<<"[Event Manager] Received event of type "<<e.type<<endl;

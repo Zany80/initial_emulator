@@ -67,3 +67,4 @@ void out_N_A(uint8_t opcode);
 //these don't have to have the signature `void opcode(uint8_t)`.
 inline void push(uint16_t value);
 inline uint16_t pop();
+inline void cp(uint8_t value,bool regular);

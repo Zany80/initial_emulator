@@ -7,8 +7,8 @@ ZENITH_HEADER
 
 class Z80Device{
 	public:
-		virtual void out(uint8_t port,uint8_t value)=0;
-		virtual uint8_t in(uint8_t port)=0;
+		virtual void out(uint16_t port,uint8_t value)=0;
+		virtual uint8_t in(uint16_t port)=0;
 };
 
 ZENITH_FOOTER

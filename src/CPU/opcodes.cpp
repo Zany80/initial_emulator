@@ -373,6 +373,10 @@ void Z80::cpdr(uint8_t opcode){
  * setC(((AF.B.h-value)&0x100)==0x100);
  */
 
+void Z80::halt(uint8_t opcode){
+	halted=true;
+}
+
 //input and output group
 
 void Z80::out_N_A(uint8_t opcode){

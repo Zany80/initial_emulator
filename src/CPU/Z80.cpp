@@ -21,6 +21,7 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	R=I=0;
 	IFF1=IFF2=0;
 	tstates=0;
+	halted=false;
 	opcodes=new opcode[256];
 	opcodes_dd=new opcode[256];
 	opcodes_fd=new opcode[256];
@@ -74,6 +75,7 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	opcodes_ed[0xB1]=&Z80::cpir;
 	opcodes_ed[0xA9]=&Z80::cpd;
 	opcodes_ed[0xB9]=&Z80::cpdr;
+	opcodes[0x76]=&Z80::halt;
 	opcodes[0xD3]=&Z80::out_N_A;
 	for(int i=0;i<255;i++){
 		if((i&0xC0)==0x40
@@ -126,10 +128,19 @@ void Z80::executeOneInstruction(){
 	R++;
 	R &= 0x7F;
 	R |= (_R&0x80);
-	uint8_t opcode_value=this->ram->getOpcode(PC.word++);
-	opcode a=opcodes[opcode_value];
-	(*this.*a)(opcode_value);
+	if(halted){
+		(*this.*opcodes[0x00])(0x00);
+		tstates+=4;
+	}
+	else{
+		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
+		(*this.*opcodes[opcode_value])(opcode_value);
+	}
 };
+
+bool Z80::isHalted(){
+	return halted;
+}
 
 void Z80::setC(){
 	//TODO: implement

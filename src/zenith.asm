@@ -108,3 +108,4 @@ out (0), a
 
 ld a, '\n'
 out (0), a
+halt

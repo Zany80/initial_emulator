@@ -36,7 +36,9 @@ class Z80{
 		uint64_t getTStates();
 		friend uint8_t Z80Memory::getByte(uint16_t address);
 		void add_tstates(uint64_t tstates);
+		bool isHalted();
 	private:
+		bool halted;
 		Z80Memory * ram;
 		Z80Device * io;
 		word AF;

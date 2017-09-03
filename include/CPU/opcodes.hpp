@@ -61,6 +61,8 @@ void cpi(uint8_t opcode);
 void cpir(uint8_t opcode);
 void cpd(uint8_t opcode);
 void cpdr(uint8_t opcode);
+//general purpose arithmetic and cpu control group
+void halt(uint8_t opcode);
 //input and output group
 void out_N_A(uint8_t opcode);
 //convenience functions - not opcodes per se, but used exclusively by them to prevent typing the same commands repeatedly

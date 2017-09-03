@@ -9,6 +9,8 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 endif()
 
+set(SFML_STATIC_LIBRARIES true CACHE BOOL "Use static SFML libs" FORCE)
+
 project(ZENITH80 VERSION 0.1.0.0 LANGUAGES C CXX)
 
 configure_file(
@@ -23,7 +25,7 @@ add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
-find_package(SFML 2 REQUIRED graphics window system)
+find_package(SFML 2 REQUIRED graphics window system )
 if(SFML_NOTFOUND)
 	message(FATAL_ERROR "SFML not found!")
 endif()
@@ -34,7 +36,7 @@ if(TGUI_NOTFOUND)
 endif()
 
 include_directories(${SFML_INCLUDE_DIR} ${TGUI_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${SFML_DEPENDENCIES} ${TGUI_LIBRARY} ${SFML_LIBRARIES})
+target_link_libraries(${EXECUTABLE_NAME} ${TGUI_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
 install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
 

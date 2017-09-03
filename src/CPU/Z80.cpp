@@ -16,12 +16,7 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	regs=new vector<uint8_t*>{&BC.B.h,&BC.B.l,&DE.B.h,&DE.B.l,&HL.B.h,&HL.B.l,0,&AF.B.h};
 	regsDD=new vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&SP.word};
 	regsQQ=new vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&AF.word};
-	AF.word=AF2.word=BC.word=BC2.word=DE.word=DE2.word=HL.word=HL2.word=IX.word=IY.word=SP.word=PC.word=0;
-	BC.word=512;
-	R=I=0;
-	IFF1=IFF2=0;
-	tstates=0;
-	halted=false;
+	reset();
 	opcodes=new opcode[256];
 	opcodes_dd=new opcode[256];
 	opcodes_fd=new opcode[256];
@@ -115,6 +110,15 @@ Z80::~Z80(){
 	delete opcodes;
 	delete regsDD;
 	delete regsQQ;
+}
+
+void Z80::reset(){
+	AF.word=AF2.word=BC.word=BC2.word=DE.word=DE2.word=HL.word=HL2.word=IX.word=IY.word=SP.word=PC.word=0;
+	BC.word=512;
+	R=I=0;
+	IFF1=IFF2=0;
+	tstates=0;
+	halted=false;
 }
 
 void Z80::executeXInstructions(int x){

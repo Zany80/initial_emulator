@@ -20,6 +20,7 @@ using sf::RenderWindow;
 using sf::VideoMode;
 using sf::Color;
 using sf::Event;
+using sf::Mouse;
 
 #include <iostream>
 using std::cout;
@@ -174,6 +175,12 @@ void Main::processEvents(){
 			case Event::Closed:
 				window->close();
 				cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
+				break;
+			case Event::MouseButtonPressed:
+				if(e.mouseButton.button==Mouse::Button::Left){
+					if(cpu->isHalted())
+						cpu->reset();
+				}
 				break;
 			default:
 			//	cout<<"[Event Manager] Received event of type "<<e.type<<endl;

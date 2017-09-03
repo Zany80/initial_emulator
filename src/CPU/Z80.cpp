@@ -21,8 +21,8 @@ Z80::Z80(Z80Memory * ram,Z80Device * io){
 	opcodes_dd=new opcode[256];
 	opcodes_fd=new opcode[256];
 	opcodes_ed=new opcode[256];
-	for(int i=0x00;i<=0xFF;i++)
-		opcodes[i]=opcodes_dd[i]=opcodes_fd[i]=opcodes_ed[i]=&Z80::nop;
+	//for(int i=0x00;i<=0xFF;i++)
+		//opcodes[i]=opcodes_dd[i]=opcodes_fd[i]=opcodes_ed[i]=&Z80::nop;
 	opcodes[0x00]=&Z80::nop;
 	opcodes[0xDD]=&Z80::DD;
 	opcodes[0xFD]=&Z80::FD;

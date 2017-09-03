@@ -55,40 +55,39 @@ class DummyMemory : public Z80Memory{
 };
 
 DummyMemory::DummyMemory(){
-	/*memory=new uint8_t[65536]{
-		0x3E,0x48,0xD3,0x00,
-		0x3E,0x45,0xD3,0x00,
-		0x3E,0x4C,0xD3,0x00,
-		0x3E,0x4C,0xD3,0x00,
-		0x3E,0x4F,0xD3,0x00,
-		0x3E,0x0A,0xD3,0x00,
-
-	};*/
-	//memory=new uint8_t[65536]{
-		//0x00
-	//};
-
 	//load data from zenith.bin
 	ifstream f("zenith.bin", ios::in | ios::binary | ios::ate);
     if (!f.is_open()){
 		cout<<"Failed to load data from file, using compiled in program."<<endl;
-		memory=new uint8_t[65536]{
-			//ld bc, 0xD300 (0xD300 is the opcode for `out(0), A`)
-			0x01,0xD3,0x00,
-			//ld sp, 1024
-			0x31,0x00,0x04,
-			//push bc
-			0xC5,
-			//ld a, 72 (ASCII 'H')
-			0x3E,0x48,
+		cout<<"Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within."<<endl;
+		//memory=new uint8_t[65536]{
+			////output 0x59 to port 0 (0x59 is ASCII 'Y')
+			////0x3E,0x59,0xDE,0x00
+
+		//};
+			//~ for(int i=0;i<65536;i++)
+				//~ memory[i]=0;
+			memory=new uint8_t[65536]{
+			0x3E,0x48,0xD3,0x00,
+			0x3E,0x45,0xD3,0x00,
+			0x3E,0x4C,0xD3,0x00,
+			0x3E,0x4C,0xD3,0x00,
+			0x3E,0x4F,0xD3,0x00,
+			0x3E,0x0A,0xD3,0x00,
+
 		};
+		//memory=new uint8_t[65536]{
+			//0x00
+		//};
 		return;
 	}
 	memory=new uint8_t[65536];
 	cout<<"Loading program from zenith.bin .."<<endl;
 	streampos size=f.tellg();
     f.seekg(0, ios::beg);
-    f.read((char	*)memory,size);
+    f.read((char*)memory,size);
+    for(int i=size;i<65536;i++)
+		memory[i]=0x00;
     f.close();
 }
 
@@ -149,7 +148,7 @@ uint8_t DummyDevice::in(uint16_t port){
 Main::Main(){
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setVerticalSyncEnabled(true);
-	background=Color(255,255,255);
+	background=Color(3,255,190);
 	cpu=new Z80(new DummyMemory(),new DummyDevice());
 	Main::instance=this;
 }

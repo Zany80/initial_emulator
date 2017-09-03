@@ -9,7 +9,9 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 endif()
 
-set(SFML_STATIC_LIBRARIES true CACHE BOOL "Use static SFML libs" FORCE)
+if(NOT SFML_STATIC_LIBRARIES)
+	set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Use static SFML libs" FORCE)
+endif()
 
 project(ZENITH80 VERSION 0.1.0.0 LANGUAGES C CXX)
 

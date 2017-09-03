@@ -2,17 +2,17 @@
 
 void Z80::DD(uint8_t opcode){
 	opcode=ram->getOpcode(PC.word++);
-	(*this.*(opcodes_dd[opcode]))(opcode);
+	(*this.*(opcodesDD[opcode]))(opcode);
 }
 
 void Z80::FD(uint8_t opcode){
 	opcode=ram->getOpcode(PC.word++);
-	(*this.*(opcodes_fd[opcode]))(opcode);
+	(*this.*(opcodesFD[opcode]))(opcode);
 }
 
 void Z80::ED(uint8_t opcode){
 	opcode=ram->getOpcode(PC.word++);
-	(*this.*(opcodes_ed[opcode]))(opcode);
+	(*this.*(opcodesED[opcode]))(opcode);
 }
 
 //8-bit load group
@@ -366,6 +366,201 @@ void Z80::cpdr(uint8_t opcode){
 		tstates+=5;
 	}
 }
+
+//8-bit arithmetic group
+
+void Z80::addAR(uint8_t opcode){
+
+}
+
+void Z80::addAN(uint8_t opcode){
+
+}
+
+void Z80::addA_HL_(uint8_t opcode){
+
+}
+
+void Z80::addA_IXd_(uint8_t opcode){
+
+}
+
+void Z80::addA_IYd_(uint8_t opcode){
+
+}
+
+void Z80::adcAR(uint8_t opcode){
+
+}
+
+void Z80::adcAN(uint8_t opcode){
+
+}
+
+void Z80::adcA_HL_(uint8_t opcode){
+
+}
+
+void Z80::adcA_IXd_(uint8_t opcode){
+
+}
+
+void Z80::adcA_IYd_(uint8_t opcode){
+
+}
+
+void Z80::subR(uint8_t opcode){
+
+}
+
+void Z80::subN(uint8_t opcode){
+
+}
+
+void Z80::sub_HL_(uint8_t opcode){
+
+}
+
+void Z80::sub_IXd_(uint8_t opcode){
+
+}
+
+void Z80::sub_IYd_(uint8_t opcode){
+
+}
+
+void Z80::sbcAR(uint8_t opcode){
+
+}
+
+void Z80::sbcAN(uint8_t opcode){
+
+}
+
+void Z80::sbcA_HL_(uint8_t opcode){
+
+}
+
+void Z80::sbcA_IXd_(uint8_t opcode){
+
+}
+
+void Z80::sbcA_IYd_(uint8_t opcode){
+
+}
+
+void Z80::andR(uint8_t opcode){
+
+}
+
+void Z80::andN(uint8_t opcode){
+
+}
+
+void Z80::and_HL_(uint8_t opcode){
+
+}
+
+void Z80::and_IXd_(uint8_t opcode){
+
+}
+
+void Z80::and_IYd_(uint8_t opcode){
+
+}
+
+void Z80::orR(uint8_t opcode){
+
+}
+
+void Z80::orN(uint8_t opcode){
+
+}
+
+void Z80::or_HL_(uint8_t opcode){
+
+}
+
+void Z80::or_IXd_(uint8_t opcode){
+
+}
+
+void Z80::or_IYd_(uint8_t opcode){
+
+}
+
+void Z80::xorR(uint8_t opcode){
+
+}
+
+void Z80::xorN(uint8_t opcode){
+
+}
+
+void Z80::xor_HL_(uint8_t opcode){
+
+}
+
+void Z80::xor_IXd_(uint8_t opcode){
+
+}
+
+void Z80::xor_IYd_(uint8_t opcode){
+
+}
+
+void Z80::cpR(uint8_t opcode){
+
+}
+
+void Z80::cpN(uint8_t opcode){
+
+}
+
+void Z80::cp_HL_(uint8_t opcode){
+
+}
+
+void Z80::cp_IXd_(uint8_t opcode){
+
+}
+
+void Z80::cp_IYd_(uint8_t opcode){
+
+}
+
+void Z80::incR(uint8_t opcode){
+
+}
+
+void Z80::inc_HL_(uint8_t opcode){
+
+}
+
+void Z80::inc_IXd_(uint8_t opcode){
+
+}
+
+void Z80::inc_IYd_(uint8_t opcode){
+
+}
+
+void Z80::decR(uint8_t opcode){
+
+}
+
+void Z80::dec_HL_(uint8_t opcode){
+
+}
+
+void Z80::dec_IXd_(uint8_t opcode){
+
+}
+
+void Z80::dec_IYd_(uint8_t opcode){
+
+}
+
 
 /*
  * regular CP:

@@ -161,7 +161,7 @@ int Main::run(int argc,char ** argv){
 	while(window->isOpen()){
 		window->clear(this->background);
 		window->display();
-		cpu->executeXInstructions(1.5*1000*1000/60);
+		cpu->executeXInstructions(4.1*1000*1000/60);
 		this->processEvents();
 	}
 	return 0;

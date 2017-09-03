@@ -18,7 +18,7 @@ class Z80{
 		Z80(Z80Memory * ram,Z80Device * io);
 		~Z80();
 		void executeOneInstruction();
-		void executeXInstructions(int x);
+		void executeXInstructions(int64_t x);
 		word getAF();
 		word getAF2();
 		word getBC();
@@ -33,7 +33,7 @@ class Z80{
 		word getPC();
 		uint8_t getR();
 		uint8_t getI();
-		uint64_t getTStates();
+		int64_t getTStates();
 		friend uint8_t Z80Memory::getByte(uint16_t address);
 		void add_tstates(uint64_t tstates);
 		bool isHalted();
@@ -61,12 +61,13 @@ class Z80{
 		vector<uint16_t*>* regsQQ;
 		bool IFF1,IFF2;
 		opcode * opcodes;
-		opcode * opcodes_dd;
-		opcode * opcodes_fd;
-		opcode * opcodes_ed;
+		opcode * opcodesDD;
+		opcode * opcodesFD;
+		opcode * opcodesED;
 		#include <CPU/opcodes.hpp>
+		void initOpcodes();
 	public:
-		uint64_t tstates;
+		int64_t tstates;
 	private:
 		void setC();
 		void setS();

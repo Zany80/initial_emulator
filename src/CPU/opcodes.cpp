@@ -334,22 +334,44 @@ void Z80::lddr(uint8_t opcode){
 }
 
 void Z80::cpi(uint8_t opcode){
-	cp(ram->getByte(HL.word++),false);
-	BC.word--;
+	cp(ram->getByte(HL.word++));
+	setPV((BC.word--)!=0);
+	tstates+=5;
 }
 
 void Z80::cpir(uint8_t opcode){
-
+	uint8_t v=ram->getByte(HL.word++);
+	cp(v);
+	setPV((BC.word--)!=0);
+	tstates+=5;
+	if(BC.word!=0 && !(AF.B.l&0x40)){
+		PC.word-=2;
+		tstates+=5;
+	}
 }
 
 void Z80::cpd(uint8_t opcode){
-
+	cp(ram->getByte(HL.word--));
+	setPV((BC.word--)!=0);
+	tstates+=5;
 }
 
 void Z80::cpdr(uint8_t opcode){
-
+	uint8_t v=ram->getByte(HL.word--);
+	cp(v);
+	setPV((BC.word--)!=0);
+	tstates+=5;
+	if(BC.word!=0 && !(AF.B.l&0x40)){
+		PC.word-=2;
+		tstates+=5;
+	}
 }
 
+/*
+ * regular CP:
+ * setPV((AF.B.h&0x80)!=(value&0x80)&&(AF.B.h&0x80)!=(r&0x80));
+ * setC(((AF.B.h-value)&0x100)==0x100);
+ */
 
 //input and output group
 
@@ -370,21 +392,10 @@ inline uint16_t Z80::pop(){
 	return v;
 }
 
-inline void Z80::cp(uint8_t value,bool regular){
-	/* Regular cp:
-		P/V is set if overflow; otherwise, it is reset.
-		C is set if borrow; otherwise, it is reset.
-	*/
-	/* CPI:
-		P/V is set if BC – 1 is not 0; otherwise, it is reset.
-		C is not affected.
-	*/
+inline void Z80::cp(uint8_t value){
 	uint8_t r=AF.B.h-value;
 	setS(r&0x80==0x80);
 	setZ(r==0);
 	setN();
 	setH((((AF.B.h&0x0F)-(value&0x0F))&0x10)==0x10);
-	if(regular){
-		setPV((AF.B.h&0x80)!=(value&0x80)&&(AF.B.h&0x80)!=(r&0x80));
-	}
 }

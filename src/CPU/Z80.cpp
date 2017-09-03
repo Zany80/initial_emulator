@@ -117,13 +117,15 @@ Z80::~Z80(){
 
 void Z80::executeXInstructions(int x){
 	for(int i=0;i<x;i++){
-		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
-		if(opcode_value)
-			(*this.*(opcodes[opcode_value]))(opcode_value);
+		executeOneInstruction();
 	}
 }
 
 void Z80::executeOneInstruction(){
+	uint8_t _R = R;
+	R++;
+	R &= 0x7F;
+	R |= (_R&0x80);
 	uint8_t opcode_value=this->ram->getOpcode(PC.word++);
 	opcode a=opcodes[opcode_value];
 	(*this.*a)(opcode_value);

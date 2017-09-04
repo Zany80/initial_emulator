@@ -572,6 +572,29 @@ void Z80::halt(uint8_t opcode){
 	halted=true;
 }
 
+//jump group
+
+void Z80::jpNN(uint8_t opcode){
+	PC.word=ram->getWord(PC.word);
+}
+
+void Z80::jpCCNN(uint8_t opcode){
+	uint16_t address=ram->getWord(PC.word);
+	PC.word+=2;
+	uint8_t c=(opcode&0x38)>>3;
+	if(
+		(c==0&&(AF.B.l&0x40)!=0x40)
+		|| (c==1&&(AF.B.l&0x40)==0x40)
+		|| (c==2&&(AF.B.l&0x01)!=0x01)
+		|| (c==3&&(AF.B.l&0x01)==0x01)
+		|| (c==4&&(AF.B.l&0x04)!=0x04)
+		|| (c==5&&(AF.B.l&0x04)==0x04)
+		|| (c==6&&(AF.B.l&0x80)!=0x80)
+		|| (c==7&&(AF.B.l&0x80)==0x80)
+	)
+		PC.word=address;
+}
+
 //call and return group
 
 void Z80::callNN(uint8_t opcode){

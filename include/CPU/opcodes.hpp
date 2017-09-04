@@ -114,6 +114,7 @@ void dec_IYd_(uint8_t opcode);
 void halt(uint8_t opcode);
 //jump group
 void jpNN(uint8_t opcode);
+void jpCCNN(uint8_t opcode);
 //call and return group
 void callNN(uint8_t opcode);
 void ret(uint8_t opcode);

@@ -57,6 +57,21 @@ void Z80::initOpcodes(){
 	opcodesFD[0xE5]=&Z80::pushIY;
 	opcodesDD[0xE1]=&Z80::popIX;
 	opcodesFD[0xE1]=&Z80::popIY;
+	opcodes[0xEB]=&Z80::exDEHL;
+	opcodes[0x08]=&Z80::exAFAF2;
+	opcodes[0xD9]=&Z80::exx;
+	opcodes[0xE3]=&Z80::ex_SP_HL;
+	opcodesDD[0xE3]=&Z80::ex_SP_IX;
+	opcodesFD[0xE3]=&Z80::ex_SP_IY;
+	opcodesED[0xA0]=&Z80::ldi;
+	opcodesED[0xB0]=&Z80::ldir;
+	opcodesED[0xA8]=&Z80::ldd;
+	opcodesED[0xA8]=&Z80::lddr;
+	opcodesED[0xA1]=&Z80::cpi;
+	opcodesED[0xB1]=&Z80::cpir;
+	opcodesED[0xA9]=&Z80::cpd;
+	opcodesED[0xA9]=&Z80::cpdr;
+	opcodes[0xC3]=&Z80::jpNN;
 	opcodes[0xCD]=&Z80::callNN;
 	opcodes[0xC9]=&Z80::ret;
 	for(int i=0;i<256;i++){
@@ -89,6 +104,8 @@ void Z80::initOpcodes(){
 			opcodes[i]=&Z80::pushQQ;
 		if((i&0xCF)==0xC1)
 			opcodes[i]=&Z80::popQQ;
+		if((i&0xC7)==0xC2)
+			opcodes[i]=&Z80::jpCCNN;
 	}
 }
 

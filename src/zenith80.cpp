@@ -148,7 +148,7 @@ uint8_t DummyDevice::in(uint16_t port){
 Main::Main(){
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setVerticalSyncEnabled(true);
-	background=Color(3,255,190);
+	background=Color(244,255,190);
 	cpu=new Z80(new DummyMemory(),new DummyDevice());
 	Main::instance=this;
 }

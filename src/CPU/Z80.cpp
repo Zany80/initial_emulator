@@ -25,8 +25,31 @@ void Z80::initOpcodes(){
 	opcodesDD=new opcode[256];
 	opcodesFD=new opcode[256];
 	opcodesED=new opcode[256];
-	for(int i=0x00;i<=0xFF;i++)
+	for(int i=0x00;i<256;i++)
 		opcodes[i]=opcodesDD[i]=opcodesFD[i]=opcodesED[i]=&Z80::nop;
+	opcodes[0xD3]=&Z80::out_N_A;
+	opcodes[0x76]=&Z80::halt;
+	for(int i=0;i<256;i++){
+		if((i&0xC0)==0x40
+			&& ((i&0x38)>>3)!=6
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::ldRRx;
+		if((i&0xC7)==0x06
+			&& ((i&0x38)>>3)!=6)
+			opcodes[i]=&Z80::ldRN;
+		if((i&0xC7)==0x46
+			&& ((i&0x38)>>3)!=6){
+			opcodes[i]=&Z80::ldR_HL_;
+			opcodesDD[i]=&Z80::ldR_IXd_;
+			opcodesFD[i]=&Z80::ldR_IYd_;
+		}
+		if((i&0xF8)==0x70
+			&& (i&0x07)!=6){
+			opcodes[i]=&Z80::ld_HL_R;
+			opcodesDD[i]=&Z80::ld_IXd_R;
+			opcodesFD[i]=&Z80::ld_IYd_R;
+		}
+	}
 }
 
 Z80::~Z80(){

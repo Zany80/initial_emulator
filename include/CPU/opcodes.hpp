@@ -112,6 +112,11 @@ void dec_IXd_(uint8_t opcode);
 void dec_IYd_(uint8_t opcode);
 //general purpose arithmetic and cpu control group
 void halt(uint8_t opcode);
+//jump group
+void jpNN(uint8_t opcode);
+//call and return group
+void callNN(uint8_t opcode);
+void ret(uint8_t opcode);
 //input and output group
 void out_N_A(uint8_t opcode);
 //convenience functions - not opcodes per se, but used exclusively by them to prevent typing the same commands repeatedly

@@ -57,6 +57,8 @@ void Z80::initOpcodes(){
 	opcodesFD[0xE5]=&Z80::pushIY;
 	opcodesDD[0xE1]=&Z80::popIX;
 	opcodesFD[0xE1]=&Z80::popIY;
+	opcodes[0xCD]=&Z80::callNN;
+	opcodes[0xC9]=&Z80::ret;
 	for(int i=0;i<256;i++){
 		if((i&0xC0)==0x40
 			&& ((i&0x38)>>3)!=6

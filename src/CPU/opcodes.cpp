@@ -572,6 +572,20 @@ void Z80::halt(uint8_t opcode){
 	halted=true;
 }
 
+//call and return group
+
+void Z80::callNN(uint8_t opcode){
+	uint16_t address=ram->getWord(PC.word);
+	PC.word+=2;
+	push(PC.word);
+	PC.word=address;
+	tstates++;
+}
+
+void Z80::ret(uint8_t opcode){
+	PC.word=pop();
+}
+
 //input and output group
 
 void Z80::out_N_A(uint8_t opcode){

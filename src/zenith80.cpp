@@ -31,6 +31,9 @@ using std::ifstream;
 using std::streampos;
 using std::ios;
 
+#include <string>
+using std::string;
+
 int main(int argc,char ** argv){
 	return Zenith80::Main::main(argc,argv);
 }
@@ -38,13 +41,13 @@ int main(int argc,char ** argv){
 ZENITH_HEADER
 
 int Main::main(int argc,char **argv){
-	Main z;
-	return z.run(argc,argv);
+	Main z(argc,argv);
+	return z.run();
 }
 
 class DummyMemory : public Z80Memory{
 	public:
-		DummyMemory();
+		DummyMemory(const char * name);
 		uint8_t getOpcode(uint16_t address) override;
 		uint8_t getByte(uint16_t address) override;
 		void setByte(uint16_t address,uint8_t value) override;
@@ -54,9 +57,9 @@ class DummyMemory : public Z80Memory{
 		uint8_t * memory;
 };
 
-DummyMemory::DummyMemory(){
+DummyMemory::DummyMemory(const char * name){
 	//load data from zenith.bin
-	ifstream f("zenith.bin", ios::in | ios::binary | ios::ate);
+	ifstream f(name, ios::in | ios::binary | ios::ate);
     if (!f.is_open()){
 		cout<<"Failed to load data from file, using compiled in program."<<endl;
 		cout<<"Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within."<<endl;
@@ -82,7 +85,7 @@ DummyMemory::DummyMemory(){
 		return;
 	}
 	memory=new uint8_t[65536];
-	cout<<"Loading program from zenith.bin .."<<endl;
+	cout<<"Loading program from "<<name<<endl;
 	streampos size=f.tellg();
     f.seekg(0, ios::beg);
     f.read((char*)memory,size);
@@ -145,11 +148,16 @@ uint8_t DummyDevice::in(uint16_t port){
 	return ports[port];
 };
 
-Main::Main(){
+Main::Main(int argc,char ** argv){
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setVerticalSyncEnabled(true);
 	background=Color(244,255,190);
-	cpu=new Z80(new DummyMemory(),new DummyDevice());
+	string name;
+	if(argc>1)
+		name=argv[1];
+	else
+		name="zenith.bin";
+	cpu=new Z80(new DummyMemory(name.c_str()),new DummyDevice());
 	Main::instance=this;
 }
 
@@ -157,7 +165,7 @@ Main::~Main(){
 	delete window;
 }
 
-int Main::run(int argc,char ** argv){
+int Main::run(){
 	while(window->isOpen()){
 		window->clear(this->background);
 		window->display();

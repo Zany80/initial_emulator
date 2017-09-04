@@ -29,6 +29,24 @@ void Z80::initOpcodes(){
 		opcodes[i]=opcodesDD[i]=opcodesFD[i]=opcodesED[i]=&Z80::nop;
 	opcodes[0xD3]=&Z80::out_N_A;
 	opcodes[0x76]=&Z80::halt;
+	opcodes[0x36]=&Z80::ld_HL_N;
+	opcodesDD[0x36]=&Z80::ld_IXd_N;
+	opcodesFD[0x36]=&Z80::ld_IYd_N;
+	opcodes[0x0A]=&Z80::ldA_BC_;
+	opcodes[0x1A]=&Z80::ldA_DE_;
+	opcodes[0x3A]=&Z80::ldA_NN_;
+	opcodes[0x02]=&Z80::ld_BC_A;
+	opcodes[0x12]=&Z80::ld_DE_A;
+	opcodes[0x32]=&Z80::ld_NN_A;
+	opcodesED[0x57]=&Z80::ldAI;
+	opcodesED[0x5F]=&Z80::ldAR;
+	opcodesED[0x47]=&Z80::ldIA;
+	opcodesED[0x4F]=&Z80::ldRA;
+	opcodesDD[0x21]=&Z80::ldIXNN;
+	opcodesFD[0x21]=&Z80::ldIYNN;
+	opcodes[0x2A]=&Z80::ldHL_NN_;
+	opcodesDD[0x2A]=&Z80::ldIX_NN_;
+	opcodesFD[0x2A]=&Z80::ldIY_NN_;
 	for(int i=0;i<256;i++){
 		if((i&0xC0)==0x40
 			&& ((i&0x38)>>3)!=6
@@ -49,12 +67,19 @@ void Z80::initOpcodes(){
 			opcodesDD[i]=&Z80::ld_IXd_R;
 			opcodesFD[i]=&Z80::ld_IYd_R;
 		}
+		if((i&0xCF)==0x01)
+			opcodes[i]=&Z80::ldDDNN;
+		if((i&0xCF)==0x4B)
+			opcodesED[i]=&Z80::ldDD_NN_;
 	}
 }
 
 Z80::~Z80(){
-	delete regs;
 	delete opcodes;
+	delete opcodesDD;
+	delete opcodesFD;
+	delete opcodesED;
+	delete regs;
 	delete regsDD;
 	delete regsQQ;
 }

@@ -12,10 +12,10 @@ ZENITH_HEADER
 
 class Main{
 	public:
-		Main();
+		Main(int argc,char ** argv);
 		~Main();
 		static int main(int argc,char** argv);
-		int run(int argc,char ** argv);
+		int run();
 		static Main * instance;
 		Z80 * cpu;
 	private:

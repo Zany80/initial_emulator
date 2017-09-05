@@ -4,7 +4,11 @@
 #include <cstdlib>
 
 #include <iostream>
-using std::cout;using std::endl;
+using std::cout;
+using std::cerr;
+using std::endl;
+
+#include <config.h>
 
 ZENITH_HEADER
 
@@ -27,6 +31,9 @@ void Z80::initOpcodes(){
 	opcodesED=new opcode[256];
 	for(int i=0x00;i<256;i++)
 		opcodes[i]=opcodesDD[i]=opcodesFD[i]=opcodesED[i]=&Z80::nop;
+	opcodes[0xED]=&Z80::ED;
+	opcodes[0xDD]=&Z80::DD;
+	opcodes[0xFD]=&Z80::FD;
 	opcodes[0xD3]=&Z80::out_N_A;
 	opcodes[0x76]=&Z80::halt;
 	opcodes[0x36]=&Z80::ld_HL_N;
@@ -71,6 +78,44 @@ void Z80::initOpcodes(){
 	opcodesED[0xB1]=&Z80::cpir;
 	opcodesED[0xA9]=&Z80::cpd;
 	opcodesED[0xA9]=&Z80::cpdr;
+	opcodes[0xC6]=&Z80::addAN;
+	opcodes[0x86]=&Z80::addA_HL_;
+	opcodesDD[0x86]=&Z80::addA_IXd_;
+	opcodesFD[0x86]=&Z80::addA_IYd_;
+	opcodes[0xCE]=&Z80::adcAN;
+	opcodes[0x8E]=&Z80::adcA_HL_;
+	opcodesDD[0x8E]=&Z80::adcA_IXd_;
+	opcodesFD[0x8E]=&Z80::adcA_IYd_;
+	opcodes[0xD6]=&Z80::subN;
+	opcodes[0x96]=&Z80::sub_HL_;
+	opcodesDD[0x96]=&Z80::sub_IXd_;
+	opcodesFD[0x96]=&Z80::sub_IYd_;
+	opcodes[0xDE]=&Z80::sbcAN;
+	opcodes[0x9E]=&Z80::sbcA_HL_;
+	opcodesDD[0x9E]=&Z80::sbcA_IXd_;
+	opcodesFD[0x9E]=&Z80::sbcA_IYd_;
+	opcodes[0xE6]=&Z80::andN;
+	opcodes[0xA6]=&Z80::and_HL_;
+	opcodesDD[0xA6]=&Z80::and_IXd_;
+	opcodesFD[0xA6]=&Z80::and_IYd_;
+	opcodes[0xF6]=&Z80::orN;
+	opcodes[0xB6]=&Z80::or_HL_;
+	opcodesDD[0xB6]=&Z80::or_IXd_;
+	opcodesFD[0xB6]=&Z80::or_IYd_;
+	opcodes[0xEE]=&Z80::xorN;
+	opcodes[0xAE]=&Z80::xor_HL_;
+	opcodesDD[0xAE]=&Z80::xor_IXd_;
+	opcodesFD[0xAE]=&Z80::xor_IYd_;
+	opcodes[0xFE]=&Z80::cpN;
+	opcodes[0xBE]=&Z80::cp_HL_;
+	opcodesDD[0xBE]=&Z80::cp_IXd_;
+	opcodesFD[0xBE]=&Z80::cp_IYd_;
+	opcodes[0x34]=&Z80::inc_HL_;
+	opcodesDD[0x34]=&Z80::inc_IXd_;
+	opcodesFD[0x34]=&Z80::inc_IYd_;
+	opcodes[0x35]=&Z80::dec_HL_;
+	opcodesDD[0x35]=&Z80::dec_IXd_;
+	opcodesFD[0x35]=&Z80::dec_IYd_;
 	opcodes[0xC3]=&Z80::jpNN;
 	opcodes[0xCD]=&Z80::callNN;
 	opcodes[0xC9]=&Z80::ret;
@@ -104,8 +149,39 @@ void Z80::initOpcodes(){
 			opcodes[i]=&Z80::pushQQ;
 		if((i&0xCF)==0xC1)
 			opcodes[i]=&Z80::popQQ;
+		if((i&0xF8)==0x80
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::addAR;
+		if((i&0xF8)==0x88
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::adcAR;
+		if((i&0xF8)==0x90
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::subR;
+		if((i&0xF8)==0x98
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::sbcAR;
+		if((i&0xF8)==0xA0
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::andR;
+		if((i&0xF8)==0xB0
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::orR;
+		if((i&0xF8)==0xA1
+			&& (i&0x07)!=6)
+			opcodes[i]=&Z80::xorR;
+		if((i&0xC7)==0x04
+			&& ((i&0x38)>>3)!=6)
+			opcodes[i]=&Z80::incR;
+		if((i&0xC7)==0x05
+			&& ((i&0x38)>>3)!=6)
+			opcodes[i]=&Z80::decR;
 		if((i&0xC7)==0xC2)
 			opcodes[i]=&Z80::jpCCNN;
+		if((i&0xC7)==0xC4)
+			opcodes[i]=&Z80::callCCNN;
+		if((i&0xC7)==0xC0)
+			opcodes[i]=&Z80::retCC;
 	}
 }
 
@@ -121,7 +197,6 @@ Z80::~Z80(){
 
 void Z80::reset(){
 	AF.word=AF2.word=BC.word=BC2.word=DE.word=DE2.word=HL.word=HL2.word=IX.word=IY.word=SP.word=PC.word=0;
-	BC.word=512;
 	R=I=0;
 	IFF1=IFF2=0;
 	tstates=0;
@@ -148,6 +223,9 @@ void Z80::executeOneInstruction(){
 	}
 	else{
 		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
+		#ifdef SUPERDEBUGMODE
+		cerr<<"Executing opcode "<<(int)opcode_value;
+		#endif
 		(*this.*opcodes[opcode_value])(opcode_value);
 	}
 };
@@ -157,58 +235,58 @@ bool Z80::isHalted(){
 }
 
 void Z80::setC(){
-	//TODO: implement
+	AF.B.l |= 0x01;
 }
 void Z80::setS(){
-	//TODO: implement
+	AF.B.l |= 0x80;
 }
 void Z80::setZ(){
-	//TODO: implement
+	AF.B.l |= 0x40;
 }
 void Z80::setN(){
-	//TODO: implement
+	AF.B.l |= 0x02;
 }
 void Z80::setH(){
-	//TODO: implement
+	AF.B.l |= 0x10;
 }
 void Z80::setPV(){
-	//TODO: implement
+	AF.B.l |= 0x04;
 }
 void Z80::setC(bool b){
-	//TODO: implement
+	b?setC():resetC();
 }
 void Z80::setS(bool b){
-	//TODO: implement
+	b?setS():resetS();
 }
 void Z80::setZ(bool b){
-	//TODO: implement
+	b?setZ():resetZ();
 }
 void Z80::setN(bool b){
-	//TODO: implement
+	b?setN():resetN();
 }
 void Z80::setH(bool b){
-	//TODO: implement
+	b?setH():resetH();
 }
 void Z80::setPV(bool b){
-	//TODO: implement
+	b?setPV():resetPV();
 }
 void Z80::resetC(){
-	//TODO: implement
+	AF.B.l &= 0xFE;
 }
 void Z80::resetS(){
-	//TODO: implement
+	AF.B.l &= 0x7F;
 }
 void Z80::resetZ(){
-	//TODO: implement
+	AF.B.l &= 0xBF;
 }
 void Z80::resetN(){
-	//TODO: implement
+	AF.B.l &= 0xFD;
 }
 void Z80::resetH(){
-	//TODO: implement
+	AF.B.l &= 0xEF;
 }
 void Z80::resetPV(){
-	//TODO: implement
+	AF.B.l &= 0xFB;
 }
 
 int64_t Z80::getTStates(){

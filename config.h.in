@@ -1,1 +1,20 @@
+#cmakedefine CMAKE_BUILD_TYPE @CMAKE_BUILD_TYPE@
+#cmakedefine ZENITH_SUPERDEBUGMODE
 
+#ifdef ZENITH_SUPERDEBUGMODE
+#define SUPERDEBUGMODE ZENITH_SUPERDEBUGMODE
+#endif
+
+#define BUILD_TYPE_DEBUG Debug
+#define BUILD_TYPE_RELEASE Release
+
+#ifndef STRINGIFY
+#define STRINGIFY(x) STRINGIFY_(x)
+#define STRINGIFY_(x) #x
+#endif
+
+#ifdef SUPERDEBUGMODE
+#define SUPERDEBUG(x) cerr<<" "<<x;
+#else
+#define SUPERDEBUG(x)
+#endif

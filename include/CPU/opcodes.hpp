@@ -117,7 +117,9 @@ void jpNN(uint8_t opcode);
 void jpCCNN(uint8_t opcode);
 //call and return group
 void callNN(uint8_t opcode);
+void callCCNN(uint8_t opcode);
 void ret(uint8_t opcode);
+void retCC(uint8_t opcode);
 //input and output group
 void out_N_A(uint8_t opcode);
 //convenience functions - not opcodes per se, but used exclusively by them to prevent typing the same commands repeatedly
@@ -125,3 +127,5 @@ void out_N_A(uint8_t opcode);
 inline void push(uint16_t value);
 inline uint16_t pop();
 inline void cp(uint8_t value);
+inline void addA(uint8_t value);
+inline void subA(uint8_t value);

@@ -127,6 +127,8 @@ class DummyDevice : public Z80Device{
 	private:
 		uint16_t amount=0;
 		uint8_t ports[65536];
+		uint8_t tvalue=0;
+		bool t=false;
 };
 
 void DummyDevice::out(uint16_t port,uint8_t value){
@@ -139,6 +141,13 @@ void DummyDevice::out(uint16_t port,uint8_t value){
 	}
 	else if(port==1)
 		cout<<(int)value;
+	else if(port==2){
+		if(t)
+			cout<<(int)((int)(tvalue<<8)+value)<<endl;
+		else
+			tvalue=value;
+		t=!t;
+	}
 	else
 		cout<<(int)value<<" written to port "<<(int)port<<endl;
 }

@@ -667,7 +667,7 @@ void Z80::cp_IYd_(uint8_t opcode){
 void Z80::incR(uint8_t opcode){
 	SUPERDEBUG(endl);
 	uint8_t old_val=*((*regs)[(opcode&0x38)>>3])++;
-	uint8_t new_val=*((*regs)[(opcode&0x38)>>3]);
+	uint8_t new_val=old_val+1;
 	setS((new_val&0x80)==0x80);
 	setZ(new_val==0);
 	//if bit 3 was set and isn't now, that means there was a carry from bit 3, so set H, else reset H
@@ -695,7 +695,7 @@ void Z80::inc_IXd_(uint8_t opcode){
 	tstates+=6;
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t old_val=ram->getByte(IX.word+d);
-	uint8_t new_val=old_val++;
+	uint8_t new_val=old_val+1;
 	ram->setByte(IX.word+d,new_val);
 	setS((new_val&0x80)==0x80);
 	setZ(new_val==0);
@@ -710,7 +710,7 @@ void Z80::inc_IYd_(uint8_t opcode){
 	tstates+=6;
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t old_val=ram->getByte(IY.word+d);
-	uint8_t new_val=old_val++;
+	uint8_t new_val=old_val+1;
 	ram->setByte(IY.word+d,new_val);
 	setS((new_val&0x80)==0x80);
 	setZ(new_val==0);
@@ -722,23 +722,62 @@ void Z80::inc_IYd_(uint8_t opcode){
 
 void Z80::decR(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	uint8_t old_val=*((*regs)[(opcode&0x38)>>3])++;
+	uint8_t new_val=old_val+1;
+	setS((new_val&0x80)==0x80);
+	setZ(new_val==0);
+	//if bit 3 was set and isn't now, that means there was a carry from bit 3, so set H, else reset H
+	setH((old_val&0x08)==0x08 && (new_val&0x08)==0);
+	setPV(old_val==0x7F);
+	setN();
 }
 
 void Z80::dec_HL_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	tstates++;
+	uint8_t old_val=ram->getByte(HL.word);
+	uint8_t new_val=old_val-1;
+	ram->setByte(HL.word,new_val);
+	setS((new_val&0x80)==0x80);
+	setZ(new_val==0);
+	//if bit 3 was set and isn't now, that means there was a carry from bit 3, so set H, else reset H
+	//...though H should also be set if bit 3 wasn't set but is now, so that needs to be fixed...
+	setH((old_val&0x08)==0x08 && (new_val&0x08)==0);
+	setPV(old_val==0x7F);
+	setN();
 }
 
 void Z80::dec_IXd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	tstates+=6;
+	int8_t d=ram->getByte(PC.word++);
+	uint8_t old_val=ram->getByte(IX.word+d);
+	uint8_t new_val=old_val-1;
+	ram->setByte(IX.word+d,new_val);
+	setS((new_val&0x80)==0x80);
+	setZ(new_val==0);
+	//if bit 3 was set and isn't now, that means there was a carry from bit 3, so set H, else reset H
+	setH((old_val&0x08)==0x08 && (new_val&0x08)==0);
+	setPV(old_val==0x7F);
+	setN();
 }
 
 void Z80::dec_IYd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	tstates+=6;
+	int8_t d=ram->getByte(PC.word++);
+	uint8_t old_val=ram->getByte(IY.word+d);
+	uint8_t new_val=old_val-1;
+	ram->setByte(IY.word+d,new_val);
+	setS((new_val&0x80)==0x80);
+	setZ(new_val==0);
+	//if bit 3 was set and isn't now, that means there was a carry from bit 3, so set H, else reset H
+	setH((old_val&0x08)==0x08 && (new_val&0x08)==0);
+	setPV(old_val==0x7F);
+	setN();
 }
+
+
 
 void Z80::halt(uint8_t opcode){
 	SUPERDEBUG(endl);

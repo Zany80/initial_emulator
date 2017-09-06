@@ -395,7 +395,7 @@ void Z80::lddr(uint8_t opcode){
 void Z80::cpi(uint8_t opcode){
 	SUPERDEBUG("(`cpi`)."<<endl);
 	SUPERDEBUG(endl);
-	cp(ram->getByte(HL.word++));
+	cp(ram->getByte(HL.word++),false);
 	setPV((BC.word--)!=0);
 	tstates+=5;
 }
@@ -403,7 +403,7 @@ void Z80::cpi(uint8_t opcode){
 void Z80::cpir(uint8_t opcode){
 	SUPERDEBUG("(`cpir`)."<<endl);
 	uint8_t v=ram->getByte(HL.word++);
-	cp(v);
+	cp(v,false);
 	setPV((BC.word--)!=0);
 	tstates+=5;
 	if(BC.word!=0 && !(AF.B.l&0x40)){
@@ -415,7 +415,7 @@ void Z80::cpir(uint8_t opcode){
 void Z80::cpd(uint8_t opcode){
 	SUPERDEBUG("(`cpd`)."<<endl);
 	SUPERDEBUG(endl);
-	cp(ram->getByte(HL.word--));
+	cp(ram->getByte(HL.word--),false);
 	setPV((BC.word--)!=0);
 	tstates+=5;
 }
@@ -424,7 +424,7 @@ void Z80::cpdr(uint8_t opcode){
 	SUPERDEBUG("(`cpdr`)."<<endl);
 	SUPERDEBUG(endl);
 	uint8_t v=ram->getByte(HL.word--);
-	cp(v);
+	cp(v,false);
 	setPV((BC.word--)!=0);
 	tstates+=5;
 	if(BC.word!=0 && !(AF.B.l&0x40)){
@@ -491,133 +491,151 @@ void Z80::adcA_IYd_(uint8_t opcode){
 
 
 void Z80::subR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG("(`sub r`). Subtracting "<<(int)*((*regs)[opcode&0x07])<<" from register A."<<endl);
 	subA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::subN(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	uint8_t N=ram->getByte(PC.word++);
+	SUPERDEBUG("(`sub N`). Subtracting "<<N<<" from register A."<<endl);
+	subA(N);
 }
 
 void Z80::sub_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	SUPERDEBUG("(`sub (HL)`). Subtracting "<<_HL_<<" from register A."<<endl);
+	subA(_HL_);
 }
 
 void Z80::sub_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint8_t _IXd_=ram->getByte(IX.word+d);
+	SUPERDEBUG("(`sub (IX+d)`). Subtracting "<<_IXd_<<" from register A."<<endl);
+	subA(_IXd_);
 }
 
 void Z80::sub_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint8_t _IYd_=ram->getByte(IY.word+d);
+	SUPERDEBUG("(`sub (IY+d)`). Subtracting "<<_IYd_<<" from register A."<<endl);
+	subA(_IYd_);
 }
 
 void Z80::sbcAR(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	SUPERDEBUG("(`sbc r`). Subtracting "<<(int)(*((*regs)[opcode&0x07])+(AF.B.l&0x01))<<" from register A."<<endl);
+	subA(*((*regs)[opcode&0x07])+(AF.B.l&0x01));
 }
 
 void Z80::sbcAN(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	uint8_t N=ram->getByte(PC.word++);
+	SUPERDEBUG("(`sbc N`). Subtracting "<<N+(AF.B.l&0x01)<<" from register A."<<endl);
+	subA(N);
 }
 
 void Z80::sbcA_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	SUPERDEBUG("(`sbc (HL)`). Subtracting "<<_HL_+(AF.B.l&0x01)<<" from register A."<<endl);
+	subA(_HL_+(AF.B.l&0x01));
 }
 
 void Z80::sbcA_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint8_t _IXd_=ram->getByte(IX.word+d);
+	SUPERDEBUG("(`sbc (IX+d)`). Subtracting "<<_IXd_+(AF.B.l&0x01)<<" from register A."<<endl);
+	subA(_IXd_+(AF.B.l&0x01));
 }
 
 void Z80::sbcA_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint8_t _IYd_=ram->getByte(IY.word+d);
+	SUPERDEBUG("(`sbc (IY+d)`). Subtracting "<<_IYd_+(AF.B.l&0x01)<<" from register A."<<endl);
+	subA(_IYd_+(AF.B.l&0x01));
 }
 
 void Z80::andR(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	andA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::andN(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	andA(ram->getByte(PC.word++));
 }
 
 void Z80::and_HL_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	andA(ram->getByte(HL.word));
 }
 
 void Z80::and_IXd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	andA(ram->getByte(IX.word+d));
 }
 
 void Z80::and_IYd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	andA(ram->getByte(IY.word+d));
 }
 
 void Z80::orR(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	orA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::orN(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	orA(ram->getByte(PC.word++));
 }
 
 void Z80::or_HL_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	orA(ram->getByte(HL.word));
 }
 
 void Z80::or_IXd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	orA(ram->getByte(IX.word+d));
 }
 
 void Z80::or_IYd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	orA(ram->getByte(IY.word+d));
 }
 
 void Z80::xorR(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	xorA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::xorN(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	xorA(ram->getByte(PC.word++));
 }
 
 void Z80::xor_HL_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	xorA(ram->getByte(HL.word));
 }
 
 void Z80::xor_IXd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	xorA(ram->getByte(IX.word+d));
 }
 
 void Z80::xor_IYd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	xorA(ram->getByte(IY.word+d));
 }
 
 void Z80::cpR(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	cp(*((*regs)[opcode&0x07]),true);
 }
 
 void Z80::cpN(uint8_t opcode){
@@ -679,13 +697,6 @@ void Z80::dec_IYd_(uint8_t opcode){
 	SUPERDEBUG(endl);
 
 }
-
-
-/*
- * regular CP:
- * setPV((AF.B.h&0x80)!=(value&0x80)&&(AF.B.h&0x80)!=(r&0x80));
- * setC(((AF.B.h-value)&0x100)==0x100);
- */
 
 void Z80::halt(uint8_t opcode){
 	SUPERDEBUG(endl);
@@ -792,12 +803,17 @@ inline uint16_t Z80::pop(){
 	return v;
 }
 
-inline void Z80::cp(uint8_t value){
-	uint8_t r=AF.B.h-value;
+inline void Z80::cp(uint8_t value,bool b){
+	uint16_t result=AF.B.h-value;
+	uint8_t r=result&0x00FF;
 	setS(r&0x80==0x80);
 	setZ(r==0);
 	setN();
 	setH((((AF.B.h&0x0F)-(value&0x0F))&0x10)==0x10);
+	if(b){
+		setPV((AF.B.h&0x80)!=(value&0x80)&&(AF.B.h&0x80)!=(r&0x80));
+		setC((result&0x0100)==0x0100);
+	}
 }
 
 inline void Z80::addA(uint8_t value){
@@ -822,4 +838,41 @@ inline void Z80::subA(uint8_t value){
 	setN();
 	setC((result&0x0100)==0x0100);
 	AF.B.h=r;
+}
+
+inline void Z80::andA(uint8_t value){
+	uint8_t result=AF.B.h&value;
+	setS((result&0x80)==0x80);
+	setZ(result==0);
+	setH();
+	setPV(!parity(result));
+	resetN();
+	resetC();
+}
+
+inline void Z80::orA(uint8_t value){
+	uint8_t result=AF.B.h|value;
+	setS((result&0x80)==0x80);
+	setZ(result==0);
+	resetH();
+	setPV(!parity(result));
+	resetN();
+	resetC();
+}
+
+inline void Z80::xorA(uint8_t value){
+	uint8_t result=AF.B.h ^ value;
+	setS((result&0x80)==0x80);
+	setZ(result==0);
+	resetH();
+	setPV(!parity(result));
+	resetN();
+	resetC();
+}
+
+inline int Z80::parity(uint8_t x){
+	x ^= x >> 4;
+	x ^= x >> 2;
+	x ^= x >> 1;
+	return x & 1;
 }

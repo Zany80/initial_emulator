@@ -1,12 +1,11 @@
-ld bc, 419
-ld de, 8131
-call add16
-ld hl, hello
+ld hl, hello_world
 ld a, 0
-call print_str
+call strlen
+ld a, c
+out (1), a
 halt
 
-hello: .db "Hello, World!",0
+hello_world: .db "Hello, World!",0
 
 ; add16
 ; inputs:
@@ -45,13 +44,17 @@ print_str:
 	ret
 
 newline:
-	ld a, 0x0A
-	out (0), a
-	ret
+    push af
+    ld a, 0x0A
+    out (0), a
+    pop af
+    ret
 space:
-	ld a, ' '
-	out (0), a
-	ret
+    push af
+    ld a, ' '
+    out (0), a
+    pop af
+    ret
 
 ; strlen
 ; inputs:
@@ -60,9 +63,9 @@ space:
 ; outputs:
 ;	c: length
 ; notes:
-;	maximum length: 255
+;	maximum length: 256
 strlen:
-	ld bc, 255
+	ld bc, 256
 	cpir
 	push af
 	ld a, 255

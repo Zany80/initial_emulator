@@ -126,6 +126,10 @@ void out_N_A(uint8_t opcode);
 //these don't have to have the signature `void opcode(uint8_t)`.
 inline void push(uint16_t value);
 inline uint16_t pop();
-inline void cp(uint8_t value);
+inline void cp(uint8_t value,bool b);
 inline void addA(uint8_t value);
 inline void subA(uint8_t value);
+inline void andA(uint8_t value);
+inline void orA(uint8_t value);
+inline void xorA(uint8_t value);
+inline int parity(uint8_t x);

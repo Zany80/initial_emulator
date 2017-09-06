@@ -28,18 +28,20 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=7
-FILE_NAME_0=15210;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
-FILE_NAME_1=3894;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
+current_page=0
+FILE_NAME_0=16494;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
+FILE_NAME_1=3853;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
 FILE_NAME_2=311;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
 FILE_NAME_3=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80Device.hpp;0;4
 FILE_NAME_4=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80Memory.hpp;0;4
-FILE_NAME_5=3413;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
+FILE_NAME_5=4873;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
 FILE_NAME_6=62;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
-FILE_NAME_7=505;ASM;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fasm%2Fzenith.asm;0;4
+FILE_NAME_7=508;ASM;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fasm%2Fzenith.asm;0;4
 FILE_NAME_8=376;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fconfig.h.in;0;4
 FILE_NAME_9=35;CMake;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2FCMakeLists.txt;0;4
-FILE_NAME_10=35;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDesktop%2Fworking;0;4
+FILE_NAME_10=1553;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Finclude%2Fz80e%2Fcore%2Fregisters.h;0;4
+FILE_NAME_11=476;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fregisters.c;0;4
+FILE_NAME_12=15435;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fcpu.c;0;4
 
 [build-menu]
 C++FT_00_LB=_Compile

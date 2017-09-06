@@ -640,22 +640,28 @@ void Z80::cpR(uint8_t opcode){
 
 void Z80::cpN(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	uint8_t N=ram->getByte(PC.word++);
+	cp(N,true);
 }
 
 void Z80::cp_HL_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	cp(_HL_,true);
 }
 
 void Z80::cp_IXd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	uint8_t _IXd_=ram->getByte(IX.word+d);
+	cp(_IXd_,true);
 }
 
 void Z80::cp_IYd_(uint8_t opcode){
 	SUPERDEBUG(endl);
-
+	int8_t d=ram->getByte(PC.word++);
+	uint8_t _IYd_=ram->getByte(IY.word+d);
+	cp(_IYd_,true);
 }
 
 void Z80::incR(uint8_t opcode){

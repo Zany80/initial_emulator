@@ -116,6 +116,11 @@ void Z80::initOpcodes(){
 	opcodes[0x35]=&Z80::dec_HL_;
 	opcodesDD[0x35]=&Z80::dec_IXd_;
 	opcodesFD[0x35]=&Z80::dec_IYd_;
+	opcodes[0x27]=&Z80::daa;
+	opcodes[0x2F]=&Z80::cpl;
+	opcodesED[0x44]&Z80::neg;
+	opcodes[0x3F]=&Z80::ccf;
+	opcodes[0x37]&Z80::scf;
 	opcodes[0xC3]=&Z80::jpNN;
 	opcodes[0xCD]=&Z80::callNN;
 	opcodes[0xC9]=&Z80::ret;
@@ -251,6 +256,24 @@ void Z80::setH(){
 }
 void Z80::setPV(){
 	AF.B.l |= 0x04;
+}
+bool Z80::getC(){
+	return (AF.B.l & 0x01)==0x01;
+}
+bool Z80::getS(){
+	return (AF.B.l & 0x80)==0x80;
+}
+bool Z80::getZ(){
+	return (AF.B.l & 0x40)==0x40;
+}
+bool Z80::getN(){
+	return (AF.B.l & 0x02)==0x02;
+}
+bool Z80::getH(){
+	return (AF.B.l & 0x10)==0x10;
+}
+bool Z80::getPV(){
+	return (AF.B.l & 0x04)==0x04;
 }
 void Z80::setC(bool b){
 	b?setC():resetC();

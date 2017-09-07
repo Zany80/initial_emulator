@@ -75,6 +75,12 @@ class Z80{
 		void setN();
 		void setH();
 		void setPV();
+		bool getC();
+		bool getS();
+		bool getZ();
+		bool getN();
+		bool getH();
+		bool getPV();
 		void setC(bool b);
 		void setS(bool b);
 		void setZ(bool b);

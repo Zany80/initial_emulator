@@ -777,7 +777,64 @@ void Z80::dec_IYd_(uint8_t opcode){
 	setN();
 }
 
+//General-purpose arithmetic group
 
+void Z80::daa(uint8_t opcode){
+	SUPERDEBUG(endl);
+	uint8_t old=AF.B.h;
+	uint8_t v=0;
+	if((AF.B.h&0xF)>9 || getH())
+		v+=0x06;
+	if(((AF.B.h+v)>>4)>9 || getC() || (((uint16_t)(AF.B.h+v))&0x100)==0x100)
+		v+=0x60;
+	if(getN()){
+		AF.B.h-=v;
+		setH((((old & 0xf) - (v & 0xf)) & 0x10)==0x10);
+	}
+	else{
+		AF.B.h+=v;
+		setH((((old & 0xf)+(v & 0xf)) & 0x10)==0x10);
+	}
+	setS((AF.B.h&0x80)==0x80);
+	setZ(AF.B.h==0);
+	setPV(!parity(AF.B.h));
+	setC(v>=0x60);
+}
+
+void Z80::cpl(uint8_t opcode){
+	SUPERDEBUG(endl);
+	AF.B.h ^= 0xFF;
+	setH();
+	setN();
+}
+
+void Z80::neg(uint8_t opcode){
+	SUPERDEBUG(endl);
+	uint8_t old=AF.B.h;
+	AF.B.h=-old;
+	setS((AF.B.h&0x80)==0x80);
+	setZ(AF.B.h==0);
+	setPV(old==0x80);
+	setN();
+	setC(old!=0);
+}
+
+void Z80::ccf(uint8_t opcode){
+	SUPERDEBUG(endl);
+	setH(getC());
+	setC(!getC());
+	resetN();
+}
+
+void Z80::scf(uint8_t opcode){
+	SUPERDEBUG(endl);
+	resetH();
+	resetN();
+	setC();
+}
+
+
+//CPU control group
 
 void Z80::halt(uint8_t opcode){
 	SUPERDEBUG(endl);

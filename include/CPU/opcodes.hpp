@@ -3,7 +3,6 @@ void DD(uint8_t opcode);
 void FD(uint8_t opcode);
 void ED(uint8_t opcode);
 //8-bit load group
-void nop(uint8_t opcode);
 void ldRRx(uint8_t opcode);
 void ldRN(uint8_t opcode);
 void ldR_HL_(uint8_t opcode);
@@ -110,8 +109,15 @@ void decR(uint8_t opcode);
 void dec_HL_(uint8_t opcode);
 void dec_IXd_(uint8_t opcode);
 void dec_IYd_(uint8_t opcode);
-//general purpose arithmetic and cpu control group
+//general purpose arithmetic
+void daa(uint8_t opcode);
+void cpl(uint8_t opcode);
+void neg(uint8_t opcode);
+void ccf(uint8_t opcode);
+void scf(uint8_t opcode);
+//cpu control group
 void halt(uint8_t opcode);
+void nop(uint8_t opcode);
 //jump group
 void jpNN(uint8_t opcode);
 void jpCCNN(uint8_t opcode);

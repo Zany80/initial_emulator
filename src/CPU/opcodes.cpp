@@ -22,12 +22,6 @@ void Z80::ED(uint8_t opcode){
 
 //8-bit load group
 
-void Z80::nop(uint8_t opcode){
-	if(halted)
-		return;
-	SUPERDEBUG("(nop). Opcode: "<<(int)opcode<<endl);
-}
-
 void Z80::ldRRx(uint8_t opcode){
 	SUPERDEBUG(endl);
 	*((*regs)[(opcode&0x38)>>3])=*((*regs)[opcode&0x07]);
@@ -835,6 +829,12 @@ void Z80::scf(uint8_t opcode){
 
 
 //CPU control group
+
+void Z80::nop(uint8_t opcode){
+	if(halted)
+		return;
+	SUPERDEBUG("(nop). Opcode: "<<(int)opcode<<endl);
+}
 
 void Z80::halt(uint8_t opcode){
 	SUPERDEBUG(endl);

@@ -116,8 +116,20 @@ void neg(uint8_t opcode);
 void ccf(uint8_t opcode);
 void scf(uint8_t opcode);
 //cpu control group
-void halt(uint8_t opcode);
 void nop(uint8_t opcode);
+void halt(uint8_t opcode);
+void di(uint8_t opcode);
+void ei(uint8_t opcode);
+void im(uint8_t opcode);
+/*
+ * 46=0
+ * 56=1
+ * 5e=2
+ *
+ * 01000110 = 0
+ * 01010110 = 1
+ * 01011110 = 2
+ */
 //jump group
 void jpNN(uint8_t opcode);
 void jpCCNN(uint8_t opcode);

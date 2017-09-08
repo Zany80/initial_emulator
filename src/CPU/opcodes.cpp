@@ -954,6 +954,143 @@ void Z80::decIY(uint8_t opcode){
 	tstates+=2;
 }
 
+//rotate/shift group
+
+void Z80::rlca(uint8_t opcode){
+
+}
+
+void Z80::rla(uint8_t opcode){
+
+}
+
+void Z80::rrca(uint8_t opcode){
+
+}
+
+void Z80::rra(uint8_t opcode){
+
+}
+
+void Z80::rlcR(uint8_t opcode){
+
+}
+
+void Z80::rlc_HL_(uint8_t opcode){
+
+}
+
+void Z80::rlc_IXd_(uint8_t opcode){
+
+}
+
+void Z80::rlc_IYd_(uint8_t opcode){
+
+}
+
+void Z80::rlR(uint8_t opcode){
+
+}
+
+void Z80::rl_HL_(uint8_t opcode){
+
+}
+
+void Z80::rl_IXd_(uint8_t opcode){
+
+}
+
+void Z80::rl_IYd_(uint8_t opcode){
+
+}
+
+void Z80::rrcR(uint8_t opcode){
+
+}
+
+void Z80::rrc_HL_(uint8_t opcode){
+
+}
+
+void Z80::rrc_IXd_(uint8_t opcode){
+
+}
+
+void Z80::rrc_IYd_(uint8_t opcode){
+
+}
+
+void Z80::rrR(uint8_t opcode){
+
+}
+
+void Z80::rr_HL_(uint8_t opcode){
+
+}
+
+void Z80::rr_IXd_(uint8_t opcode){
+
+}
+
+void Z80::rr_IYd_(uint8_t opcode){
+
+}
+
+void Z80::slaR(uint8_t opcode){
+
+}
+
+void Z80::sla_HL_(uint8_t opcode){
+
+}
+
+void Z80::sla_IXd_(uint8_t opcode){
+
+}
+
+void Z80::sla_IYd_(uint8_t opcode){
+
+}
+
+void Z80::sraR(uint8_t opcode){
+
+}
+
+void Z80::sra_HL_(uint8_t opcode){
+
+}
+
+void Z80::sra_IXd_(uint8_t opcode){
+
+}
+
+void Z80::sra_IYd_(uint8_t opcode){
+
+}
+
+void Z80::srlR(uint8_t opcode){
+
+}
+
+void Z80::srl_HL_(uint8_t opcode){
+
+}
+
+void Z80::srl_IXd_(uint8_t opcode){
+
+}
+
+void Z80::srl_IYd_(uint8_t opcode){
+
+}
+
+void Z80::rld(uint8_t opcode){
+
+}
+
+void Z80::rrd(uint8_t opcode){
+
+}
 
 //jump group
 

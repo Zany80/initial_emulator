@@ -4,8 +4,6 @@ pipelines:
   default:
     - step:
         caches:
-          - sfml
-          - tgui
           - apt
         script: # Modify the commands below to build your repository.
           - apt-get update

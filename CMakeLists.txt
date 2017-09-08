@@ -9,9 +9,13 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
 endif()
 
+# Default to static libs
 if(NOT SFML_STATIC_LIBRARIES)
-	set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Use static SFML libs" FORCE)
+	set(SFML_STATIC_LIBRARIES TRUE CACHE BOOL "Use static SFML libs" FORCE)
 endif()
+
+set(SFML_ROOT ${CMAKE_SOURCE_DIR}/libs/)
+set(TGUI_ROOT ${SFML_ROOT})
 
 if(NOT ZENITH_SUPERDEBUGMODE)
 	set(ZENITH_SUPERDEBUGMODE FALSE CACHE BOOL "Super debug mode (activates verbose debug logging to standard error)" FORCE)

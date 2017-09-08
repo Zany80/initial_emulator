@@ -66,9 +66,11 @@ class DummyMemory : public Z80Memory{
 DummyMemory::DummyMemory(const char * name){
 	//load data from zenith.bin
 	ifstream f(name, ios::in | ios::binary | ios::ate);
-	emu=new uint8_t[0x100]{
-		0xC3,0x00,0x01,0x00,0x00,0x00,0xC9
-	};
+	if(Main::instance->cpm_emu){
+		emu=new uint8_t[0x100]{
+			0xC3,0x00,0x01,0x00,0x00,0x00,0xC9
+		};
+	}
     if (!f.is_open()){
 		cout<<"Failed to load data from file, using compiled in program."<<endl;
 		cout<<"Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within."<<endl;
@@ -112,6 +114,27 @@ uint8_t DummyMemory::getByte(uint16_t address){
 
 uint8_t DummyMemory::getOpcode(uint16_t address){
 	Main::instance->cpu->tstates+=4;
+	if(Main::instance->cpm_emu&&address==5){
+		uint8_t C=Main::instance->cpu->getBC().B.l;
+		word DE=Main::instance->cpu->getDE();
+		switch(C){
+			case 0:
+				cout<<"BDOS system reset"<<endl;
+				Main::instance->cpu->reset();
+				break;
+			case 2:
+				cout<<(char)DE.B.l;
+				break;
+			case 9:
+				while(memory[DE.word]!='$')
+					cout<<(char)memory[DE.word++];
+				cout.flush();
+				break;
+			default:
+				cout<<"BDOS call: "<<C<<endl;
+				break;
+		}
+	}
 	if(Main::instance->cpm_emu&&address<0x100)
 		return emu[address];
 	return memory[address];
@@ -178,6 +201,7 @@ uint8_t DummyDevice::in(uint16_t port){
 };
 
 Main::Main(int argc,char ** argv){
+	Main::instance=this;
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setVerticalSyncEnabled(true);
 	background=Color(3,225,197);
@@ -204,7 +228,6 @@ Main::Main(int argc,char ** argv){
 	if(!name_changed)
 		cout<<"No --file argument received, defaulting to \"zenith.bin\"..."<<endl;
 	cpu=new Z80(new DummyMemory(name.c_str()),new DummyDevice());
-	Main::instance=this;
 	default_font=new Font;
 	default_font->loadFromMemory(&Famirids_ttf,Famirids_ttf_len);
 	git_revision=new Text(string("Git revision: ")+STRINGIFY(GIT_REVISION),*default_font,23);

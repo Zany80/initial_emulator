@@ -323,4 +323,12 @@ void Z80::add_tstates(uint64_t tstates){
 	this->tstates+=tstates;
 }
 
+word Z80::getBC(){
+	return this->BC;
+}
+
+word Z80::getDE(){
+	return this->DE;
+}
+
 ZENITH_FOOTER

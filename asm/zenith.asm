@@ -1,3 +1,5 @@
+.fill 0x100-$
+
 ; clear the screen - if you comment this out, running repeatedly (clicking the window repeatedly) will append the text to the screen
 ld a, 0
 out (3), a
@@ -5,10 +7,14 @@ out (3), a
 ld hl, hello_world
 ld a, 0
 call draw_str
+; print using BDOS CP/M syscall
+ld de, hello_world
+ld c, 9
+call 5
 ; halt the CPU
 halt
 
-hello_world: .db "Welcome to Zenith80! If you need help, ask on #other-consoles\non the Fantasy Consoles Discord server.\n",0
+hello_world: .db "Welcome to Zenith80! If you need help, ask on #other-consoles\non the Fantasy Consoles Discord server.\n$",0
 
 ; add16
 ; inputs:
@@ -55,7 +61,6 @@ _:
 	out (3), a
 	dec c
 	ld a, c
-	out (1), a
 	cp 0
 	jp nz, --_
 	ret

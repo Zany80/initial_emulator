@@ -14,7 +14,7 @@ cd build
 cmake ..
 make -j6
 make install
-cd $HOME
+cd ../..
 if [ ! -d "./TGUI" ]
 then
 	git clone https://github.com/texus/TGUI

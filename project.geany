@@ -28,21 +28,16 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=13
-FILE_NAME_0=19621;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
-FILE_NAME_1=3464;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
-FILE_NAME_2=1036;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
-FILE_NAME_3=7257;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
-FILE_NAME_4=62;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
-FILE_NAME_5=304;ASM;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fasm%2Fzenith.asm;0;4
-FILE_NAME_6=449;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fconfig.h.in;0;4
-FILE_NAME_7=2085;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Finclude%2Fz80e%2Fcore%2Fregisters.h;0;4
-FILE_NAME_8=28291;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fcpu.c;0;4
-FILE_NAME_9=3057;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
-FILE_NAME_10=429;CMake;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2FCMakeLists.txt;0;4
-FILE_NAME_11=458;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fmain.hpp;0;4
-FILE_NAME_12=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FLibs%2Fz80cpp%2Fexample%2Fz80sim.cpp;0;4
-FILE_NAME_13=0;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
+current_page=0
+FILE_NAME_0=21050;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
+FILE_NAME_1=4567;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
+FILE_NAME_2=3308;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Finclude%2Fz80e%2Fcore%2Fregisters.h;0;4
+FILE_NAME_3=27355;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fcpu.c;0;4
+FILE_NAME_4=3086;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
+FILE_NAME_5=5591;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
+FILE_NAME_6=168;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
+FILE_NAME_7=1265;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
+FILE_NAME_8=3217;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
 
 [build-menu]
 C++FT_00_LB=_Compile

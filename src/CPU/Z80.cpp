@@ -35,7 +35,6 @@ void Z80::initOpcodes(){
 	opcodes[0xDD]=&Z80::DD;
 	opcodes[0xFD]=&Z80::FD;
 	opcodes[0xD3]=&Z80::out_N_A;
-	opcodes[0x76]=&Z80::halt;
 	opcodes[0x36]=&Z80::ld_HL_N;
 	opcodesDD[0x36]=&Z80::ld_IXd_N;
 	opcodesFD[0x36]=&Z80::ld_IYd_N;
@@ -118,9 +117,13 @@ void Z80::initOpcodes(){
 	opcodesFD[0x35]=&Z80::dec_IYd_;
 	opcodes[0x27]=&Z80::daa;
 	opcodes[0x2F]=&Z80::cpl;
-	opcodesED[0x44]&Z80::neg;
+	opcodesED[0x44]=&Z80::neg;
 	opcodes[0x3F]=&Z80::ccf;
-	opcodes[0x37]&Z80::scf;
+	opcodes[0x37]=&Z80::scf;
+	opcodes[0x76]=&Z80::halt;
+	opcodes[0xF3]=&Z80::di;
+	opcodes[0xFB]=&Z80::ei;
+	opcodesED[0x46]=opcodesED[0x56]=opcodesED[0x5E]=&Z80::im;
 	opcodes[0xC3]=&Z80::jpNN;
 	opcodes[0xCD]=&Z80::callNN;
 	opcodes[0xC9]=&Z80::ret;

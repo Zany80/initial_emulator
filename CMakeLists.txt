@@ -19,6 +19,10 @@ endif()
 
 project(ZENITH80 VERSION 0.1.0.0 LANGUAGES C CXX)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+
+include(git_revision)
+
 configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
@@ -29,7 +33,6 @@ set(EXECUTABLE_NAME zenith80)
 add_subdirectory(src)
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
 find_package(SFML 2 REQUIRED graphics window system )
 if(SFML_NOTFOUND)

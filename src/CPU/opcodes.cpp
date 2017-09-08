@@ -841,11 +841,29 @@ void Z80::halt(uint8_t opcode){
 	halted=true;
 }
 
+void Z80::di(uint8_t opcode){
+	IFF1=IFF2=false;
+}
+
+void Z80::ei(uint8_t opcode){
+	IFF1=IFF2=true;
+}
+
+void Z80::im(uint8_t opcode){
+	if((opcode&0x18)==0x10)
+		mode=IM1;
+	else if((opcode&0x18)==0x18)
+		mode=IM2;
+	else
+		mode=IM0;
+}
+
 //jump group
 
 void Z80::jpNN(uint8_t opcode){
-	SUPERDEBUG(endl);
-	PC.word=ram->getWord(PC.word);
+	uint16_t address=ram->getWord(PC.word);
+	SUPERDEBUG("(jp NN). Jumping to address "<<address);
+	PC.word=address;
 }
 
 void Z80::jpCCNN(uint8_t opcode){

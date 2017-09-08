@@ -24,6 +24,7 @@ using sf::Mouse;
 
 #include <iostream>
 using std::cout;
+using std::cerr;
 using std::endl;
 
 #include <fstream>
@@ -33,6 +34,10 @@ using std::ios;
 
 #include <string>
 using std::string;
+
+#include <config.h>
+
+#include <fonts/Famirids.h>
 
 int main(int argc,char ** argv){
 	return Zenith80::Main::main(argc,argv);
@@ -55,11 +60,15 @@ class DummyMemory : public Z80Memory{
 		void setWord(uint16_t address,uint16_t value) override;
 	private:
 		uint8_t * memory;
+		uint8_t * emu;
 };
 
 DummyMemory::DummyMemory(const char * name){
 	//load data from zenith.bin
 	ifstream f(name, ios::in | ios::binary | ios::ate);
+	emu=new uint8_t[0x100]{
+		0xC3,0x00,0x01,0x00,0x00,0x00,0xC9
+	};
     if (!f.is_open()){
 		cout<<"Failed to load data from file, using compiled in program."<<endl;
 		cout<<"Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within."<<endl;
@@ -70,7 +79,7 @@ DummyMemory::DummyMemory(const char * name){
 		//};
 			//~ for(int i=0;i<65536;i++)
 				//~ memory[i]=0;
-			memory=new uint8_t[65536]{
+		memory=new uint8_t[65536]{
 			0x3E,0x48,0xD3,0x00,
 			0x3E,0x45,0xD3,0x00,
 			0x3E,0x4C,0xD3,0x00,
@@ -85,22 +94,26 @@ DummyMemory::DummyMemory(const char * name){
 		return;
 	}
 	memory=new uint8_t[65536];
+	for(int i=0;i<65536;i++)
+		memory[i]=0;
 	cout<<"Loading program from "<<name<<endl;
 	streampos size=f.tellg();
     f.seekg(0, ios::beg);
     f.read((char*)memory,size);
-    for(int i=size;i<65536;i++)
-		memory[i]=0x00;
     f.close();
 }
 
 uint8_t DummyMemory::getByte(uint16_t address){
 	Main::instance->cpu->tstates+=3;
+	if(Main::instance->cpm_emu&&address<0x100)
+		return emu[address];
 	return memory[address];
 }
 
 uint8_t DummyMemory::getOpcode(uint16_t address){
 	Main::instance->cpu->tstates+=4;
+	if(Main::instance->cpm_emu&&address<0x100)
+		return emu[address];
 	return memory[address];
 }
 
@@ -134,22 +147,29 @@ class DummyDevice : public Z80Device{
 void DummyDevice::out(uint16_t port,uint8_t value){
 	Main::instance->cpu->tstates+=4;
 	ports[port]=value;
-	if(port==0){
-		cout<<value;
-		if((amount++)%1024==0)
-			cout.flush();
+	switch(port){
+		case 0:
+			cout<<value;
+			if((amount++)%1024==0)
+				cout.flush();
+			break;
+		case 1:
+			cout<<(int)value;
+			break;
+		case 2:
+			if(t)
+				cout<<(int)((int)(tvalue<<8)+value)<<endl;
+			else
+				tvalue=value;
+			t=!t;
+			break;
+		case 3:
+			Main::instance->put_char((char)value);
+			break;
+		default:
+			cout<<(int)value<<" written to port "<<(int)port<<endl;
+			break;
 	}
-	else if(port==1)
-		cout<<(int)value;
-	else if(port==2){
-		if(t)
-			cout<<(int)((int)(tvalue<<8)+value)<<endl;
-		else
-			tvalue=value;
-		t=!t;
-	}
-	else
-		cout<<(int)value<<" written to port "<<(int)port<<endl;
 }
 
 uint8_t DummyDevice::in(uint16_t port){
@@ -160,23 +180,54 @@ uint8_t DummyDevice::in(uint16_t port){
 Main::Main(int argc,char ** argv){
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setVerticalSyncEnabled(true);
-	background=Color(244,255,190);
-	string name;
-	if(argc>1)
-		name=argv[1];
-	else
-		name="zenith.bin";
+	background=Color(3,225,197);
+	string name="zenith.bin";
+	bool name_changed=false;
+	cpm_emu=false;
+	for(int i=1;i<argc;i++){
+		string arg=argv[i];
+		if(arg=="--file"){
+			cout<<"--file recognized, ";
+			if(name_changed)
+				cout<<"discarding previous argument \""<<name.c_str()<<"\" and ";
+			name=argv[++i];
+			cout<<"loading \""<<name<<"\"..."<<endl;
+			name_changed=true;
+		}
+		else if(arg=="--cpm"){
+			cpm_emu=true;
+		}
+		else{
+			cerr<<"Unrecognized option \""<<arg<<"\", ignoring..."<<endl;
+		}
+	}
+	if(!name_changed)
+		cout<<"No --file argument received, defaulting to \"zenith.bin\"..."<<endl;
 	cpu=new Z80(new DummyMemory(name.c_str()),new DummyDevice());
 	Main::instance=this;
+	default_font=new Font;
+	default_font->loadFromMemory(&Famirids_ttf,Famirids_ttf_len);
+	git_revision=new Text(string("Git revision: ")+STRINGIFY(GIT_REVISION),*default_font,23);
+	git_revision->setFillColor(Color(255,0,0));
+	git_revision->setPosition(0,0);
+	terminal=new Text("",*default_font,18);
+	terminal->setFillColor(Color(39,91,201));
+	terminal->setPosition(0,25);
+	terminal_string="";
 }
 
 Main::~Main(){
 	delete window;
+	delete cpu;
+	delete git_revision;
+	delete default_font;
 }
 
 int Main::run(){
 	while(window->isOpen()){
 		window->clear(this->background);
+		window->draw(*(this->git_revision));
+		window->draw(*(this->terminal));
 		window->display();
 		cpu->executeXInstructions(4.1*1000*1000/60);
 		this->processEvents();
@@ -203,6 +254,11 @@ void Main::processEvents(){
 				break;
 		}
 	}
+}
+
+void Main::put_char(char c){
+	terminal_string+=c;
+	terminal->setString(terminal_string);
 }
 
 ZENITH_FOOTER

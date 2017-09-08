@@ -5,6 +5,11 @@
 #include <SFML/Graphics.hpp>
 using sf::RenderWindow;
 using sf::Color;
+using sf::Text;
+using sf::Font;
+
+#include <string>
+using std::string;
 
 #include <CPU/Z80.hpp>
 
@@ -18,9 +23,15 @@ class Main{
 		int run();
 		static Main * instance;
 		Z80 * cpu;
+		bool cpm_emu;
+		void put_char(char c);
 	private:
 		RenderWindow * window;
 		Color background;
+		Text * git_revision;
+		Text * terminal;
+		string terminal_string;
+		Font * default_font;
 		void processEvents();
 };
 

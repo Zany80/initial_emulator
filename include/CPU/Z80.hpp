@@ -12,6 +12,10 @@ using std::vector;
 
 ZENITH_HEADER
 
+enum InterruptMode{
+	IM0,IM1,IM2
+};
+
 class Z80{
 	public:
 		typedef void (Z80::*opcode)(uint8_t);
@@ -54,6 +58,7 @@ class Z80{
 		word IY;
 		word SP;
 		word PC;
+		InterruptMode mode;
 		uint8_t R;
 		uint8_t I;
 		vector<uint8_t*>* regs;

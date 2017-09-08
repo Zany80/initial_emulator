@@ -18,3 +18,5 @@
 #else
 #define SUPERDEBUG(x)
 #endif
+
+#define GIT_REVISION @GIT_REVISION@

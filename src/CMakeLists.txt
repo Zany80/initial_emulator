@@ -1,4 +1,5 @@
 add_subdirectory(CPU)
+add_subdirectory(assets)
 
 set(SOURCES
 	${SOURCES}

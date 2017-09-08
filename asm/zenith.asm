@@ -1,8 +1,13 @@
+
 ld hl, hello_world
 ld a, 0
 call strlen
-ld a, c
-out (1), a
+ld a, 'H'
+out (3), a
+ld a, 'i'
+out (3), a
+ld a, '!'
+out (3), a
 halt
 
 hello_world: .db "Hello, World!",0

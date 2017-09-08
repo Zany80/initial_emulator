@@ -28,19 +28,19 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=0
-FILE_NAME_0=18549;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
-FILE_NAME_1=3514;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
-FILE_NAME_2=1310;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
-FILE_NAME_3=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80Device.hpp;0;4
-FILE_NAME_4=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80Memory.hpp;0;4
-FILE_NAME_5=3139;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
-FILE_NAME_6=62;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
-FILE_NAME_7=508;ASM;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fasm%2Fzenith.asm;0;4
-FILE_NAME_8=376;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fconfig.h.in;0;4
-FILE_NAME_9=35;CMake;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2FCMakeLists.txt;0;4
-FILE_NAME_10=2085;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Finclude%2Fz80e%2Fcore%2Fregisters.h;0;4
-FILE_NAME_11=28291;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fcpu.c;0;4
+current_page=5
+FILE_NAME_0=18939;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
+FILE_NAME_1=3464;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
+FILE_NAME_2=1036;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
+FILE_NAME_3=1257;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
+FILE_NAME_4=62;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
+FILE_NAME_5=0;ASM;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fasm%2Fzenith.asm;0;4
+FILE_NAME_6=376;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fconfig.h.in;0;4
+FILE_NAME_7=2085;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Finclude%2Fz80e%2Fcore%2Fregisters.h;0;4
+FILE_NAME_8=28291;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fcpu.c;0;4
+FILE_NAME_9=2581;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
+FILE_NAME_10=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FLibs%2Fz80cpp%2Fexample%2Fz80sim.cpp;0;4
+FILE_NAME_11=362;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fmain.hpp;0;4
 
 [build-menu]
 C++FT_00_LB=_Compile
@@ -55,7 +55,7 @@ C++FT_02_CM=cppcheck --language=c++ --enable=warning,style --template=gcc "%f"
 C++FT_02_WD=
 NF_00_LB=_Make
 NF_00_CM=make --no-print-directory
-NF_00_WD=%p
+NF_00_WD=%p/builds/build-linux-x86_64-superdebug
 NF_01_LB=Make Custom _Target...
 NF_01_CM=make --no-print-directory 
 NF_01_WD=%p
@@ -63,7 +63,7 @@ NF_02_LB=Make _Object
 NF_02_CM=make --no-print-directory %e.o
 NF_02_WD=%p
 EX_00_LB=_Execute
-EX_00_CM=./zenith80 %e.bin
+EX_00_CM=./zenith80 --file %e.bin
 EX_00_WD=%p/builds/build-linux-x86_64-debug
 ASMFT_00_LB=_Compile
 ASMFT_00_CM=sass "%d/%f"

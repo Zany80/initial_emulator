@@ -633,8 +633,8 @@ void Z80::cpR(uint8_t opcode){
 }
 
 void Z80::cpN(uint8_t opcode){
-	SUPERDEBUG(endl);
 	uint8_t N=ram->getByte(PC.word++);
+	SUPERDEBUG("(`cp N`). Comparing to "<<(int)N<<"..."<<endl);
 	cp(N,true);
 }
 
@@ -659,9 +659,10 @@ void Z80::cp_IYd_(uint8_t opcode){
 }
 
 void Z80::incR(uint8_t opcode){
-	SUPERDEBUG(endl);
-	uint8_t old_val=*((*regs)[(opcode&0x38)>>3])++;
+	SUPERDEBUG("(`inc r`). Incrementing register "<<((opcode&0x38)>>3)<<"."<<endl);
+	uint8_t old_val=*((*regs)[(opcode&0x38)>>3]);
 	uint8_t new_val=old_val+1;
+	*((*regs)[(opcode&0x38)>>3])=new_val;
 	setS((new_val&0x80)==0x80);
 	setZ(new_val==0);
 	//if bit 3 was set and isn't now, that means there was a carry from bit 3, so set H, else reset H
@@ -715,9 +716,10 @@ void Z80::inc_IYd_(uint8_t opcode){
 }
 
 void Z80::decR(uint8_t opcode){
-	SUPERDEBUG(endl);
-	uint8_t old_val=*((*regs)[(opcode&0x38)>>3])++;
-	uint8_t new_val=old_val+1;
+	SUPERDEBUG("(`dec r`). Decrementing register "<<((opcode&0x38)>>3)<<"."<<endl);
+	uint8_t old_val=*((*regs)[(opcode&0x38)>>3]);
+	uint8_t new_val=old_val-1;
+	*((*regs)[(opcode&0x38)>>3])=new_val;
 	setS((new_val&0x80)==0x80);
 	setZ(new_val==0);
 	//if bit 3 was set and isn't now, that means there was a carry from bit 3, so set H, else reset H
@@ -867,21 +869,25 @@ void Z80::jpNN(uint8_t opcode){
 }
 
 void Z80::jpCCNN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG("(`jp cc, nn`).");
 	uint16_t address=ram->getWord(PC.word);
 	PC.word+=2;
 	uint8_t c=(opcode&0x38)>>3;
+	SUPERDEBUG("Condition: "<<(int)c<<".");
 	if(
-		(c==0&&(AF.B.l&0x40)!=0x40)
-		|| (c==1&&((AF.B.l&0x40)==0x40))
-		|| (c==2&&((AF.B.l&0x01)!=0x01))
-		|| (c==3&&((AF.B.l&0x01)==0x01))
-		|| (c==4&&((AF.B.l&0x04)!=0x04))
-		|| (c==5&&((AF.B.l&0x04)==0x04))
-		|| (c==6&&((AF.B.l&0x80)!=0x80))
-		|| (c==7&&((AF.B.l&0x80)==0x80))
-	)
+		(c==0&&!getZ())
+		|| (c==1 && getZ())
+		|| (c==2 && !getC())
+		|| (c==3 && getC())
+		|| (c==4 && !getPV())
+		|| (c==5 && getPV())
+		|| (c==6 && !getS())
+		|| (c==7 && getS())
+	){
 		PC.word=address;
+		SUPERDEBUG("Jumping to "<<address<<"...");
+	}
+	SUPERDEBUG(endl);
 }
 
 //call and return group

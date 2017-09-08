@@ -258,6 +258,10 @@ void Main::processEvents(){
 
 void Main::put_char(char c){
 	terminal_string+=c;
+	if(c==' ')
+		terminal_string+=' ';
+	if(c==0)
+		terminal_string="";
 	terminal->setString(terminal_string);
 }
 

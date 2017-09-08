@@ -1,16 +1,14 @@
-
+; clear the screen - if you comment this out, running repeatedly (clicking the window repeatedly) will append the text to the screen
+ld a, 0
+out (3), a
+; print the hello_world string
 ld hl, hello_world
 ld a, 0
-call strlen
-ld a, 'H'
-out (3), a
-ld a, 'i'
-out (3), a
-ld a, '!'
-out (3), a
+call draw_str
+; halt the CPU
 halt
 
-hello_world: .db "Hello, World!",0
+hello_world: .db "Welcome to Zenith80! If you need help, ask on #other-consoles\non the Fantasy Consoles Discord server.\n",0
 
 ; add16
 ; inputs:
@@ -40,12 +38,26 @@ print16:
 	pop af
 	ret
 
-; print_str
+; draw_str
 ; inputs:
 ;	hl: address of string
 ;	a: end character
-print_str:
+draw_str:
+	push hl
 	call strlen
+	pop hl
+_:
+	ld a, (hl)
+	inc l
+	jp nz, _
+	inc h
+_:
+	out (3), a
+	dec c
+	ld a, c
+	out (1), a
+	cp 0
+	jp nz, --_
 	ret
 
 newline:

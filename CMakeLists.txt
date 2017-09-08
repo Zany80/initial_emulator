@@ -27,12 +27,11 @@ configure_file(
   "${PROJECT_SOURCE_DIR}/config.h.in"
   "${PROJECT_BINARY_DIR}/config.h"
   )
-include_directories("${PROJECT_BINARY_DIR}" "${ZENITH80_SOURCE_DIR}/include")
+include_directories("${ZENITH80_BINARY_DIR}" "${ZENITH80_SOURCE_DIR}/include")
 
 set(EXECUTABLE_NAME zenith80)
 add_subdirectory(src)
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
-
 
 find_package(SFML 2 REQUIRED graphics window system )
 if(SFML_NOTFOUND)
@@ -51,6 +50,9 @@ install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_VERSION_MAJOR "${myproject_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR "${myproject_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_MAJOR ${ZENITH80_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${ZENITH80_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${ZENITH80_VERSION_PATCH})
+#set(CPACK_PACKAGE_EXECUTABLES ${executable_name} "icon")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "pixelherodev")
 include(CPack)

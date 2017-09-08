@@ -100,8 +100,13 @@ DummyMemory::DummyMemory(const char * name){
 		memory[i]=0;
 	cout<<"Loading program from "<<name<<endl;
 	streampos size=f.tellg();
-    f.seekg(0, ios::beg);
-    f.read((char*)memory,size);
+    f.seekg(0x00);
+    char* mem=(char*)memory;
+    if(Main::instance->cpm_emu){
+		mem+=0x100;
+		f.seekg(0x100);
+	}
+    f.read(mem,size);
     f.close();
 }
 
@@ -131,7 +136,7 @@ uint8_t DummyMemory::getOpcode(uint16_t address){
 				cout.flush();
 				break;
 			default:
-				cout<<"BDOS call: "<<C<<endl;
+				cout<<"BDOS call: "<<(int)C<<endl;
 				break;
 		}
 	}

@@ -860,6 +860,101 @@ void Z80::im(uint8_t opcode){
 		mode=IM0;
 }
 
+//16-bit arithmetic group
+
+void Z80::addHLSS(uint8_t opcode){
+	uint16_t SS=*((*regsDD)[(opcode&0x30)>>4]);
+	uint32_t result=SS+HL.word;
+	setH((((SS&0x0FFF)+(HL.word&0x0FFF))&0x1000)==0x1000);
+	resetN();
+	setC((result&0x10000)==0x10000);
+	HL.word+=SS;
+	tstates+=7;
+}
+
+void Z80::adcHLSS(uint8_t opcode){
+	uint16_t SSC=*((*regsDD)[(opcode&0x30)>>4])+getC()?1:0;
+	uint32_t result=SSC+HL.word;
+	uint16_t r=result&0xFFFF;
+	setS((r&0x8000)==0x8000);
+	setZ(r==0);
+	setH((((SSC&0x0FFF)+(HL.word&0x0FFF))&0x1000)==0x1000);
+	setPV(((SSC&0x8000)==(HL.word&0x8000))&&((SSC&0x8000)!=(r&0x8000)));
+	resetN();
+	setC((result&0x10000)==0x10000);
+	tstates+=7;
+	HL.word=r;
+}
+
+void Z80::sbcHLSS(uint8_t opcode){
+	uint16_t SSC=*((*regsDD)[(opcode&0x30)>>4])+getC()?1:0;
+	uint32_t result=SSC-HL.word;
+	uint16_t r=result&0xFFFF;
+	setS((r&0x8000)==0x8000);
+	setZ(r==0);
+	setH((((SSC&0x0FFF)-(HL.word&0x0FFF))&0x1000)==0x1000);
+	setPV(((SSC&0x8000)==(HL.word&0x8000))&&((SSC&0x8000)!=(r&0x8000)));
+	setN();
+	setC((result&0x10000)==0x10000);
+	tstates+=7;
+	HL.word=r;
+}
+
+void Z80::addIXPP(uint8_t opcode){
+	(*regsDD)[2]=&IX.word;
+	uint16_t SS=*((*regsDD)[(opcode&0x30)>>4]);
+	uint32_t result=SS+IX.word;
+	setH((((SS&0x0FFF)+(IX.word&0x0FFF))&0x1000)==0x1000);
+	resetN();
+	setC((result&0x10000)==0x10000);
+	IX.word+=SS;
+	tstates+=7;
+	(*regsDD)[2]=&HL.word;
+}
+
+void Z80::addIYRR(uint8_t opcode){
+	(*regsDD)[2]=&IY.word;
+	uint16_t SS=*((*regsDD)[(opcode&0x30)>>4]);
+	uint32_t result=SS+IY.word;
+	setH((((SS&0x0FFF)+(IY.word&0x0FFF))&0x1000)==0x1000);
+	resetN();
+	setC((result&0x10000)==0x10000);
+	IY.word+=SS;
+	tstates+=7;
+	(*regsDD)[2]=&HL.word;
+}
+
+void Z80::incSS(uint8_t opcode){
+	*((*regsDD)[(opcode&0x30)>>4])++;
+	tstates+=2;
+}
+
+void Z80::incIX(uint8_t opcode){
+	IX.word++;
+	tstates+=2;
+}
+
+void Z80::incIY(uint8_t opcode){
+	IY.word++;
+	tstates+=2;
+}
+
+void Z80::decSS(uint8_t opcode){
+	*((*regsDD)[(opcode&0x30)>>4])--;
+	tstates+=2;
+}
+
+void Z80::decIX(uint8_t opcode){
+	IX.word--;
+	tstates+=2;
+}
+
+void Z80::decIY(uint8_t opcode){
+	IY.word--;
+	tstates+=2;
+}
+
+
 //jump group
 
 void Z80::jpNN(uint8_t opcode){

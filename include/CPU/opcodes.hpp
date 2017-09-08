@@ -121,15 +121,18 @@ void halt(uint8_t opcode);
 void di(uint8_t opcode);
 void ei(uint8_t opcode);
 void im(uint8_t opcode);
-/*
- * 46=0
- * 56=1
- * 5e=2
- *
- * 01000110 = 0
- * 01010110 = 1
- * 01011110 = 2
- */
+//16-bit arithmetic group
+void addHLSS(uint8_t opcode);
+void adcHLSS(uint8_t opcode);
+void sbcHLSS(uint8_t opcode);
+void addIXPP(uint8_t opcode);
+void addIYRR(uint8_t opcode);
+void incSS(uint8_t opcode);
+void incIX(uint8_t opcode);
+void incIY(uint8_t opcode);
+void decSS(uint8_t opcode);
+void decIX(uint8_t opcode);
+void decIY(uint8_t opcode);
 //jump group
 void jpNN(uint8_t opcode);
 void jpCCNN(uint8_t opcode);

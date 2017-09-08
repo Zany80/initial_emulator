@@ -73,3 +73,6 @@ ASMFT_00_WD=%p/builds/build-linux-x86_64-debug
 NoneFT_00_LB=Assemble zexall
 NoneFT_00_CM=%p/scripts/build_zmac "%f" "%p/builds/build-linux-x86_64-debug"
 NoneFT_00_WD=%d
+EX_01_LB=Execute CP/M BDOS program
+EX_01_CM=./zenith80 --cpm --file %e.bin
+EX_01_WD=%p/builds/build-linux-x86_64-debug

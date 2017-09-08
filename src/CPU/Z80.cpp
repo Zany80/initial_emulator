@@ -124,6 +124,10 @@ void Z80::initOpcodes(){
 	opcodes[0xF3]=&Z80::di;
 	opcodes[0xFB]=&Z80::ei;
 	opcodesED[0x46]=opcodesED[0x56]=opcodesED[0x5E]=&Z80::im;
+	opcodesDD[0x23]=&Z80::incIX;
+	opcodesFD[0x23]=&Z80::incIY;
+	opcodesDD[0x2B]=&Z80::decIX;
+	opcodesFD[0x2B]=&Z80::decIY;
 	opcodes[0xC3]=&Z80::jpNN;
 	opcodes[0xCD]=&Z80::callNN;
 	opcodes[0xC9]=&Z80::ret;
@@ -190,6 +194,19 @@ void Z80::initOpcodes(){
 			opcodes[i]=&Z80::callCCNN;
 		if((i&0xC7)==0xC0)
 			opcodes[i]=&Z80::retCC;
+		if((i&0xCF)==0x09){
+			opcodes[i]=&Z80::addHLSS;
+			opcodesDD[i]=&Z80::addIXPP;
+			opcodesFD[i]=&Z80::addIYRR;
+		}
+		if((i&0xCF)==0x4A)
+			opcodesED[i]=&Z80::adcHLSS;
+		if((i&0xCF)==0x42)
+			opcodesED[i]=&Z80::sbcHLSS;
+		if((i&0xCF)==0x03)
+			opcodes[i]=&Z80::incSS;
+		if((i&0xCF)==0x0B)
+			opcodes[i]=&Z80::decSS;
 	}
 }
 

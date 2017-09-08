@@ -68,7 +68,7 @@ DummyMemory::DummyMemory(const char * name){
 	ifstream f(name, ios::in | ios::binary | ios::ate);
 	if(Main::instance->cpm_emu){
 		emu=new uint8_t[0x100]{
-			0xC3,0x00,0x01,0x00,0x00,0x00,0xC9
+			0xC3,0x00,0x01,0x00,0x00,0xC9
 		};
 	}
     if (!f.is_open()){
@@ -138,6 +138,7 @@ uint8_t DummyMemory::getOpcode(uint16_t address){
 			default:
 				cout<<"BDOS call: "<<(int)C<<endl;
 				break;
+			return 0xC9;
 		}
 	}
 	if(Main::instance->cpm_emu&&address<0x100)
@@ -261,7 +262,7 @@ int Main::run(){
 		window->draw(*(this->git_revision));
 		window->draw(*(this->terminal));
 		window->display();
-		cpu->executeXInstructions(4.1*1000*1000/60);
+		cpu->executeXInstructions(4*1000*1000/60);
 		this->processEvents();
 	}
 	return 0;

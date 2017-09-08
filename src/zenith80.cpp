@@ -214,6 +214,10 @@ Main::Main(int argc,char ** argv){
 			cout<<"--file recognized, ";
 			if(name_changed)
 				cout<<"discarding previous argument \""<<name.c_str()<<"\" and ";
+			if(i+1==argc){
+				cerr<<"but no file specified! Ignoring option."<<endl;
+				break;
+			}
 			name=argv[++i];
 			cout<<"loading \""<<name<<"\"..."<<endl;
 			name_changed=true;

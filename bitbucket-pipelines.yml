@@ -1,0 +1,19 @@
+image: gcc:6.1
+
+pipelines:
+  default:
+    - step:
+        script: # Modify the commands below to build your repository.
+          - apt-get update
+          - apt-get install libfreetype6-dev libjpeg-dev libx11-dev libxrandr-dev libxcb1-dev libx11-xcb-dev libxcb-randr0-dev libxcb-image0-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libvorbisenc2 libvorbisfile3 libopenal-dev libpthread-stubs0-dev cmake libudev-dev -y
+          - bash ./libs_build.sh
+          - mkdir build
+          - cd build
+          - cmake ..
+          - make
+          - curl -T ./zenith80 ftp://$FTP_AUTH@files.000webhost.com/public_html/
+
+definitions:
+  caches:
+    sfml: $HOME/SFML
+    tgui: $HOME/TGUI

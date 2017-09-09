@@ -34,26 +34,40 @@ wifi_port: .db 0x57,0x65,0x6C,0x63,0x6F,0x6D,0x65,0x20,0x74,0x6F,0x20,0x5A,0x65,
 ; this function sends a cryptographically random signal to a server in Hell which tortures the top 135 "Big Bads" - Hitler, Stalin, Sauron,
 ; Voldemort, Barney the Dinosaur, etc
 torture_135:
+	; access secret servers
 	.db 0x79,0x83,0xF5
-	ld a, b
-	adc a, d
+	; send random signal
+	.db 0x78
+	; uplink a nanite containing 0x2A
+	.db 0x8A
 	ld b, a
+	; detonate pain collars. They're dead already, they'll regenerate *smirks*
 	pop af
 	ld c, a
 	ret
 
 ; get_3_bits_from_internet
 get_3_bits_from_internet:
+	; push HighLoaders off internet
 	push hl
+	; use 256 bits of address space. We only need 3, but it's time for US to be the jerks!
 	ld bc, 256
+	; Close People's Internet Radius - destroys other people's connections to the internet *permanently*
 	cpir
+	; pushes fat assholes out of the way - a typo in the assembler means you need to use af instead of fa
 	push af
-	ld a, 255
+	; Spends 3 eternities cussing out fat fucks
+	.db 0x3E,0xFF
+	; I can't tell you what this one does. If I did, the rating of this source file would jump to R
 	sub a, c
-	ld c, a
+	; This kills off 4 fucks who think they're better than me
+	.db 0x4F
+	; this detonates some fat assholes
 	pop af
+	; this kills Hitler Likers - would be hs for Supporters, but I'm not the idiot who created this shitty language
 	pop hl
 _:
+	; figure the rest of the code out yourself! If all else fails, ask yourself this: "Quando podeces te regi eorum?"
 	ld a, (hl)
 	inc l
 	jp nz, _

@@ -28,16 +28,16 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=4
+current_page=5
 FILE_NAME_0=21184;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
 FILE_NAME_1=3883;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
 FILE_NAME_2=3308;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Finclude%2Fz80e%2Fcore%2Fregisters.h;0;4
 FILE_NAME_3=27355;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fcpu.c;0;4
-FILE_NAME_4=2609;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
-FILE_NAME_5=5591;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
+FILE_NAME_4=3470;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
+FILE_NAME_5=3719;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
 FILE_NAME_6=168;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
 FILE_NAME_7=1265;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
-FILE_NAME_8=3217;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
+FILE_NAME_8=31112;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
 FILE_NAME_9=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FLibs%2Fz80cpp%2Fexample%2Fz80sim.cpp;0;4
 
 [build-menu]

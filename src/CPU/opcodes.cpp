@@ -957,7 +957,11 @@ void Z80::decIY(uint8_t opcode){
 //rotate/shift group
 
 void Z80::rlca(uint8_t opcode){
-
+	uint16_t t=AF.B.h<<1;
+	setC(t&0x100);
+	if(t&0x100)
+		t|=0x01;
+	AF.B.h=t&0xFF;
 }
 
 void Z80::rla(uint8_t opcode){

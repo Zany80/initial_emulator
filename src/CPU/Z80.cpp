@@ -128,6 +128,7 @@ void Z80::initOpcodes(){
 	opcodesFD[0x23]=&Z80::incIY;
 	opcodesDD[0x2B]=&Z80::decIX;
 	opcodesFD[0x2B]=&Z80::decIY;
+	opcodes[0x07]=&Z80::rlca;
 	opcodes[0xC3]=&Z80::jpNN;
 	opcodes[0xCD]=&Z80::callNN;
 	opcodes[0xC9]=&Z80::ret;

@@ -28,16 +28,17 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=8
+current_page=4
 FILE_NAME_0=23214;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
 FILE_NAME_1=4963;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
 FILE_NAME_2=3308;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Finclude%2Fz80e%2Fcore%2Fregisters.h;0;4
 FILE_NAME_3=27355;C;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FKnightOS%2Fsdk%2Fz80e%2Flibz80e%2Fsrc%2Fcore%2Fcpu.c;0;4
-FILE_NAME_4=5408;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
+FILE_NAME_4=5143;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
 FILE_NAME_5=3774;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
 FILE_NAME_6=168;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
 FILE_NAME_7=1265;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
 FILE_NAME_8=420;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fconfig.h.in;0;4
+FILE_NAME_9=594;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fmain.hpp;0;4
 
 [build-menu]
 C++FT_00_LB=_Compile
@@ -52,7 +53,7 @@ C++FT_02_CM=cppcheck --language=c++ --enable=warning,style --template=gcc "%f"
 C++FT_02_WD=
 NF_00_LB=_Make
 NF_00_CM=make --no-print-directory
-NF_00_WD=%p/builds/build-linux-x86_64-superdebug
+NF_00_WD=%p/builds/build-linux-x86_64-debug
 NF_01_LB=Make Custom _Target...
 NF_01_CM=make --no-print-directory 
 NF_01_WD=%p

@@ -13,6 +13,10 @@ using std::string;
 
 #include <CPU/Z80.hpp>
 
+#include <TGUI/TGUI.hpp>
+using tgui::Gui;
+typedef tgui::ChatBox TermOut;
+
 ZENITH_HEADER
 
 class Main{
@@ -24,18 +28,15 @@ class Main{
 		static Main * instance;
 		Z80 * cpu;
 		bool cpm_emu;
-		void put_char(char c);
+		void putchar(char c);
 	private:
 		RenderWindow * window;
+		Gui * gui;
+		TermOut::Ptr termOut;
 		Color background;
-		Text * git_revision;
-		Text * terminal;
-		string terminal_string;
 		Font * default_font;
 		void processEvents();
 };
-
-Main* Main::instance;
 
 ZENITH_FOOTER
 

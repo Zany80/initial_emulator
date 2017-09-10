@@ -1,3 +1,3 @@
 all:
 %:
-	@find builds/ -maxdepth 1 -type d -name build-* -exec make -C {} $@ \;
+	@find builds/ -maxdepth 1 -type d -name build-* -exec $(MAKE) -C {} $@ \;

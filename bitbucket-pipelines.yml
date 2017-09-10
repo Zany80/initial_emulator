@@ -18,7 +18,7 @@ pipelines:
           - cd ../
           - mkdir linux64-superdebug
           - cd linux64-superdebug
-          - cmake ../.. -DZENITH_SUPERDEBUGMODE
+          - cmake ../.. -DZENITH_SUPERDEBUGMODE:BOOL=TRUE
           - make -j8
           - curl -T ./zenith80 ftp://$FTP_AUTH@files.000webhost.com/public_html/zenith80/downloads/zenith80-linux-x86_64-superdebug
 

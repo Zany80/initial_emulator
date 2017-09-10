@@ -11,7 +11,7 @@ endif()
 
 # Default to static libs
 if(NOT DEFINED SFML_STATIC_LIBRARIES)
-	set(SFML_STATIC_LIBRARIES TRUE CACHE BOOL "Use static SFML libs" FORCE)
+	set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Use static SFML libs" FORCE)
 	set(SFML_ROOT ${CMAKE_SOURCE_DIR}/libs/)
 endif()
 

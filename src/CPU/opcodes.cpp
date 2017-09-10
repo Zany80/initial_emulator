@@ -1126,6 +1126,15 @@ void Z80::jpCCNN(uint8_t opcode){
 	SUPERDEBUG(endl);
 }
 
+void Z80::djnzE(uint8_t opcode){
+	tstates++;
+	int8_t displacement=ram->getByte(PC.word++);
+	if(--BC.B.h!=0){
+		PC.word+=displacement;
+		tstates+=5;
+	}
+}
+
 //call and return group
 
 void Z80::callNN(uint8_t opcode){

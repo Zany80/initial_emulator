@@ -171,6 +171,7 @@ void rrd(uint8_t opcode);
 //jump group
 void jpNN(uint8_t opcode);
 void jpCCNN(uint8_t opcode);
+void djnzE(uint8_t opcode);
 //call and return group
 void callNN(uint8_t opcode);
 void callCCNN(uint8_t opcode);

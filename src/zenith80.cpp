@@ -36,8 +36,10 @@ using std::ios;
 using std::string;
 
 #include <config.h>
+#include "icon.c"
 
 #include <fonts/Famirids.h>
+
 
 int main(int argc,char ** argv){
 	return Zenith80::Main::main(argc,argv);
@@ -210,6 +212,7 @@ Main::Main(int argc,char ** argv){
 	Main::instance=this;
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setVerticalSyncEnabled(true);
+	window->setIcon(icon.width,icon.height,icon.pixel_data);
 	background=Color(3,225,197);
 	string name="zenith.bin";
 	bool name_changed=false;

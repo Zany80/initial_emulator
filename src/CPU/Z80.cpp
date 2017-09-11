@@ -350,4 +350,8 @@ word Z80::getDE(){
 	return this->DE;
 }
 
+void Z80::halt(){
+	halted=true;
+}
+
 ZENITH_FOOTER

@@ -33,6 +33,7 @@ using std::streampos;
 using std::ios;
 
 #include <string>
+using std::to_string;
 using std::string;
 
 #include <config.h>
@@ -67,6 +68,10 @@ class DummyDevice : public Z80Device{
 		uint16_t amount=0;
 		uint8_t ports[65536];
 		uint8_t tvalue=0;
+		struct{
+			uint8_t num;
+			bool active;
+		}test;
 		bool t=false;
 };
 
@@ -92,6 +97,26 @@ void DummyDevice::out(uint16_t port,uint8_t value){
 		case 3:
 			Main::instance->putchar((char)value);
 			break;
+		case 4:
+			if(!test.active)
+				test.num=value;
+			else if(test.num!=value){
+				Main::instance->cpu->halt();
+				Main::instance->putmsg("Assertion failed! CPU halted!");
+				string s="Expected value: "+to_string((int)test.num);
+				s=s+", received: "+to_string((int)value);
+				Main::instance->putmsg(s);
+				Main::instance->putmsg("");
+			}
+			else{
+				Main::instance->putmsg("Assertion passed! Program execution continuing normally.");
+				string s="Expected value: "+to_string((int)test.num);
+				s=s+", received: "+to_string((int)value);
+				Main::instance->putmsg(s);
+				Main::instance->putmsg("");
+			}
+			test.active=!test.active;
+			break;
 		default:
 			cout<<(int)value<<" written to port "<<(int)port<<endl;
 			break;
@@ -111,8 +136,9 @@ Main::Main(int argc,char ** argv){
 	gui=new Gui(*window);
 	termOut=TermOut::create();
 	termOut->setPosition(0,0);
-	termOut->setSize(800,600);
+	termOut->setSize(800,570);
 	termOut->setLinesStartFromTop(true);
+	termOut->setLineLimit(1000);
 	gui->add(termOut);
 	termOut->addLine(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));
 	termOut->addLine("Loading...");
@@ -163,6 +189,9 @@ Main::Main(int argc,char ** argv){
 	default_font=new Font;
 	default_font->loadFromMemory(&Famirids_ttf,Famirids_ttf_len);
 	termOut->addLine("");
+	termOut->addLine("Starting program...");
+	termOut->addLine("");
+	termOut->addLine("");
 }
 
 Main::~Main(){
@@ -176,7 +205,7 @@ int Main::run(){
 		window->clear(this->background);
 		gui->draw();
 		window->display();
-		cpu->executeXInstructions(4*1000*1000/60);
+		cpu->executeXInstructions(20*4*1000*1000/60);
 		this->processEvents();
 	}
 	return 0;
@@ -211,6 +240,10 @@ void Main::putchar(char ch){
 	}
 	else
 		termOut->addLine("");
+}
+
+void Main::putmsg(string s){
+	termOut->addLine(s);
 }
 
 ZENITH_FOOTER

@@ -213,7 +213,7 @@ void Z80::ldIY_NN_(uint8_t opcode){
 void Z80::ld_NN_HL(uint8_t opcode){
 	SUPERDEBUG(endl);
 	ram->setWord(ram->getWord(PC.word),HL.word);
-	HL.word+=2;
+	PC.word+=2;
 }
 
 void Z80::ld_NN_DD(uint8_t opcode){
@@ -925,7 +925,8 @@ void Z80::addIYRR(uint8_t opcode){
 }
 
 void Z80::incSS(uint8_t opcode){
-	*((*regsDD)[(opcode&0x30)>>4])++;
+	SUPERDEBUG("(`inc ss`). Incrementing register "<<((opcode&0x30)>>4)<<" which currently contains "<<*((*regsDD)[(opcode&0x30)>>4])<<"."<<endl);
+	(*((*regsDD)[(opcode&0x30)>>4]))++;
 	tstates+=2;
 }
 
@@ -940,7 +941,7 @@ void Z80::incIY(uint8_t opcode){
 }
 
 void Z80::decSS(uint8_t opcode){
-	*((*regsDD)[(opcode&0x30)>>4])--;
+	(*((*regsDD)[(opcode&0x30)>>4]))--;
 	tstates+=2;
 }
 
@@ -959,21 +960,41 @@ void Z80::decIY(uint8_t opcode){
 void Z80::rlca(uint8_t opcode){
 	uint16_t t=AF.B.h<<1;
 	setC(t&0x100);
+	resetH();
+	resetN();
 	if(t&0x100)
 		t|=0x01;
 	AF.B.h=t&0xFF;
 }
 
 void Z80::rla(uint8_t opcode){
-
+	uint16_t t=AF.B.h<<1;
+	if(getC())
+		t|=0x01;
+	setC(t&0x100);
+	AF.B.h=t&0xFF;
+	resetH();
+	resetN();
 }
 
 void Z80::rrca(uint8_t opcode){
-
+	uint16_t t=AF.B.h>>1;
+	setC(AF.B.h&0x01);
+	if(getC())
+		t|=0x80;
+	AF.B.h=t&0xFF;
+	resetH();
+	resetN();
 }
 
 void Z80::rra(uint8_t opcode){
-
+	resetH();
+	resetN();
+	uint16_t t=AF.B.h>>1;
+	if(getC())
+		t|=0x80;
+	setC(AF.B.h&0x01);
+	AF.B.h=t&0xFF;
 }
 
 void Z80::rlcR(uint8_t opcode){

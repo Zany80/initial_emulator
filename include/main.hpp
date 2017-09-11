@@ -29,6 +29,7 @@ class Main{
 		Z80 * cpu;
 		bool cpm_emu;
 		void putchar(char c);
+		void putmsg(string s);
 	private:
 		RenderWindow * window;
 		Gui * gui;

@@ -20,6 +20,8 @@ RAMController::RAMController(const char * name){
     if (!f.is_open()){
 		cout<<"Failed to load data from file, using compiled in program."<<endl;
 		cout<<"Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within."<<endl;
+		Main::instance->putmsg("Failed to load data from file, using compiled in program.");
+		Main::instance->putmsg("Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within.");
 		//memory=new uint8_t[65536]{
 			////output 0x59 to port 0 (0x59 is ASCII 'Y')
 			////0x3E,0x59,0xDE,0x00
@@ -49,6 +51,7 @@ RAMController::RAMController(const char * name){
 	for(int i=0;i<65536;i++)
 		memory[i]=0;
 	cout<<"Loading program from "<<name<<endl;
+	Main::instance->putmsg((string)"Loading program from "+name);
 	streampos size=f.tellg();
     f.seekg(0x00);
     char* mem=(char*)memory;

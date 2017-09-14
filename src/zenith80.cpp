@@ -37,15 +37,12 @@ using std::to_string;
 using std::string;
 
 #include <config.h>
+#include <defines.hpp>
 #include "icon.c"
 
 #include <fonts/Famirids.h>
 
 #include <CPU/peripherals/RAMController.hpp>
-
-#define ZENITH_TO termOut->removeLine(termOut->getLineAmount()-1);termOut->addLine(c);
-#define ZENITH_AU window->clear(this->background);gui->draw();window->display();
-#define ZENITH_TOAU ZENITH_TO ZENITH_AU
 
 int main(int argc,char ** argv){
 	return Zenith80::Main::main(argc,argv);
@@ -109,11 +106,8 @@ void DummyDevice::out(uint16_t port,uint8_t value){
 				Main::instance->putmsg("");
 			}
 			else{
-				Main::instance->putmsg("Assertion passed! Program execution continuing normally.");
-				string s="Expected value: "+to_string((int)test.num);
-				s=s+", received: "+to_string((int)value);
-				Main::instance->putmsg(s);
-				Main::instance->putmsg("");
+				cout<<"Assertion passed! Program execution continuing normally."<<endl;
+				cout<<"Expected value: "<<(int)test.num<<", received: "<<(int)value<<endl;
 			}
 			test.active=!test.active;
 			break;
@@ -130,6 +124,8 @@ uint8_t DummyDevice::in(uint16_t port){
 
 Main::Main(int argc,char ** argv){
 	Main::instance=this;
+	clock_speed=4;
+	unit=MHz;
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setIcon(icon.width,icon.height,icon.pixel_data);
 	window->setVerticalSyncEnabled(true);
@@ -149,25 +145,27 @@ Main::Main(int argc,char ** argv){
 	for(int i=1;i<argc;i++){
 		string arg=argv[i];
 		if(arg=="--file"){
-			cout<<"--file recognized, ";
-			termOut->addLine("--file recognized, ");
-			ZENITH_AU
 			if(i+1==argc){
 				cerr<<"No file specified! Ignoring option \"--file\"."<<endl;
-				string c="-file recognized, but no file specified! Ignoring option.";
-				ZENITH_TOAU
+				termOut->addLine("No file specified! Ignoring option \"--file\".");
 				break;
 			}
 			if(name_changed){
-				string c=termOut->getLine(termOut->getLineAmount()-1)+"discarding previous argument \""+name.c_str()+"\".";
-				ZENITH_TOAU
-				cout<<"discarding previous argument \""<<name.c_str()<<"\".";
+				termOut->addLine(((string)"Discarding previous --file argument \"")+name.c_str()+"\".");
+				cerr<<"Discarding previous --file argument \""<<name.c_str()<<"\".";
 			}
 			name=argv[++i];
-			string c=termOut->getLine(termOut->getLineAmount()-1)+"loading \""+name+"\"...";
-			ZENITH_TOAU
-			cout<<"loading \""<<name<<"\"..."<<endl;
+			termOut->addLine((string)"--file specified, loading \""+name+"\"...");
+			cout<<"--file specified, loading \""<<name<<"\"..."<<endl;
 			name_changed=true;
+		}
+		else if(arg=="--clock-speed"){
+			if(i+1==argc){
+				cerr<<"--clock-speed requires an argument!"<<endl;
+				termOut->addLine("--clock-speed requires an argument!");
+				break;
+			}
+			clock_speed=std::stoll(argv[++i]);
 		}
 		else if(arg=="--cpm"){
 			cpm_emu=true;
@@ -205,7 +203,7 @@ int Main::run(){
 		window->clear(this->background);
 		gui->draw();
 		window->display();
-		cpu->executeXInstructions(20*4*1000*1000/60);
+		cpu->executeXInstructions(this->clock_speed*this->unit/60);
 		this->processEvents();
 	}
 	return 0;
@@ -236,7 +234,8 @@ void Main::processEvents(){
 void Main::putchar(char ch){
 	if(ch!='\n'){
 		string c=termOut->getLine(termOut->getLineAmount()-1)+ch;
-		ZENITH_TO
+		termOut->removeLine(termOut->getLineAmount()-1);
+		termOut->addLine(c);
 	}
 	else
 		termOut->addLine("");

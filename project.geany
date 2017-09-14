@@ -19,7 +19,7 @@ indent_mode=2
 
 [project]
 name=zenith80
-base_path=/home/noam/projects/zenith80/
+base_path=/home/noam/Documents/Development/zenith80
 description=
 file_patterns=
 
@@ -28,17 +28,10 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=9
-FILE_NAME_0=4708;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
-FILE_NAME_1=4963;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2Fopcodes.hpp;0;4
-FILE_NAME_2=2481;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
-FILE_NAME_3=7787;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
-FILE_NAME_4=114;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fdefines.hpp;0;4
-FILE_NAME_5=390;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
-FILE_NAME_6=420;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fconfig.h.in;0;4
-FILE_NAME_7=555;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fmain.hpp;0;4
-FILE_NAME_8=138;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Finclude%2Fprogram.hpp;0;4
-FILE_NAME_9=1642;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2Fprojects%2Fzenith80%2Fsrc%2FCPU%2Fperipherals%2FRAMController.cpp;0;4
+current_page=2
+FILE_NAME_0=21990;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
+FILE_NAME_1=3797;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
+FILE_NAME_2=0;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
 
 [build-menu]
 C++FT_00_LB=_Compile
@@ -53,7 +46,7 @@ C++FT_02_CM=cppcheck --language=c++ --enable=warning,style --template=gcc "%f"
 C++FT_02_WD=
 NF_00_LB=_Make
 NF_00_CM=make -j4 --no-print-directory
-NF_00_WD=%p/builds/build-linux-x86_64-debug
+NF_00_WD=%p/builds/build-linux-x86_64-superdebug
 NF_01_LB=Make Custom _Target...
 NF_01_CM=make --no-print-directory 
 NF_01_WD=%p
@@ -71,4 +64,4 @@ NoneFT_00_CM=%p/scripts/build_zmac "%f" "%p/builds/build-linux-x86_64-debug"
 NoneFT_00_WD=%d
 EX_01_LB=Execute CP/M BDOS program
 EX_01_CM=./zenith80 --cpm --file %e.bin
-EX_01_WD=%p/builds/build-linux-x86_64-debug
+EX_01_WD=%p/builds/build-linux-x86_64-superdebug

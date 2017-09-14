@@ -10,6 +10,9 @@ using std::endl;
 
 #include <config.h>
 
+#include <string>
+using std::string;
+
 ZENITH_HEADER
 
 #include "opcodes.cpp"
@@ -129,6 +132,9 @@ void Z80::initOpcodes(){
 	opcodesDD[0x2B]=&Z80::decIX;
 	opcodesFD[0x2B]=&Z80::decIY;
 	opcodes[0x07]=&Z80::rlca;
+	opcodes[0x17]=&Z80::rla;
+	opcodes[0x0F]=&Z80::rrca;
+	opcodes[0x1F]=&Z80::rra;
 	opcodes[0xC3]=&Z80::jpNN;
 	opcodes[0x10]=&Z80::djnzE;
 	opcodes[0xCD]=&Z80::callNN;
@@ -181,7 +187,7 @@ void Z80::initOpcodes(){
 		if((i&0xF8)==0xB0
 			&& (i&0x07)!=6)
 			opcodes[i]=&Z80::orR;
-		if((i&0xF8)==0xA1
+		if((i&0xF8)==0xA8
 			&& (i&0x07)!=6)
 			opcodes[i]=&Z80::xorR;
 		if((i&0xC7)==0x04
@@ -239,6 +245,14 @@ void Z80::executeXInstructions(int64_t x){
 	}
 }
 
+string hex(uint8_t a){
+	static char hex[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	string h="";
+	h+=hex[(a&0xF0)>>4];
+	h+=hex[a&0x0F];
+	return h;
+}
+
 void Z80::executeOneInstruction(){
 	uint8_t _R = R;
 	R++;
@@ -251,7 +265,7 @@ void Z80::executeOneInstruction(){
 	else{
 		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
 		#ifdef SUPERDEBUGMODE
-		cerr<<"Executing opcode "<<(int)opcode_value;
+		cerr<<"Executing opcode 0x"<<hex(opcode_value);
 		#endif
 		(*this.*opcodes[opcode_value])(opcode_value);
 	}

@@ -350,7 +350,7 @@ void Z80::ldi(uint8_t opcode){
 }
 
 void Z80::ldir(uint8_t opcode){
-	SUPERDEBUG("(`ldir`).");
+	SUPERDEBUG("(`ldir`)."<<endl);
 	ram->setByte(DE.word,ram->getByte(HL.word));
 	DE.word++;HL.word++;
 	BC.word--;
@@ -998,19 +998,54 @@ void Z80::rra(uint8_t opcode){
 }
 
 void Z80::rlcR(uint8_t opcode){
-
+	uint8_t * r=(*regs)[opcode&0x07];
+	uint16_t v=(*r)<<1;;
+	setC(v&0x100);
+	if(v&0x100)
+		v|=0x01;
+	*r=v&0xFF;
+	setS(((*r)&0x80)==0x80);
+	setZ((*r)==0);
+	resetH();
+	setPV(!parity(*r));
+	resetN();
 }
 
 void Z80::rlc_HL_(uint8_t opcode){
-
+	uint8_t _hl_=ram->getByte(HL.word);
+	uint16_t v=_hl_<<1;
+	setC(v&0x100);
+	if(v&0x100)
+		v|=0x01;
+	ram->setByte(HL.word,v&0xFF);
+	uint8_t r=v&0xFF;
+	setS(((r)&0x80)==0x80);
+	setZ((r)==0);
+	resetH();
+	setPV(!parity(r));
+	resetN();
 }
 
 void Z80::rlc_IXd_(uint8_t opcode){
-
+	uint16_t address=IX.word;
+	address+=((int8_t)ram->getByte(PC.word++));
+	uint8_t _IXd_=ram->getByte(address);
+	uint16_t v=_IXd_<<1;
+	setC(v&0x100);
+	if(v&0x100)
+		v|=0x01;
+	ram->setByte(address,v&0xFF);
 }
 
 void Z80::rlc_IYd_(uint8_t opcode){
-
+	uint16_t address=IY.word;
+	address+=((int8_t)ram->getByte(PC.word++));
+	uint8_t _IYd_=ram->getByte(address);
+	uint16_t v=_IYd_<<1;
+	setC(v&0x100);
+	if(v&0x100)
+		v|=0x01;
+	ram->setByte(address,v&0xFF);
 }
 
 void Z80::rlR(uint8_t opcode){

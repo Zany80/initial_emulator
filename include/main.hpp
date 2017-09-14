@@ -13,9 +13,13 @@ using std::string;
 
 #include <CPU/Z80.hpp>
 
+#include <defines.hpp>
+
 #include <TGUI/TGUI.hpp>
 using tgui::Gui;
 typedef tgui::ChatBox TermOut;
+
+typedef const char * cstring;
 
 ZENITH_HEADER
 
@@ -31,6 +35,8 @@ class Main{
 		void putchar(char c);
 		void putmsg(string s);
 	private:
+		uint64_t unit;
+		uint64_t clock_speed;
 		RenderWindow * window;
 		Gui * gui;
 		TermOut::Ptr termOut;

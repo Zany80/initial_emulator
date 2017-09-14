@@ -39,12 +39,12 @@ start:
 	ld a, h
 	out (4), a
 	; tests ld (nn), hl
-	ld hl, t3
-	ld a, 109
+	ld hl, 192
+	ld a, l
 	out (4), a
 	ld (t5), hl
-	ld hl, (t5)
-	ld a, l
+	ld hl, t5
+	ld a, (hl)
 	out (4), a
 	halt
 

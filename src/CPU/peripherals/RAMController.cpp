@@ -22,13 +22,6 @@ RAMController::RAMController(const char * name){
 		cout<<"Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within."<<endl;
 		Main::instance->putmsg("Failed to load data from file, using compiled in program.");
 		Main::instance->putmsg("Note: this usually means you don't have a file zenith.bin in the current working directory (if you don't know what that means, it's probably the folder this program is located within.");
-		//memory=new uint8_t[65536]{
-			////output 0x59 to port 0 (0x59 is ASCII 'Y')
-			////0x3E,0x59,0xDE,0x00
-
-		//};
-			//~ for(int i=0;i<65536;i++)
-				//~ memory[i]=0;
 		#ifdef PREBUILT_ASM_PROG
 		memory=program;
 		#else
@@ -77,8 +70,8 @@ uint8_t RAMController::getOpcode(uint16_t address){
 		word DE=Main::instance->cpu->getDE();
 		switch(C){
 			case 0:
-				cout<<"BDOS system reset"<<endl;
-				Main::instance->cpu->reset();
+				cout<<"BDOS system reset - halting"<<endl;
+				Main::instance->cpu->halt();
 				break;
 			case 2:
 				cout<<(char)DE.B.l;

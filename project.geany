@@ -28,10 +28,14 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=21990;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
-FILE_NAME_1=3797;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
-FILE_NAME_2=0;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
+current_page=6
+FILE_NAME_0=185;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
+FILE_NAME_1=6306;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
+FILE_NAME_2=42382;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
+FILE_NAME_3=3572;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
+FILE_NAME_4=2121;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fperipherals%2FRAMController.cpp;0;4
+FILE_NAME_5=235;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
+FILE_NAME_6=71;Javascript;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FTaskBot%2Fmain.js;0;4
 
 [build-menu]
 C++FT_00_LB=_Compile

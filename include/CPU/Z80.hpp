@@ -9,12 +9,16 @@
 #include <defines.hpp>
 #include <vector>
 using std::vector;
+#include <string>
+using std::string;
 
 ZENITH_HEADER
 
 enum InterruptMode{
 	IM0,IM1,IM2
 };
+
+string hex(uint8_t a);
 
 class Z80{
 	public:
@@ -63,6 +67,7 @@ class Z80{
 		uint8_t R;
 		uint8_t I;
 		vector<uint8_t*>* regs;
+		vector<char> r;
 		vector<uint16_t*>* regsDD;
 		vector<uint16_t*>* regsQQ;
 		bool IFF1,IFF2;

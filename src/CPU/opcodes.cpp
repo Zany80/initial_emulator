@@ -4,26 +4,26 @@
 
 void Z80::DD(uint8_t opcode){
 	uint8_t secondary_opcode=ram->getOpcode(PC.word++);
-	SUPERDEBUG("(DD prefix). Secondary opcode: "<<(int)secondary_opcode);
+	SUPERDEBUG("(DD prefix). Secondary opcode: "<<hex(secondary_opcode));
 	(*this.*(opcodesDD[secondary_opcode]))(secondary_opcode);
 }
 
 void Z80::FD(uint8_t opcode){
 	uint8_t secondary_opcode=ram->getOpcode(PC.word++);
-	SUPERDEBUG("(FD prefix). Secondary opcode: "<<(int)secondary_opcode);
+	SUPERDEBUG("(FD prefix). Secondary opcode: "<<hex(secondary_opcode));
 	(*this.*(opcodesFD[secondary_opcode]))(secondary_opcode);
 }
 
 void Z80::ED(uint8_t opcode){
 	uint8_t secondary_opcode=ram->getOpcode(PC.word++);
-	SUPERDEBUG("(ED prefix). Secondary opcode: "<<(int)secondary_opcode);
+	SUPERDEBUG("(ED prefix). Secondary opcode: "<<hex(secondary_opcode));
 	(*this.*(opcodesED[secondary_opcode]))(secondary_opcode);
 }
 
 //8-bit load group
 
 void Z80::ldRRx(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG("(`ld "<<r[int(opcode&0x07)]<<", "<<r[(opcode&0x38)>>3]<<"`). Value: "<<(int)*((*regs)[opcode&0x07])<<endl);
 	*((*regs)[(opcode&0x38)>>3])=*((*regs)[opcode&0x07]);
 }
 

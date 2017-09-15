@@ -77,9 +77,7 @@ void DummyDevice::out(uint16_t port,uint8_t value){
 	ports[port]=value;
 	switch(port){
 		case 0:
-			cout<<value;
-			if((amount++)%1024==0)
-				cout.flush();
+			Main::instance->putchar((char)value);
 			break;
 		case 1:
 			cout<<(int)value;
@@ -90,9 +88,6 @@ void DummyDevice::out(uint16_t port,uint8_t value){
 			else
 				tvalue=value;
 			t=!t;
-			break;
-		case 3:
-			Main::instance->putchar((char)value);
 			break;
 		case 4:
 			if(!test.active)

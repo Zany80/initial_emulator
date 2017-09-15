@@ -27,11 +27,11 @@ print_str:
 	push hl
 	call strlen
 	pop hl
-_loop:
+_:
 	ld a, (hl)
-	out (3), a
+	out (0), a
 	inc hl
-	djnz _loop
+	djnz -_
 	ret
 
 ;;strlen

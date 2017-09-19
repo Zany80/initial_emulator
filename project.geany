@@ -28,14 +28,20 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=6
-FILE_NAME_0=185;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
-FILE_NAME_1=6306;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
+current_page=12
+FILE_NAME_0=26589;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes.cpp;0;4
+FILE_NAME_1=738;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2FZ80.cpp;0;4
 FILE_NAME_2=42382;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2Fzexall.z80;0;4
-FILE_NAME_3=3572;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
-FILE_NAME_4=2121;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fperipherals%2FRAMController.cpp;0;4
-FILE_NAME_5=235;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
-FILE_NAME_6=71;Javascript;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2FTaskBot%2Fmain.js;0;4
+FILE_NAME_3=1031;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2Fzenith80.cpp;0;4
+FILE_NAME_4=1101;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fperipherals%2FRAMController.cpp;0;4
+FILE_NAME_5=372;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Finclude%2FCPU%2FZ80.hpp;0;4
+FILE_NAME_6=254;ASM;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fasm%2Fzenith.asm;0;4
+FILE_NAME_7=228;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes%2Fmain.cpp;0;4
+FILE_NAME_8=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes%2FDD.cpp;0;4
+FILE_NAME_9=1238;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes%2FED.cpp;0;4
+FILE_NAME_10=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fsrc%2FCPU%2Fopcodes%2FFD.cpp;0;4
+FILE_NAME_11=369;None;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Fconfig.h.in;0;4
+FILE_NAME_12=0;C++;0;EUTF-8;1;1;0;%2Fhome%2Fnoam%2FDocuments%2FDevelopment%2Fzenith80%2Finclude%2Fprogram.hpp;0;4
 
 [build-menu]
 C++FT_00_LB=_Compile
@@ -59,10 +65,10 @@ NF_02_CM=make --no-print-directory %e.o
 NF_02_WD=%p
 EX_00_LB=_Execute
 EX_00_CM=./zenith80 --file %e.bin
-EX_00_WD=%p/builds/build-linux-x86_64-debug
+EX_00_WD=%p/builds/build-linux-x86_64-superdebug
 ASMFT_00_LB=_Compile
 ASMFT_00_CM=sass "%d/%f"
-ASMFT_00_WD=%p/builds/build-linux-x86_64-debug
+ASMFT_00_WD=%p/builds/build-linux-x86_64-superdebug
 NoneFT_00_LB=Assemble zexall
 NoneFT_00_CM=%p/scripts/build_zmac "%f" "%p/builds/build-linux-x86_64-debug"
 NoneFT_00_WD=%d

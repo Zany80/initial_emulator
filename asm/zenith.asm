@@ -8,6 +8,13 @@ start:
 	ld hl, hello_world
 	ld a, 0
 	call print_str
+	;im 1
+	ld a, 'A'
+	ld b, 26
+_:
+	out (0), a
+	inc a
+	djnz -_
 	halt
 
 print16:

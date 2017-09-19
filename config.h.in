@@ -14,7 +14,7 @@
 #endif
 
 #ifdef SUPERDEBUGMODE
-#define SUPERDEBUG(x) cerr<<" "<<x;
+#define SUPERDEBUG(x) cerr<<x;
 #else
 #define SUPERDEBUG(x)
 #endif

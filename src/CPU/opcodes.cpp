@@ -4,49 +4,49 @@
 
 void Z80::DD(uint8_t opcode){
 	uint8_t secondary_opcode=ram->getOpcode(PC.word++);
-	SUPERDEBUG("(DD prefix). Secondary opcode: "<<hex(secondary_opcode));
+	SUPERDEBUG(hex(secondary_opcode));
 	(*this.*(opcodesDD[secondary_opcode]))(secondary_opcode);
 }
 
 void Z80::FD(uint8_t opcode){
 	uint8_t secondary_opcode=ram->getOpcode(PC.word++);
-	SUPERDEBUG("(FD prefix). Secondary opcode: "<<hex(secondary_opcode));
+	SUPERDEBUG(hex(secondary_opcode));
 	(*this.*(opcodesFD[secondary_opcode]))(secondary_opcode);
 }
 
 void Z80::ED(uint8_t opcode){
 	uint8_t secondary_opcode=ram->getOpcode(PC.word++);
-	SUPERDEBUG("(ED prefix). Secondary opcode: "<<hex(secondary_opcode));
+	SUPERDEBUG(hex(secondary_opcode));
 	(*this.*(opcodesED[secondary_opcode]))(secondary_opcode);
 }
 
 //8-bit load group
 
 void Z80::ldRRx(uint8_t opcode){
-	SUPERDEBUG("(`ld "<<r[int(opcode&0x07)]<<", "<<r[(opcode&0x38)>>3]<<"`). Value: "<<(int)*((*regs)[opcode&0x07])<<endl);
+	SUPERDEBUG(" "<<"(`ld "<<r[(opcode&0x38)>>3]<<", "<<r[int(opcode&0x07)]<<"`). Value: "<<(int)*((*regs)[opcode&0x07])<<endl);
 	*((*regs)[(opcode&0x38)>>3])=*((*regs)[opcode&0x07]);
 }
 
 void Z80::ldRN(uint8_t opcode){
-	SUPERDEBUG(endl);
 	uint8_t n=ram->getByte(PC.word++);
+	SUPERDEBUG(" "<<"(`ld "<<r[(opcode&0x38)>>3]<<", "<<(int)n<<"`)"<<endl);
 	*((*regs)[(opcode&0x38)>>3])=n;
 }
 
 void Z80::ldR_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	*((*regs)[(opcode&0x38)>>3])=ram->getByte(HL.word);
 }
 
 void Z80::ldR_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	*(*regs)[(opcode&0x38)>>3]=ram->getByte(IX.word+d);
 	tstates+=5;
 }
 
 void Z80::ldR_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint8_t * reg=(*regs)[(opcode&0x38)>>3];
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	tstates+=5;
@@ -54,12 +54,12 @@ void Z80::ldR_IYd_(uint8_t opcode){
 }
 
 void Z80::ld_HL_R(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(HL.word,*((*regs)[opcode&0x07]));
 }
 
 void Z80::ld_IXd_R(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint8_t * reg=(*regs)[opcode&0x07];
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	tstates+=5;
@@ -67,7 +67,7 @@ void Z80::ld_IXd_R(uint8_t opcode){
 }
 
 void Z80::ld_IYd_R(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint8_t * reg=(*regs)[opcode&0x07];
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	tstates+=5;
@@ -75,12 +75,12 @@ void Z80::ld_IYd_R(uint8_t opcode){
 }
 
 void Z80::ld_HL_N(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(HL.word,ram->getByte(PC.word++));
 }
 
 void Z80::ld_IXd_N(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	//19 tstates for this opcode - 4 for the DD fetch, 4 for the 36 fetch, and another 11
 	//getByte adds 3, as does setByte. Those are called 3 times in total -or 9 tstates
 	//this leaves 2, and frankly I'm confused. The docs say 4,4,3,5,3 t states - 4 for the first two fetches, 3 for the read,
@@ -93,46 +93,46 @@ void Z80::ld_IXd_N(uint8_t opcode){
 }
 
 void Z80::ld_IYd_N(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=2;
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	ram->setByte(IY.word+d,ram->getByte(PC.word++));
 }
 
 void Z80::ldA_BC_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	AF.B.h=ram->getByte(BC.word);
 }
 
 void Z80::ldA_DE_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	AF.B.h=ram->getByte(DE.word);
 }
 
 void Z80::ldA_NN_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	AF.B.h=ram->getByte(ram->getWord(PC.word));
 	PC.word+=2;
 }
 
 void Z80::ld_BC_A(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(BC.word,AF.B.h);
 }
 
 void Z80::ld_DE_A(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(DE.word,AF.B.h);
 }
 
 void Z80::ld_NN_A(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(ram->getWord(PC.word),AF.B.h);
 	PC.word+=2;
 }
 
 void Z80::ldAI(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=5;
 	AF.B.h=I;
 	setS((I&0x80)==0x80);
@@ -143,7 +143,7 @@ void Z80::ldAI(uint8_t opcode){
 }
 
 void Z80::ldAR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=5;
 	AF.B.h=R;
 	setS((R&0x80)==0x80);
@@ -154,13 +154,13 @@ void Z80::ldAR(uint8_t opcode){
 }
 
 void Z80::ldIA(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=5;
 	I=AF.B.h;
 }
 
 void Z80::ldRA(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=5;
 	R=AF.B.h;
 }
@@ -168,154 +168,154 @@ void Z80::ldRA(uint8_t opcode){
 //16-bit load group
 
 void Z80::ldDDNN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<"(`ld dd, nn`)."<<endl);
 	uint16_t val=ram->getWord(PC.word);
 	PC.word+=2;
 	*((*regsDD)[(opcode&0x30)>>4])=val;
 }
 
 void Z80::ldIXNN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	IX.word=ram->getWord(PC.word);
 	PC.word+=2;
 }
 
 void Z80::ldIYNN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	IY.word=ram->getWord(PC.word);
 	PC.word+=2;
 }
 
 void Z80::ldHL_NN_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	HL.word=ram->getWord(ram->getWord(PC.word));
 	PC.word+=2;
 }
 
 void Z80::ldDD_NN_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	*((*regsDD)[(opcode&0x30)>>4])=ram->getWord(ram->getWord(PC.word));
 	PC.word+=2;
 }
 
 void Z80::ldIX_NN_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	IX.word=ram->getWord(ram->getWord(PC.word));
 	PC.word+=2;
 }
 
 void Z80::ldIY_NN_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	IY.word=ram->getWord(ram->getWord(PC.word));
 	PC.word+=2;
 }
 
 void Z80::ld_NN_HL(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setWord(ram->getWord(PC.word),HL.word);
 	PC.word+=2;
 }
 
 void Z80::ld_NN_DD(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setWord(ram->getWord(PC.word),*((*regsDD)[(opcode&0x30)>>4]));
 	PC.word+=2;
 }
 
 void Z80::ld_NN_IX(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setWord(ram->getWord(PC.word),IX.word);
 	PC.word+=2;
 }
 
 void Z80::ld_NN_IY(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setWord(ram->getWord(PC.word),IY.word);
 	PC.word+=2;
 }
 
 void Z80::ldSPHL(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	//takes 6 tstates for some reason. Since 4 are needed for opcode fetch, add 2
 	tstates+=2;
 	SP.word=HL.word;
 }
 
 void Z80::ldSPIX(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	//takes 6 tstates for some reason. Since 4 are needed for opcode fetch, add 2
 	tstates+=2;
 	SP.word=IX.word;
 }
 
 void Z80::ldSPIY(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	//takes 6 tstates for some reason. Since 4 are needed for opcode fetch, add 2
 	tstates+=2;
 	SP.word=IY.word;
 }
 
 void Z80::pushQQ(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	//takes 11 tstates. opcode fetch=4, push=ram->setWord=2x ram->setByte=6, add 1
 	tstates++;
 	push(*((*regsQQ)[(opcode&0x30)>>4]));
 }
 
 void Z80::pushIX(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	//takes 15 tstates. 2x opcode fetch=8, push=ram->setWord=2x ram->setByte=6, add 1
 	tstates++;
 	push(IX.word);
 }
 
 void Z80::pushIY(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	//takes 15 tstates. 2x opcode fetch=8, push=ram->setWord=2x ram->setByte=6, add 1
 	tstates++;
 	push(IY.word);
 }
 
 void Z80::popQQ(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	*((*regsQQ)[(opcode&0x30)>>4])=pop();
 }
 
 void Z80::popIX(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	IX.word=pop();
 }
 
 void Z80::popIY(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	IY.word=pop();
 }
 
 //exchange, block transfer, and search group
 
 void Z80::exDEHL(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint16_t t=DE.word;
 	DE.word=HL.word;
 	HL.word=t;
 }
 
 void Z80::exAFAF2(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint16_t t=AF.word;
 	AF.word=AF2.word;
 	AF2.word=t;
 }
 
 void Z80::exx(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint16_t t1=BC.word,t2=DE.word,t3=HL.word;
 	BC.word=BC2.word;DE.word=DE2.word;HL.word=HL2.word;
 	HL2.word=t1;DE2.word=t2;HL2.word=t3;
 }
 
 void Z80::ex_SP_HL(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	word t=HL;
 	HL.word=ram->getWord(SP.word);
 	ram->setWord(SP.word,t.word);
@@ -323,7 +323,7 @@ void Z80::ex_SP_HL(uint8_t opcode){
 }
 
 void Z80::ex_SP_IX(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	word t=IX;
 	IX.word=ram->getWord(SP.word);
 	ram->setWord(SP.word,t.word);
@@ -331,7 +331,7 @@ void Z80::ex_SP_IX(uint8_t opcode){
 }
 
 void Z80::ex_SP_IY(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	word t=IY;
 	IY.word=ram->getWord(SP.word);
 	ram->setWord(SP.word,t.word);
@@ -339,7 +339,7 @@ void Z80::ex_SP_IY(uint8_t opcode){
 }
 
 void Z80::ldi(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(DE.word,ram->getByte(HL.word));
 	DE.word++;HL.word++;
 	BC.word--;
@@ -350,7 +350,7 @@ void Z80::ldi(uint8_t opcode){
 }
 
 void Z80::ldir(uint8_t opcode){
-	SUPERDEBUG("(`ldir`)."<<endl);
+	SUPERDEBUG(" "<<"(`ldir`)."<<endl);
 	ram->setByte(DE.word,ram->getByte(HL.word));
 	DE.word++;HL.word++;
 	BC.word--;
@@ -363,7 +363,7 @@ void Z80::ldir(uint8_t opcode){
 }
 
 void Z80::ldd(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(DE.word,ram->getByte(HL.word));
 	DE.word--;HL.word--;
 	BC.word--;
@@ -374,7 +374,7 @@ void Z80::ldd(uint8_t opcode){
 }
 
 void Z80::lddr(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	ram->setByte(DE.word,ram->getByte(HL.word));
 	DE.word--;HL.word--;
 	BC.word--;
@@ -387,15 +387,15 @@ void Z80::lddr(uint8_t opcode){
 }
 
 void Z80::cpi(uint8_t opcode){
-	SUPERDEBUG("(`cpi`)."<<endl);
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<"(`cpi`)."<<endl);
+	SUPERDEBUG(" "<<endl);
 	cp(ram->getByte(HL.word++),false);
 	setPV((BC.word--)!=0);
 	tstates+=5;
 }
 
 void Z80::cpir(uint8_t opcode){
-	SUPERDEBUG("(`cpir`)."<<endl);
+	SUPERDEBUG(" "<<"(`cpir`)."<<endl);
 	uint8_t v=ram->getByte(HL.word++);
 	cp(v,false);
 	setPV((BC.word--)!=0);
@@ -407,16 +407,16 @@ void Z80::cpir(uint8_t opcode){
 }
 
 void Z80::cpd(uint8_t opcode){
-	SUPERDEBUG("(`cpd`)."<<endl);
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<"(`cpd`)."<<endl);
+	SUPERDEBUG(" "<<endl);
 	cp(ram->getByte(HL.word--),false);
 	setPV((BC.word--)!=0);
 	tstates+=5;
 }
 
 void Z80::cpdr(uint8_t opcode){
-	SUPERDEBUG("(`cpdr`)."<<endl);
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<"(`cpdr`)."<<endl);
+	SUPERDEBUG(" "<<endl);
 	uint8_t v=ram->getByte(HL.word--);
 	cp(v,false);
 	setPV((BC.word--)!=0);
@@ -430,236 +430,236 @@ void Z80::cpdr(uint8_t opcode){
 //8-bit arithmetic group
 
 void Z80::addAR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	addA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::addAN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	addA(ram->getByte(PC.word++));
 }
 
 void Z80::addA_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	addA(ram->getByte(HL.word));
 }
 
 void Z80::addA_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	addA(ram->getByte(IX.word+d));
 }
 
 void Z80::addA_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	addA(ram->getByte(IY.word+d));
 }
 
 void Z80::adcAR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	addA(*((*regs)[opcode&0x07])+(AF.B.l&0x01));
 }
 
 void Z80::adcAN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	addA(ram->getByte(PC.word++)+(AF.B.l&0x01));
 }
 
 void Z80::adcA_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	addA(ram->getByte(HL.word)+(AF.B.l&0x01));
 }
 
 void Z80::adcA_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	addA(ram->getByte(IX.word+d)+(AF.B.l&0x01));
 }
 
 void Z80::adcA_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	addA(ram->getByte(IY.word+d)+(AF.B.l&0x01));
 }
 
 
 void Z80::subR(uint8_t opcode){
-	SUPERDEBUG("(`sub r`). Subtracting "<<(int)*((*regs)[opcode&0x07])<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sub "<<r[opcode&0x07]<<"`). Value: "<<(int)*((*regs)[opcode&0x07])<<"."<<endl);
 	subA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::subN(uint8_t opcode){
 	uint8_t N=ram->getByte(PC.word++);
-	SUPERDEBUG("(`sub N`). Subtracting "<<N<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sub N`). Subtracting "<<N<<" from register A."<<endl);
 	subA(N);
 }
 
 void Z80::sub_HL_(uint8_t opcode){
 	uint8_t _HL_=ram->getByte(HL.word);
-	SUPERDEBUG("(`sub (HL)`). Subtracting "<<_HL_<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sub (HL)`). Subtracting "<<_HL_<<" from register A."<<endl);
 	subA(_HL_);
 }
 
 void Z80::sub_IXd_(uint8_t opcode){
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	uint8_t _IXd_=ram->getByte(IX.word+d);
-	SUPERDEBUG("(`sub (IX+d)`). Subtracting "<<_IXd_<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sub (IX+d)`). Subtracting "<<_IXd_<<" from register A."<<endl);
 	subA(_IXd_);
 }
 
 void Z80::sub_IYd_(uint8_t opcode){
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	uint8_t _IYd_=ram->getByte(IY.word+d);
-	SUPERDEBUG("(`sub (IY+d)`). Subtracting "<<_IYd_<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sub (IY+d)`). Subtracting "<<_IYd_<<" from register A."<<endl);
 	subA(_IYd_);
 }
 
 void Z80::sbcAR(uint8_t opcode){
-	SUPERDEBUG("(`sbc r`). Subtracting "<<(int)(*((*regs)[opcode&0x07])+(AF.B.l&0x01))<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sbc r`). Subtracting "<<(int)(*((*regs)[opcode&0x07])+(AF.B.l&0x01))<<" from register A."<<endl);
 	subA(*((*regs)[opcode&0x07])+(AF.B.l&0x01));
 }
 
 void Z80::sbcAN(uint8_t opcode){
 	uint8_t N=ram->getByte(PC.word++);
-	SUPERDEBUG("(`sbc N`). Subtracting "<<N+(AF.B.l&0x01)<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sbc N`). Subtracting "<<N+(AF.B.l&0x01)<<" from register A."<<endl);
 	subA(N);
 }
 
 void Z80::sbcA_HL_(uint8_t opcode){
 	uint8_t _HL_=ram->getByte(HL.word);
-	SUPERDEBUG("(`sbc (HL)`). Subtracting "<<_HL_+(AF.B.l&0x01)<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sbc (HL)`). Subtracting "<<_HL_+(AF.B.l&0x01)<<" from register A."<<endl);
 	subA(_HL_+(AF.B.l&0x01));
 }
 
 void Z80::sbcA_IXd_(uint8_t opcode){
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	uint8_t _IXd_=ram->getByte(IX.word+d);
-	SUPERDEBUG("(`sbc (IX+d)`). Subtracting "<<_IXd_+(AF.B.l&0x01)<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sbc (IX+d)`). Subtracting "<<_IXd_+(AF.B.l&0x01)<<" from register A."<<endl);
 	subA(_IXd_+(AF.B.l&0x01));
 }
 
 void Z80::sbcA_IYd_(uint8_t opcode){
 	int8_t d=(int8_t)ram->getByte(PC.word++);
 	uint8_t _IYd_=ram->getByte(IY.word+d);
-	SUPERDEBUG("(`sbc (IY+d)`). Subtracting "<<_IYd_+(AF.B.l&0x01)<<" from register A."<<endl);
+	SUPERDEBUG(" "<<"(`sbc (IY+d)`). Subtracting "<<_IYd_+(AF.B.l&0x01)<<" from register A."<<endl);
 	subA(_IYd_+(AF.B.l&0x01));
 }
 
 void Z80::andR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	andA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::andN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	andA(ram->getByte(PC.word++));
 }
 
 void Z80::and_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	andA(ram->getByte(HL.word));
 }
 
 void Z80::and_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	andA(ram->getByte(IX.word+d));
 }
 
 void Z80::and_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	andA(ram->getByte(IY.word+d));
 }
 
 void Z80::orR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	orA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::orN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	orA(ram->getByte(PC.word++));
 }
 
 void Z80::or_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	orA(ram->getByte(HL.word));
 }
 
 void Z80::or_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	orA(ram->getByte(IX.word+d));
 }
 
 void Z80::or_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	orA(ram->getByte(IY.word+d));
 }
 
 void Z80::xorR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	xorA(*((*regs)[opcode&0x07]));
 }
 
 void Z80::xorN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	xorA(ram->getByte(PC.word++));
 }
 
 void Z80::xor_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	xorA(ram->getByte(HL.word));
 }
 
 void Z80::xor_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	xorA(ram->getByte(IX.word+d));
 }
 
 void Z80::xor_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	xorA(ram->getByte(IY.word+d));
 }
 
 void Z80::cpR(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	cp(*((*regs)[opcode&0x07]),true);
 }
 
 void Z80::cpN(uint8_t opcode){
 	uint8_t N=ram->getByte(PC.word++);
-	SUPERDEBUG("(`cp N`). Comparing to "<<(int)N<<"..."<<endl);
+	SUPERDEBUG(" "<<"(`cp N`). Comparing to "<<(int)N<<"..."<<endl);
 	cp(N,true);
 }
 
 void Z80::cp_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint8_t _HL_=ram->getByte(HL.word);
 	cp(_HL_,true);
 }
 
 void Z80::cp_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t _IXd_=ram->getByte(IX.word+d);
 	cp(_IXd_,true);
 }
 
 void Z80::cp_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t _IYd_=ram->getByte(IY.word+d);
 	cp(_IYd_,true);
 }
 
 void Z80::incR(uint8_t opcode){
-	SUPERDEBUG("(`inc r`). Incrementing register "<<((opcode&0x38)>>3)<<"."<<endl);
+	SUPERDEBUG(" "<<"(`inc "<<r[(opcode&0x38)>>3]<<"`)."<<endl);
 	uint8_t old_val=*((*regs)[(opcode&0x38)>>3]);
 	uint8_t new_val=old_val+1;
 	*((*regs)[(opcode&0x38)>>3])=new_val;
@@ -672,7 +672,7 @@ void Z80::incR(uint8_t opcode){
 }
 
 void Z80::inc_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates++;
 	uint8_t old_val=ram->getByte(HL.word);
 	uint8_t new_val=old_val+1;
@@ -686,7 +686,7 @@ void Z80::inc_HL_(uint8_t opcode){
 }
 
 void Z80::inc_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=6;
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t old_val=ram->getByte(IX.word+d);
@@ -701,7 +701,7 @@ void Z80::inc_IXd_(uint8_t opcode){
 }
 
 void Z80::inc_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=6;
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t old_val=ram->getByte(IY.word+d);
@@ -716,7 +716,7 @@ void Z80::inc_IYd_(uint8_t opcode){
 }
 
 void Z80::decR(uint8_t opcode){
-	SUPERDEBUG("(`dec r`). Decrementing register "<<((opcode&0x38)>>3)<<"."<<endl);
+	SUPERDEBUG(" "<<"(`dec r`). Decrementing register "<<((opcode&0x38)>>3)<<"."<<endl);
 	uint8_t old_val=*((*regs)[(opcode&0x38)>>3]);
 	uint8_t new_val=old_val-1;
 	*((*regs)[(opcode&0x38)>>3])=new_val;
@@ -729,7 +729,7 @@ void Z80::decR(uint8_t opcode){
 }
 
 void Z80::dec_HL_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates++;
 	uint8_t old_val=ram->getByte(HL.word);
 	uint8_t new_val=old_val-1;
@@ -744,7 +744,7 @@ void Z80::dec_HL_(uint8_t opcode){
 }
 
 void Z80::dec_IXd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=6;
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t old_val=ram->getByte(IX.word+d);
@@ -759,7 +759,7 @@ void Z80::dec_IXd_(uint8_t opcode){
 }
 
 void Z80::dec_IYd_(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates+=6;
 	int8_t d=ram->getByte(PC.word++);
 	uint8_t old_val=ram->getByte(IY.word+d);
@@ -776,7 +776,7 @@ void Z80::dec_IYd_(uint8_t opcode){
 //General-purpose arithmetic group
 
 void Z80::daa(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint8_t old=AF.B.h;
 	uint8_t v=0;
 	if((AF.B.h&0xF)>9 || getH())
@@ -798,14 +798,14 @@ void Z80::daa(uint8_t opcode){
 }
 
 void Z80::cpl(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	AF.B.h ^= 0xFF;
 	setH();
 	setN();
 }
 
 void Z80::neg(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint8_t old=AF.B.h;
 	AF.B.h=-old;
 	setS((AF.B.h&0x80)==0x80);
@@ -816,14 +816,14 @@ void Z80::neg(uint8_t opcode){
 }
 
 void Z80::ccf(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	setH(getC());
 	setC(!getC());
 	resetN();
 }
 
 void Z80::scf(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	resetH();
 	resetN();
 	setC();
@@ -833,31 +833,38 @@ void Z80::scf(uint8_t opcode){
 //CPU control group
 
 void Z80::nop(uint8_t opcode){
-	if(halted)
-		return;
-	SUPERDEBUG("(nop). Opcode: "<<(int)opcode<<endl);
+	if(!halted)SUPERDEBUG(" "<<"(`nop`). "<<endl);
 }
 
 void Z80::halt(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<"(`halt`)."<<endl);
 	halted=true;
 }
 
 void Z80::di(uint8_t opcode){
+	SUPERDEBUG(" "<<"(`di`)."<<endl);
 	IFF1=IFF2=false;
 }
 
 void Z80::ei(uint8_t opcode){
+	SUPERDEBUG(" "<<"(`ei`)."<<endl);
 	IFF1=IFF2=true;
 }
 
 void Z80::im(uint8_t opcode){
-	if((opcode&0x18)==0x10)
+	SUPERDEBUG(" "<<"(`im");
+	if((opcode&0x18)==0x10){
 		mode=IM1;
-	else if((opcode&0x18)==0x18)
+		SUPERDEBUG(" "<<"1`)."<<endl);
+	}
+	else if((opcode&0x18)==0x18){
 		mode=IM2;
-	else
+		SUPERDEBUG(" "<<"2`)."<<endl);
+	}
+	else{
 		mode=IM0;
+		SUPERDEBUG(" "<<"0`)."<<endl);
+	}
 }
 
 //16-bit arithmetic group
@@ -925,7 +932,7 @@ void Z80::addIYRR(uint8_t opcode){
 }
 
 void Z80::incSS(uint8_t opcode){
-	SUPERDEBUG("(`inc ss`). Incrementing register "<<((opcode&0x30)>>4)<<" which currently contains "<<*((*regsDD)[(opcode&0x30)>>4])<<"."<<endl);
+	SUPERDEBUG(" "<<"(`inc ss`). Incrementing register "<<((opcode&0x30)>>4)<<" which currently contains "<<*((*regsDD)[(opcode&0x30)>>4])<<"."<<endl);
 	(*((*regsDD)[(opcode&0x30)>>4]))++;
 	tstates+=2;
 }
@@ -1156,16 +1163,15 @@ void Z80::rrd(uint8_t opcode){
 
 void Z80::jpNN(uint8_t opcode){
 	uint16_t address=ram->getWord(PC.word);
-	SUPERDEBUG("(jp NN). Jumping to address "<<address);
+	SUPERDEBUG(" "<<"(`jp "<<address<<"`)."<<endl);
 	PC.word=address;
 }
 
 void Z80::jpCCNN(uint8_t opcode){
-	SUPERDEBUG("(`jp cc, nn`).");
 	uint16_t address=ram->getWord(PC.word);
+	SUPERDEBUG(" "<<"(`jp cc, "<<address<<"`)."<<endl);
 	PC.word+=2;
 	uint8_t c=(opcode&0x38)>>3;
-	SUPERDEBUG("Condition: "<<(int)c<<".");
 	if(
 		(c==0&&!getZ())
 		|| (c==1 && getZ())
@@ -1175,16 +1181,14 @@ void Z80::jpCCNN(uint8_t opcode){
 		|| (c==5 && getPV())
 		|| (c==6 && !getS())
 		|| (c==7 && getS())
-	){
+	)
 		PC.word=address;
-		SUPERDEBUG("Jumping to "<<address<<"...");
-	}
-	SUPERDEBUG(endl);
 }
 
 void Z80::djnzE(uint8_t opcode){
 	tstates++;
 	int8_t displacement=ram->getByte(PC.word++);
+	SUPERDEBUG(" "<<"(`djnz "<<(int)displacement<<"`)."<<endl);
 	if(--BC.B.h!=0){
 		PC.word+=displacement;
 		tstates+=5;
@@ -1194,8 +1198,8 @@ void Z80::djnzE(uint8_t opcode){
 //call and return group
 
 void Z80::callNN(uint8_t opcode){
-	SUPERDEBUG(endl);
 	uint16_t address=ram->getWord(PC.word);
+	SUPERDEBUG(" "<<"(`call "<<(int)address<<"`)."<<endl);
 	PC.word+=2;
 	push(PC.word);
 	PC.word=address;
@@ -1203,7 +1207,7 @@ void Z80::callNN(uint8_t opcode){
 }
 
 void Z80::callCCNN(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	uint16_t address=ram->getWord(PC.word);
 	PC.word+=2;
 	uint8_t c=(opcode&0x38)>>3;
@@ -1224,12 +1228,12 @@ void Z80::callCCNN(uint8_t opcode){
 }
 
 void Z80::ret(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	PC.word=pop();
 }
 
 void Z80::retCC(uint8_t opcode){
-	SUPERDEBUG(endl);
+	SUPERDEBUG(" "<<endl);
 	tstates++;
 	uint8_t c=(opcode&0x38)>>3;
 	if(
@@ -1249,8 +1253,9 @@ void Z80::retCC(uint8_t opcode){
 //input and output group
 
 void Z80::out_N_A(uint8_t opcode){
-	SUPERDEBUG(endl);
-	io->out(ram->getByte(PC.word++),AF.B.h);
+	uint8_t port=ram->getByte(PC.word++);
+	SUPERDEBUG(" (`out ("<<(int)port<<"), a`)."<<endl);
+	io->out(port,AF.B.h);
 }
 
 //convenience functions

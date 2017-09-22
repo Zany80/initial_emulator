@@ -3,6 +3,6 @@
 
 #define ZENITH_HEADER namespace Zenith80{
 #define ZENITH_FOOTER }
-#define ZENITH Zenith80:
+#define ZENITH Zenith80
 
 #endif

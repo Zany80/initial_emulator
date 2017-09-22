@@ -9,6 +9,11 @@ start:
 	ld a, 0
 	call print_str
 	;im 1
+	in a, (1)
+	add a, 48
+	out (0), a
+	ld a, 48
+	out (0), a
 	ld a, 'A'
 	ld b, 26
 _:

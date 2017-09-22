@@ -43,6 +43,7 @@ using std::string;
 #include <fonts/Famirids.h>
 
 #include <CPU/peripherals/RAMController.hpp>
+#include <CPU/peripherals/DeviceController.hpp>
 
 int main(int argc,char ** argv){
 	return Zenith80::Main::main(argc,argv);
@@ -56,66 +57,6 @@ int Main::main(int argc,char **argv){
 	Main z(argc,argv);
 	return z.run();
 }
-
-class DummyDevice : public Z80Device{
-	public:
-		void out(uint16_t port,uint8_t value) override;
-		uint8_t in(uint16_t port) override;
-	private:
-		uint16_t amount=0;
-		uint8_t ports[65536];
-		uint8_t tvalue=0;
-		struct{
-			uint8_t num;
-			bool active;
-		}test;
-		bool t=false;
-};
-
-void DummyDevice::out(uint16_t port,uint8_t value){
-	Main::instance->cpu->tstates+=4;
-	ports[port]=value;
-	switch(port){
-		case 0:
-			Main::instance->putchar((char)value);
-			break;
-		case 1:
-			cout<<(int)value;
-			break;
-		case 2:
-			if(t)
-				cout<<(int)((int)(tvalue<<8)+value)<<endl;
-			else
-				tvalue=value;
-			t=!t;
-			break;
-		case 4:
-			if(!test.active)
-				test.num=value;
-			else if(test.num!=value){
-				Main::instance->cpu->halt();
-				Main::instance->putmsg("Assertion failed! CPU halted!");
-				string s="Expected value: "+to_string((int)test.num);
-				s=s+", received: "+to_string((int)value);
-				Main::instance->putmsg(s);
-				Main::instance->putmsg("");
-			}
-			else{
-				cout<<"Assertion passed! Program execution continuing normally."<<endl;
-				cout<<"Expected value: "<<(int)test.num<<", received: "<<(int)value<<endl;
-			}
-			test.active=!test.active;
-			break;
-		default:
-			cout<<(int)value<<" written to port "<<(int)port<<endl;
-			break;
-	}
-}
-
-uint8_t DummyDevice::in(uint16_t port){
-	Main::instance->cpu->tstates+=4;
-	return ports[port];
-};
 
 Main::Main(int argc,char ** argv){
 	Main::instance=this;
@@ -178,7 +119,7 @@ Main::Main(int argc,char ** argv){
 		cout<<"No --file argument received, defaulting to \"zenith.bin\"..."<<endl;
 		termOut->addLine("No --file argument received, defaulting to \"zenith.bin\"...");
 	}
-	cpu=new Z80(new RAMController(name.c_str()),new DummyDevice());
+	cpu=new Z80(new RAMController(name.c_str()),new DeviceController());
 	default_font=new Font;
 	default_font->loadFromMemory(&Famirids_ttf,Famirids_ttf_len);
 	termOut->addLine("");

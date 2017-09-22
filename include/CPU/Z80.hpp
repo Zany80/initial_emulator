@@ -4,7 +4,7 @@
 #include <zenith80.hpp>
 
 #include "Z80Memory.hpp"
-#include "Z80Device.hpp"
+#include "peripherals/DeviceController.hpp"
 
 #include <defines.hpp>
 #include <vector>
@@ -23,7 +23,7 @@ string hex(uint8_t a);
 class Z80{
 	public:
 		typedef void (Z80::*opcode)(uint8_t);
-		Z80(Z80Memory * ram,Z80Device * io);
+		Z80(Z80Memory * ram,DeviceController * io);
 		~Z80();
 		void executeOneInstruction();
 		void executeXInstructions(int64_t x);
@@ -50,7 +50,7 @@ class Z80{
 	private:
 		bool halted;
 		Z80Memory * ram;
-		Z80Device * io;
+		DeviceController * io;
 		word AF;
 		word AF2;
 		word BC;

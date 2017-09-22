@@ -6,8 +6,8 @@ opcodesDD=new opcode[256]{
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	//0x20
-	&Z80::nop,&Z80::ldIXNN,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
-	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
+	&Z80::nop,&Z80::ldIXNN,&Z80::ld_NN_IX,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
+	&Z80::nop,&Z80::nop,&Z80::ldIX_NN_,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	//0x30
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ld_IXd_N,&Z80::nop,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
@@ -42,9 +42,9 @@ opcodesDD=new opcode[256]{
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	//0xE0
-	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
+	&Z80::nop,&Z80::popIX,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::pushIX,&Z80::nop,&Z80::nop,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	//0xF0
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
-	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
+	&Z80::nop,&Z80::ldSPIX,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 };

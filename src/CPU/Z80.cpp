@@ -17,7 +17,7 @@ ZENITH_HEADER
 
 #include "opcodes.cpp"
 
-Z80::Z80(Z80Memory * ram,Z80Device * io){
+Z80::Z80(Z80Memory * ram,DeviceController * io){
 	this->ram=ram;
 	this->io=io;
 	regs=new vector<uint8_t*>{&BC.B.h,&BC.B.l,&DE.B.h,&DE.B.l,&HL.B.h,&HL.B.l,0,&AF.B.h};

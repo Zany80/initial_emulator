@@ -12,11 +12,11 @@ opcodesED=new opcode[256]{
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	//0x40
-	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ld_NN_DD,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldIA,
+	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ld_NN_DD,&Z80::neg,&Z80::nop,&Z80::im,&Z80::ldIA,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldDDNN,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldRA,
 	//0x50
-	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ld_NN_DD,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldAI,
-	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldDDNN,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldAR,
+	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ld_NN_DD,&Z80::nop,&Z80::nop,&Z80::im,&Z80::ldAI,
+	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldDDNN,&Z80::nop,&Z80::nop,&Z80::im,&Z80::ldAR,
 	//0x60
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ld_NN_DD,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldDDNN,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,

@@ -4,22 +4,15 @@ hello_world:
 	.db "Hi there! If you need help, ask on the Fantasy Consoles Discord server.\n"
 	.db "The link can be found from http://pleasanta.tk/zenith80\n",0
 
+lowercase: .db "lowercase a pressed",0
+
 start:
 	ld hl, hello_world
 	ld a, 0
 	call print_str
-	;im 1
-	in a, (1)
-	add a, 48
-	out (0), a
-	ld a, 48
-	out (0), a
-	ld a, 'A'
-	ld b, 26
-_:
-	out (0), a
-	inc a
-	djnz -_
+	im 1
+	call poll_input
+
 	halt
 
 print16:
@@ -42,7 +35,7 @@ print_str:
 _:
 	ld a, (hl)
 	out (0), a
-	inc hl
+	inc l
 	djnz -_
 	ret
 
@@ -66,3 +59,10 @@ strlen:
 
 test:
 	.db hello_world
+
+poll_input:
+_:
+	in a, (1)
+	cp 0
+	jp z, -_
+	ret

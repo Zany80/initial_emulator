@@ -1252,6 +1252,12 @@ void Z80::retCC(uint8_t opcode){
 
 //input and output group
 
+void Z80::inA_N_(uint8_t opcode){
+	uint8_t port=ram->getByte(PC.word++);
+	SUPERDEBUG(" (`in a, ("<<(int)port<<")`)."<<endl);
+	AF.B.h=io->in(port);
+}
+
 void Z80::out_N_A(uint8_t opcode){
 	uint8_t port=ram->getByte(PC.word++);
 	SUPERDEBUG(" (`out ("<<(int)port<<"), a`)."<<endl);

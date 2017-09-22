@@ -178,6 +178,7 @@ void callCCNN(uint8_t opcode);
 void ret(uint8_t opcode);
 void retCC(uint8_t opcode);
 //input and output group
+void inA_N_(uint8_t opcode);
 void out_N_A(uint8_t opcode);
 //convenience functions - not opcodes per se, but used exclusively by them to prevent typing the same commands repeatedly
 //these don't have to have the signature `void opcode(uint8_t)`.

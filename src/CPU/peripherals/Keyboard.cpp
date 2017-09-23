@@ -9,6 +9,8 @@ using sf::Keyboard;
  */
 
 uint8_t keyboardInput(){
+	bool caps=Keyboard::isKeyPressed(Keyboard::CAPS);
+	bool shift=Keyboard::isKeyPressed(Keyboard::RShift)||Keyboard::isKeyPressed(Keyboard::LShift);
 	if(Keyboard::isKeyPressed(Keyboard::Left))
 		return 0xDB;
 	if(Keyboard::isKeyPressed(Keyboard::Right))
@@ -17,69 +19,120 @@ uint8_t keyboardInput(){
 		return 0xD2;
 	if(Keyboard::isKeyPressed(Keyboard::Down))
 		return 0xDC;
+	if(Keyboard::isKeyPressed(Keyboard::Space))
+		return 0xD3;
+	if(Keyboard::isKeyPressed(Keyboard::Return))
+		return 0xD4;
+	if(Keyboard::isKeyPressed(Keyboard::BackSpace))
+		return 0xA1;
+	if(Keyboard::isKeyPressed(Keyboard::Delete))
+		return 0xE1;
 	//letters
-	uint8_t letterVal=0;
+	uint8_t val=0;
 	if(Keyboard::isKeyPressed(Keyboard::A))
-		letterVal=30;
+		val=30;
 	if(Keyboard::isKeyPressed(Keyboard::B))
-		letterVal=35;
+		val=35;
 	if(Keyboard::isKeyPressed(Keyboard::C))
-		letterVal=33;
+		val=33;
 	if(Keyboard::isKeyPressed(Keyboard::D))
-		letterVal=23;
+		val=23;
 	if(Keyboard::isKeyPressed(Keyboard::E))
-		letterVal=13;
+		val=13;
 	if(Keyboard::isKeyPressed(Keyboard::F))
-		letterVal=24;
+		val=24;
 	if(Keyboard::isKeyPressed(Keyboard::G))
-		letterVal=25;
+		val=25;
 	if(Keyboard::isKeyPressed(Keyboard::H))
-		letterVal=26;
+		val=26;
 	if(Keyboard::isKeyPressed(Keyboard::I))
-		letterVal=18;
+		val=18;
 	if(Keyboard::isKeyPressed(Keyboard::J))
-		letterVal=27;
+		val=27;
 	if(Keyboard::isKeyPressed(Keyboard::K))
-		letterVal=28;
+		val=28;
 	if(Keyboard::isKeyPressed(Keyboard::L))
-		letterVal=29;
+		val=29;
 	if(Keyboard::isKeyPressed(Keyboard::M))
-		letterVal=37;
+		val=37;
 	if(Keyboard::isKeyPressed(Keyboard::N))
-		letterVal=36;
+		val=36;
 	if(Keyboard::isKeyPressed(Keyboard::O))
-		letterVal=19;
+		val=19;
 	if(Keyboard::isKeyPressed(Keyboard::P))
-		letterVal=20;
+		val=20;
 	if(Keyboard::isKeyPressed(Keyboard::Q))
-		letterVal=11;
+		val=11;
 	if(Keyboard::isKeyPressed(Keyboard::R))
-		letterVal=14;
+		val=14;
 	if(Keyboard::isKeyPressed(Keyboard::S))
-		letterVal=22;
+		val=22;
 	if(Keyboard::isKeyPressed(Keyboard::T))
-		letterVal=15;
+		val=15;
 	if(Keyboard::isKeyPressed(Keyboard::U))
-		letterVal=17;
+		val=17;
 	if(Keyboard::isKeyPressed(Keyboard::V))
-		letterVal=34;
+		val=34;
 	if(Keyboard::isKeyPressed(Keyboard::W))
-		letterVal=12;
+		val=12;
 	if(Keyboard::isKeyPressed(Keyboard::X))
-		letterVal=32;
+		val=32;
 	if(Keyboard::isKeyPressed(Keyboard::Y))
-		letterVal=16;
+		val=16;
 	if(Keyboard::isKeyPressed(Keyboard::Z))
-		letterVal=31;
-	if(letterVal!=0){
-		//set first two bits based on case - if lower case group 0, upper case group 1
-		letterVal&=0x3F;
+		val=31;
+	if(val!=0){
 		//if (caps lock and not shift) OR (not caps lock and shift), set bit high
-		bool caps=Keyboard::isKeyPressed(Keyboard::CAPS);
-		bool shift=Keyboard::isKeyPressed(Keyboard::RShift)||Keyboard::isKeyPressed(Keyboard::LShift);
 		if((caps&& (!shift)) || (!caps && shift))
-			letterVal|=0x40;
-		return letterVal;
+			val|=0x40;
+		return val;
+	}
+	if(Keyboard::isKeyPressed(Keyboard::Num1))
+		val=1;
+	if(Keyboard::isKeyPressed(Keyboard::Num2))
+		val=2;
+	if(Keyboard::isKeyPressed(Keyboard::Num3))
+		val=3;
+	if(Keyboard::isKeyPressed(Keyboard::Num4))
+		val=4;
+	if(Keyboard::isKeyPressed(Keyboard::Num5))
+		val=5;
+	if(Keyboard::isKeyPressed(Keyboard::Num6))
+		val=6;
+	if(Keyboard::isKeyPressed(Keyboard::Num7))
+		val=7;
+	if(Keyboard::isKeyPressed(Keyboard::Num8))
+		val=8;
+	if(Keyboard::isKeyPressed(Keyboard::Num9))
+		val=9;
+	if(Keyboard::isKeyPressed(Keyboard::Num0))
+		val=10;
+	if(Keyboard::isKeyPressed(Keyboard::SemiColon))
+		val=30;
+	if(Keyboard::isKeyPressed(Keyboard::Slash))
+		val=40;
+	if(Keyboard::isKeyPressed(Keyboard::Comma))
+		val=39;
+	if(Keyboard::isKeyPressed(Keyboard::Period))
+		val=39;
+	if(Keyboard::isKeyPressed(Keyboard::Equal))
+		val=0x8B;
+	if(Keyboard::isKeyPressed(Keyboard::Dash))
+		val=0x8C;
+	if(Keyboard::isKeyPressed(Keyboard::LBracket))
+		val=0x8D;
+	if(Keyboard::isKeyPressed(Keyboard::RBracket))
+		val=0x8E;
+	if(Keyboard::isKeyPressed(Keyboard::BackSlash))
+		val=0x8F;
+	if(Keyboard::isKeyPressed(Keyboard::Quote))
+		val=0x90;
+	if(Keyboard::isKeyPressed(Keyboard::Tilde))
+		val=0x91;
+	if(val>0){
+		if(shift)
+			val|=0x40;
+		return val;
 	}
 
 	return 0x00;

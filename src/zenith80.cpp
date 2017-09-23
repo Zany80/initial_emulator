@@ -136,11 +136,11 @@ Main::~Main(){
 
 int Main::run(){
 	while(window->isOpen()){
+		this->processEvents();
 		window->clear(this->background);
 		gui->draw();
 		window->display();
 		cpu->executeXInstructions(this->clock_speed*this->unit/60);
-		this->processEvents();
 	}
 	return 0;
 }

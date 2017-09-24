@@ -26,6 +26,7 @@ Z80::Z80(Z80Memory * ram,DeviceController * io){
 	r=vector<char>{'B','C','D','E','H','L',0,'A'};
 	initOpcodes();
 	reset();
+	halted=true;
 }
 
 void Z80::initOpcodes(){

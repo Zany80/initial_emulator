@@ -26,7 +26,6 @@ _:
 	ld hl, escape
 	ld a, 0
 	call print_str
-	halt
 	jp -_
 
 print16:

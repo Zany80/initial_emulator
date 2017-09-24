@@ -10,6 +10,8 @@ using sf::Font;
 
 #include <string>
 using std::string;
+#include <vector>
+using std::vector;
 
 #include <CPU/Z80.hpp>
 
@@ -34,7 +36,10 @@ class Main{
 		bool cpm_emu;
 		void putchar(char c);
 		void putmsg(string s);
+		uint8_t key();
 	private:
+		vector<uint8_t> key_buffer;
+		uint8_t _key;
 		uint64_t unit;
 		uint64_t clock_speed;
 		RenderWindow * window;

@@ -19,6 +19,7 @@
 using sf::RenderWindow;
 using sf::VideoMode;
 using sf::Color;
+using sf::Keyboard;
 using sf::Event;
 using sf::Mouse;
 
@@ -60,8 +61,11 @@ int Main::main(int argc,char **argv){
 
 Main::Main(int argc,char ** argv){
 	Main::instance=this;
+	_key=0;
 	clock_speed=4;
 	unit=MHz;
+	char buffer[65536];
+	cout.rdbuf()->pubsetbuf(buffer,65536);
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setIcon(icon.width,icon.height,icon.pixel_data);
 	window->setVerticalSyncEnabled(true);
@@ -159,26 +163,110 @@ void Main::processEvents(){
 						cpu->reset();
 				}
 				break;
-			default:
-			//	cout<<"[Event Manager] Received event of type "<<e.type<<endl;
+			case Event::KeyPressed:
+				uint8_t v=0;
+				Event::KeyEvent k=e.key;
+				bool caps=Keyboard::isKeyPressed(Keyboard::CAPS);
+				//letters
+				switch(k.code){
+					case Keyboard::Q:
+						v=0x0B;
+						break;
+					case Keyboard::W:
+						v=0x0C;
+						break;
+					case Keyboard::E:
+						v=0x0D;
+						break;
+					case Keyboard::R:
+						v=0x0E;
+						break;
+					case Keyboard::T:
+						v=0x0F;
+						break;
+					case Keyboard::Y:
+						v=0x10;
+						break;
+					case Keyboard::U:
+						v=0x11;
+						break;
+					case Keyboard::I:
+						v=0x12;
+						break;
+					case Keyboard::O:
+						v=0x13;
+						break;
+					case Keyboard::P:
+						v=0x14;
+						break;
+					case Keyboard::A:
+						v=0x15;
+						break;
+					case Keyboard::S:
+						v=0x16;
+						break;
+					case Keyboard::D:
+						v=0x17;
+						break;
+					case Keyboard::F:
+						v=0x18;
+						break;
+					case Keyboard::G:
+						v=0x19;
+						break;
+					case Keyboard::H:
+						v=0x1A;
+						break;
+					case Keyboard::J:
+						v=0x1B;
+						break;
+					case Keyboard::K:
+						v=0x1C;
+						break;
+					case Keyboard::L:
+						v=0x1D;
+						break;
+					case Keyboard::Z:
+						v=0x1E;
+						break;
+					default:
+						break;
+				}
+				if(v!=0){
+					//if uppercase, set group to 1, otherwise leave at 0
+					if((caps&&!k.shift)||(k.shift&&!caps))
+						v|=0x40;
+					key_buffer.push_back(v);
+					break;
+				}
+				key_buffer.push_back(v);
 				break;
+			//default:
+			//	cout<<"[Event Manager] Received event of type "<<e.type<<endl;
+				//break;
 		}
 		gui->handleEvent(e);
 	}
 }
 
 void Main::putchar(char ch){
+	string msg="";
 	if(ch!='\n'){
-		string c=termOut->getLine(termOut->getLineAmount()-1)+ch;
+		msg=termOut->getLine(termOut->getLineAmount()-1)+ch;
 		termOut->removeLine(termOut->getLineAmount()-1);
-		termOut->addLine(c);
 	}
-	else
-		termOut->addLine("");
+	putmsg(msg);
 }
 
 void Main::putmsg(string s){
 	termOut->addLine(s);
+}
+
+uint8_t Main::key(){
+	if(key_buffer.empty())return 0;
+	uint8_t v=key_buffer.front();
+	key_buffer.erase(key_buffer.begin());
+	return v;
 }
 
 ZENITH_FOOTER

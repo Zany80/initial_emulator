@@ -27,6 +27,12 @@ uint8_t keyboardInput(){
 		return 0xA1;
 	if(Keyboard::isKeyPressed(Keyboard::Delete))
 		return 0xE1;
+	if(Keyboard::isKeyPressed(Keyboard::Pause))
+		return 0x92;
+	if(Keyboard::isKeyPressed(Keyboard::Insert))
+		return 0x93;
+	if(Keyboard::isKeyPressed(Keyboard::Escape))
+		return 0xDE;
 	//letters
 	uint8_t val=0;
 	if(Keyboard::isKeyPressed(Keyboard::A))
@@ -134,6 +140,25 @@ uint8_t keyboardInput(){
 			val|=0x40;
 		return val;
 	}
-
+	if(Keyboard::isKeyPressed(Keyboard::F1))
+		return 0x81;
+	if(Keyboard::isKeyPressed(Keyboard::F2))
+		return 0x82;
+	if(Keyboard::isKeyPressed(Keyboard::F3))
+		return 0x83;
+	if(Keyboard::isKeyPressed(Keyboard::F4))
+		return 0x84;
+	if(Keyboard::isKeyPressed(Keyboard::F5))
+		return 0x85;
+	if(Keyboard::isKeyPressed(Keyboard::F6))
+		return 0x86;
+	if(Keyboard::isKeyPressed(Keyboard::F7))
+		return 0x87;
+	if(Keyboard::isKeyPressed(Keyboard::F8))
+		return 0x88;
+	if(Keyboard::isKeyPressed(Keyboard::F9))
+		return 0x89;
+	if(Keyboard::isKeyPressed(Keyboard::F10))
+		return 0x8A;
 	return 0x00;
 }

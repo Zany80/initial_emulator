@@ -4,16 +4,30 @@ hello_world:
 	.db "Hi there! If you need help, ask on the Fantasy Consoles Discord server.\n"
 	.db "The link can be found from http://pleasanta.tk/zenith80\n",0
 
-lowercase: .db "lowercase a pressed",0
+escape: .db "Escape pressed\n",0
+nescape: .db "Escape not pressed\n",0
 
 start:
 	ld hl, hello_world
 	ld a, 0
 	call print_str
 	im 1
+_:
 	call poll_input
-
+	cp 0xDE
+	jp z, .escape
+	ld hl, nescape
+	ld a, 0
+	call print_str
+	jp -_
 	halt
+
+.escape:
+	ld hl, escape
+	ld a, 0
+	call print_str
+	halt
+	jp -_
 
 print16:
 	push af

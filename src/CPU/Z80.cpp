@@ -75,10 +75,8 @@ void Z80::executeOneInstruction(){
 	R++;
 	R &= 0x7F;
 	R |= (_R&0x80);
-	if(halted){
-		(*this.*opcodes[0x00])(0x00);
+	if(halted)
 		tstates+=4;
-	}
 	else{
 		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
 		#ifdef SUPERDEBUGMODE

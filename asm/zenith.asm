@@ -8,6 +8,8 @@ escape: .db "Escape pressed\n",0
 nescape: .db "Escape not pressed\n",0
 
 start:
+	ld a, 0
+	out (0), a
 	ld hl, hello_world
 	ld a, 0
 	call print_str

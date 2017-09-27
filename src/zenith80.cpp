@@ -174,6 +174,9 @@ void Main::processEvents(){
 }
 
 void Main::putchar(char ch){
+	if(ch==0){
+		return termOut->removeAllLines();
+	}
 	string msg="";
 	if(ch!='\n'){
 		msg=termOut->getLine(termOut->getLineAmount()-1)+ch;

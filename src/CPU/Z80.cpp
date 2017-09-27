@@ -13,6 +13,8 @@ using std::endl;
 #include <string>
 using std::string;
 
+#include <main.hpp>
+
 ZENITH_HEADER
 
 #include "opcodes.cpp"
@@ -52,6 +54,7 @@ void Z80::reset(){
 	IFF1=IFF2=0;
 	tstates=0;
 	halted=false;
+	Main::instance->resetKeyBuffer();
 }
 
 void Z80::executeXInstructions(int64_t x){

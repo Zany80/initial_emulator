@@ -37,6 +37,7 @@ class Main{
 		void putchar(char c);
 		void putmsg(string s);
 		uint8_t key();
+		void resetKeyBuffer();
 	private:
 		vector<uint8_t> key_buffer;
 		uint8_t _key;

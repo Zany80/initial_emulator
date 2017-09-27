@@ -8,6 +8,7 @@
 
 ZENITH_HEADER
 
+
 DeviceController::DeviceController(){
 	devices=new vector<Z80Device*>;
 	devices->push_back(new GenericDevice(&screenOutput,nullptr));

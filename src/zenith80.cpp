@@ -162,8 +162,12 @@ void Main::processEvents(){
 				break;
 			case Event::KeyPressed:
 				uint8_t key=keyCode(e.key);
-				if(key)
-					key_buffer.push_back(key);
+				if(key){
+					//limit buffer size to 32
+					if(key_buffer.size()<32){
+						key_buffer.push_back(key);
+					}
+				}
 				break;
 			//default:
 			//	cout<<"[Event Manager] Received event of type "<<e.type<<endl;
@@ -190,9 +194,15 @@ void Main::putmsg(string s){
 }
 
 uint8_t Main::key(){
-	if(key_buffer.empty())return 0;
+	if(key_buffer.empty()){
+		//if there isn't anything in the key buffer, just return 0
+		return 0;
+	}
+	//fetch the value at the front,
 	uint8_t v=key_buffer.front();
+	//then remove it from the buffer
 	key_buffer.erase(key_buffer.begin());
+	//return the value
 	return v;
 }
 

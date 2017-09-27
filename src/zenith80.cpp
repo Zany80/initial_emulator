@@ -126,8 +126,6 @@ Main::Main(int argc,char ** argv){
 	default_font=new Font;
 	default_font->loadFromMemory(&Famirids_ttf,Famirids_ttf_len);
 	termOut->addLine("");
-	termOut->addLine("Starting program...");
-	termOut->addLine("");
 	termOut->addLine("");
 }
 

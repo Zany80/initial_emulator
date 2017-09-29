@@ -39,9 +39,9 @@ using std::string;
 
 #include <config.h>
 #include <defines.hpp>
-#include "icon.c"
+#include <assets/icon.h>
 
-#include <fonts/Famirids.h>
+#include <assets/fonts/Famirids.h>
 
 #include <CPU/peripherals/RAMController.hpp>
 #include <CPU/peripherals/DeviceController.hpp>
@@ -66,7 +66,7 @@ Main::Main(int argc,char ** argv){
 	clock_speed=4;
 	unit=MHz;
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
-	window->setIcon(icon.width,icon.height,icon.pixel_data);
+	window->setIcon(80,80,icon);
 	window->setVerticalSyncEnabled(true);
 	gui=new Gui(*window);
 	termOut=TermOut::create();

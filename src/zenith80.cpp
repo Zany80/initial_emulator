@@ -39,9 +39,9 @@ using std::string;
 
 #include <config.h>
 #include <defines.hpp>
-#include <assets/icon.h>
 
-#include <assets/fonts/Famirids.h>
+#include <assets/icon.hpp>
+#include <assets/fonts/Famirids.hpp>
 
 #include <CPU/peripherals/RAMController.hpp>
 #include <CPU/peripherals/DeviceController.hpp>

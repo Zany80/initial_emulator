@@ -21,6 +21,9 @@ using std::vector;
 using tgui::Gui;
 typedef tgui::ChatBox TermOut;
 
+#include <SFML/System.hpp>
+using sf::Clock;
+
 typedef const char * cstring;
 
 ZENITH_HEADER
@@ -39,8 +42,8 @@ class Main{
 		uint8_t key();
 		void resetKeyBuffer();
 	private:
+		Clock accuracy_clock;
 		vector<uint8_t> key_buffer;
-		uint8_t _key;
 		uint64_t unit;
 		uint64_t clock_speed;
 		RenderWindow * window;
@@ -49,6 +52,7 @@ class Main{
 		Color background;
 		Font * default_font;
 		void processEvents();
+
 };
 
 ZENITH_FOOTER

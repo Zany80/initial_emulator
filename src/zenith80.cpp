@@ -62,7 +62,6 @@ int Main::main(int argc,char **argv){
 
 Main::Main(int argc,char ** argv){
 	Main::instance=this;
-	_key=0;
 	clock_speed=4;
 	unit=MHz;
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
@@ -136,6 +135,7 @@ Main::~Main(){
 }
 
 int Main::run(){
+	accuracy_clock.restart();
 	while(window->isOpen()){
 		this->processEvents();
 		window->clear(this->background);
@@ -153,6 +153,21 @@ void Main::processEvents(){
 			case Event::Closed:
 				window->close();
 				cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
+				cout<<"Target speed: "<<clock_speed;
+				{
+					string s;
+					if(unit==MHz)
+						s="MHz";
+					if(unit==Hz)
+						s="Hz";
+					if(unit==GHz)
+						s="GHz";
+					if(unit==KHz)
+						s="KHz";
+					cout<<s<<endl;
+					uint64_t speed = ((cpu->getTStates())/accuracy_clock.getElapsedTime().asSeconds());
+					cout<<"Speed: "<<((float)speed/unit)<<s<<endl;
+				}
 				break;
 			case Event::MouseButtonPressed:
 				if(e.mouseButton.button==Mouse::Button::Left){

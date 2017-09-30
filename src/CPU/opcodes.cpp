@@ -932,7 +932,9 @@ void Z80::addIYRR(uint8_t opcode){
 }
 
 void Z80::incSS(uint8_t opcode){
-	SUPERDEBUG(" "<<"(`inc ss`). Incrementing register "<<((opcode&0x30)>>4)<<" which currently contains "<<*((*regsDD)[(opcode&0x30)>>4])<<"."<<endl);
+	#ifdef SUPERDEBUGMODE
+	cerr<<" "<<"(`inc "<<dd[(opcode&0x30)>>4]<<"`). Previous value: "<<
+	#endif
 	(*((*regsDD)[(opcode&0x30)>>4]))++;
 	tstates+=2;
 }

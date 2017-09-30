@@ -26,6 +26,7 @@ Z80::Z80(Z80Memory * ram,DeviceController * io){
 	regsDD=new vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&SP.word};
 	regsQQ=new vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&AF.word};
 	r=vector<char>{'B','C','D','E','H','L',0,'A'};
+	dd=vector<string>{"BC","DE","HL","SP"};
 	initOpcodes();
 	reset();
 	halted=true;

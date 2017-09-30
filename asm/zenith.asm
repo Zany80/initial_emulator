@@ -10,6 +10,12 @@ nescape: .db "Escape not pressed\n",0
 start:
 	ld a, 0
 	out (0), a
+	ld a, 47
+	inc a
+	inc a
+	inc a
+	out (0), a
+	halt
 	ld hl, hello_world
 	ld a, 0
 	call print_str

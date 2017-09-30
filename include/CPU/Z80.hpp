@@ -69,6 +69,7 @@ class Z80{
 		vector<uint8_t*>* regs;
 		vector<char> r;
 		vector<uint16_t*>* regsDD;
+		vector<string> dd;
 		vector<uint16_t*>* regsQQ;
 		bool IFF1,IFF2;
 		opcode * opcodes;

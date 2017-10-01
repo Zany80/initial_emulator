@@ -225,4 +225,8 @@ void Main::resetKeyBuffer(){
 	key_buffer.clear();
 }
 
+void Main::resetClock(){
+	accuracy_clock.restart();
+}
+
 ZENITH_FOOTER

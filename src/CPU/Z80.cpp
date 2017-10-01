@@ -54,6 +54,7 @@ void Z80::reset(){
 	R=I=0;
 	IFF1=IFF2=0;
 	tstates=0;
+	Main::instance->resetClock();
 	halted=false;
 	Main::instance->resetKeyBuffer();
 }

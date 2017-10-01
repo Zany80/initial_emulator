@@ -41,6 +41,7 @@ class Main{
 		void putmsg(string s);
 		uint8_t key();
 		void resetKeyBuffer();
+		void resetClock();
 	private:
 		Clock accuracy_clock;
 		vector<uint8_t> key_buffer;

@@ -1,15 +1,15 @@
 opcodes=new opcode[256]{
-	&Z80::nop,&Z80::ldDDNN,&Z80::ld_BC_A,&Z80::nop,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
-	&Z80::exAFAF2,&Z80::nop,&Z80::ldA_BC_,&Z80::nop,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
+	&Z80::nop,&Z80::ldDDNN,&Z80::ld_BC_A,&Z80::incSS,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
+	&Z80::exAFAF2,&Z80::addHLSS,&Z80::ldA_BC_,&Z80::decSS,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
 	//0x10
-	&Z80::djnzE,&Z80::ldDDNN,&Z80::ld_DE_A,&Z80::nop,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
-	&Z80::nop,&Z80::nop,&Z80::ldA_DE_,&Z80::nop,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
+	&Z80::djnzE,&Z80::ldDDNN,&Z80::ld_DE_A,&Z80::incSS,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
+	&Z80::nop,&Z80::addHLSS,&Z80::ldA_DE_,&Z80::decSS,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::nop,
 	//0x20
-	&Z80::nop,&Z80::ldDDNN,&Z80::ld_NN_HL,&Z80::nop,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::daa,
-	&Z80::nop,&Z80::nop,&Z80::ldHL_NN_,&Z80::nop,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::cpl,
+	&Z80::nop,&Z80::ldDDNN,&Z80::ld_NN_HL,&Z80::incSS,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::daa,
+	&Z80::nop,&Z80::addHLSS,&Z80::ldHL_NN_,&Z80::decSS,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::cpl,
 	//0x30
-	&Z80::nop,&Z80::ldDDNN,&Z80::ld_NN_A,&Z80::nop,&Z80::inc_HL_,&Z80::dec_HL_,&Z80::ld_HL_N ,&Z80::scf,
-	&Z80::nop,&Z80::nop,&Z80::ldA_NN_,&Z80::nop,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::ccf,
+	&Z80::nop,&Z80::ldDDNN,&Z80::ld_NN_A,&Z80::incSS,&Z80::inc_HL_,&Z80::dec_HL_,&Z80::ld_HL_N ,&Z80::scf,
+	&Z80::nop,&Z80::addHLSS,&Z80::ldA_NN_,&Z80::decSS,&Z80::incR,&Z80::decR,&Z80::ldRN,&Z80::ccf,
 	//0x40
 	&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldR_HL_,&Z80::ldRRx,
 	&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldRRx,&Z80::ldR_HL_,&Z80::ldRRx,

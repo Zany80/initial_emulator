@@ -3,12 +3,9 @@ image: gcc:7
 pipelines:
   default:
     - step:
-        caches:
-          - apt
         script: # Modify the commands below to build your repository.
           - pwd
           - apt-get update
-          - apt-get install libfreetype6-dev libjpeg-dev libx11-dev libxrandr-dev libxcb1-dev libx11-xcb-dev libxcb-randr0-dev libxcb-image0-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libvorbisenc2 libvorbisfile3 libopenal-dev libpthread-stubs0-dev cmake libudev-dev --download-only -y
           - apt-get install libfreetype6-dev libjpeg-dev libx11-dev libxrandr-dev libxcb1-dev libx11-xcb-dev libxcb-randr0-dev libxcb-image0-dev libgl1-mesa-dev libflac-dev libogg-dev libvorbis-dev libvorbisenc2 libvorbisfile3 libopenal-dev libpthread-stubs0-dev cmake libudev-dev -y
           - mkdir builds
           - cd builds
@@ -23,7 +20,3 @@ pipelines:
           - cmake ../.. -DZENITH_SUPERDEBUGMODE:BOOL=TRUE
           - make -j8
           - curl -T ./zenith80 ftp://$FTP_AUTH@files.000webhost.com/public_html/zenith80/downloads/zenith80-linux-x86_64-superdebug
-
-definitions:
-  caches:
-    apt: /var/cache/apt

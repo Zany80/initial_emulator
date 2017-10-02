@@ -22,9 +22,9 @@ ZENITH_HEADER
 Z80::Z80(Z80Memory * ram,DeviceController * io){
 	this->ram=ram;
 	this->io=io;
-	regs=new vector<uint8_t*>{&BC.B.h,&BC.B.l,&DE.B.h,&DE.B.l,&HL.B.h,&HL.B.l,0,&AF.B.h};
-	regsDD=new vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&SP.word};
-	regsQQ=new vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&AF.word};
+	regs=vector<uint8_t*>{&BC.B.h,&BC.B.l,&DE.B.h,&DE.B.l,&HL.B.h,&HL.B.l,0,&AF.B.h};
+	regsDD=vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&SP.word};
+	regsQQ=vector<uint16_t*>{&BC.word,&DE.word,&HL.word,&AF.word};
 	r=vector<char>{'B','C','D','E','H','L',0,'A'};
 	dd=vector<string>{"BC","DE","HL","SP"};
 	initOpcodes();
@@ -44,9 +44,6 @@ Z80::~Z80(){
 	delete opcodesDD;
 	delete opcodesFD;
 	delete opcodesED;
-	delete regs;
-	delete regsDD;
-	delete regsQQ;
 }
 
 void Z80::reset(){

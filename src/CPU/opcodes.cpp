@@ -1008,69 +1008,51 @@ void Z80::rra(uint8_t opcode){
 
 void Z80::rlcR(uint8_t opcode){
 	uint8_t * r=regs[opcode&0x07];
-	uint16_t v=(*r)<<1;;
-	setC(v&0x100);
-	if(v&0x100)
-		v|=0x01;
-	*r=v&0xFF;
-	setS(((*r)&0x80)==0x80);
-	setZ((*r)==0);
-	resetH();
-	setPV(!parity(*r));
-	resetN();
+	*r=rlc(*r);
 }
 
 void Z80::rlc_HL_(uint8_t opcode){
-	uint8_t _hl_=ram->getByte(HL.word);
-	uint16_t v=_hl_<<1;
-	setC(v&0x100);
-	if(v&0x100)
-		v|=0x01;
-	ram->setByte(HL.word,v&0xFF);
-	uint8_t r=v&0xFF;
-	setS(((r)&0x80)==0x80);
-	setZ((r)==0);
-	resetH();
-	setPV(!parity(r));
-	resetN();
+	uint8_t _HL_=ram->getByte(HL.word);
+	ram->setByte(HL.word,rlc(_HL_));
 }
 
 void Z80::rlc_IXd_(uint8_t opcode){
-	uint16_t address=IX.word;
-	address+=((int8_t)ram->getByte(PC.word++));
-	uint8_t _IXd_=ram->getByte(address);
-	uint16_t v=_IXd_<<1;
-	setC(v&0x100);
-	if(v&0x100)
-		v|=0x01;
-	ram->setByte(address,v&0xFF);
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
+	uint8_t _IXd_=ram->getByte(IXd);
+	ram->setByte(IXd,rlc(_IXd_));
 }
 
 void Z80::rlc_IYd_(uint8_t opcode){
-	uint16_t address=IY.word;
-	address+=((int8_t)ram->getByte(PC.word++));
-	uint8_t _IYd_=ram->getByte(address);
-	uint16_t v=_IYd_<<1;
-	setC(v&0x100);
-	if(v&0x100)
-		v|=0x01;
-	ram->setByte(address,v&0xFF);
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
+	uint8_t _IYd_=ram->getByte(IYd);
+	ram->setByte(IYd,rlc(_IYd_));
 }
 
 void Z80::rlR(uint8_t opcode){
-	
+	uint8_t* r=regs[opcode&0x07];
+	uint8_t m=*r;
+	*r=rl(m);
 }
 
 void Z80::rl_HL_(uint8_t opcode){
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	ram->setByte(HL.word,rl(_HL_));
 }
 
 void Z80::rl_IXd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
+	uint8_t _IXd_=ram->getByte(IXd);
+	ram->setByte(IXd,rl(_IXd_));
 }
 
 void Z80::rl_IYd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
+	uint8_t _IYd_=ram->getByte(IYd);
+	ram->setByte(IYd,rl(_IYd_));
 }
 
 void Z80::rrcR(uint8_t opcode){
@@ -1351,4 +1333,78 @@ inline int Z80::parity(uint8_t x){
 	x ^= x >> 2;
 	x ^= x >> 1;
 	return x & 1;
+}
+
+inline uint8_t Z80::rlc(uint8_t m){
+	uint16_t v=m<<1;
+	setC(v&0x100);
+	if(v&0x100)
+		v|=0x01;
+	m=v&0xFF;
+	setS((m&0x80)==0x80);
+	setZ(m==0);
+	resetH();
+	setPV(!parity(m));
+	resetN();
+	return m;
+}
+
+inline uint8_t Z80::rl(uint8_t m){
+	bool c=getC();
+	setC(m&0x80);
+	m<<=1;
+	if(c)
+		m|=0x01;
+	setS((m&0x80)==0x80);
+	setZ(m==0);
+	resetH();
+	setPV(!parity(m));
+	resetN();
+	return m;
+}
+
+inline uint8_t Z80::rrc(uint8_t m){
+	uint8_t c=m&0x01;
+	m>>=1;
+	m|=(c<<7);
+	setS(m&0x80);
+	setZ(m==0);
+	resetH();
+	setPV(!parity(m));
+	resetN();
+	setC(c==1);
+	return m;
+}
+
+inline uint8_t Z80::rr(uint8_t m){
+	bool c=getC();
+	setC(m&0x01);
+	m>>=1;
+	if(c)
+		m|=0x80;
+	setS((m&0x80)==0x80);
+	setZ(m==0);
+	resetH();
+	setPV(!parity(m));
+	resetN();
+	return m;
+}
+
+inline uint8_t Z80::sla(uint8_t m){
+	setC(m&0x80);
+	m<<=1;
+	setS((m&0x80)==0x80);
+	setZ(m==0);
+	resetH();
+	setPV(!parity(m));
+	resetN();
+	return m;
+}
+
+inline uint8_t Z80::sra(uint8_t m){
+
+}
+
+inline uint8_t Z80::srl(uint8_t m){
+
 }

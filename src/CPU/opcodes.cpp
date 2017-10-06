@@ -1032,8 +1032,7 @@ void Z80::rlc_IYd_(uint8_t opcode){
 
 void Z80::rlR(uint8_t opcode){
 	uint8_t* r=regs[opcode&0x07];
-	uint8_t m=*r;
-	*r=rl(m);
+	*r=rl(*r);
 }
 
 void Z80::rl_HL_(uint8_t opcode){
@@ -1056,91 +1055,179 @@ void Z80::rl_IYd_(uint8_t opcode){
 }
 
 void Z80::rrcR(uint8_t opcode){
-
+	uint8_t * r = regs[opcode&0x07];
+	*r=rrc(*r);
 }
 
 void Z80::rrc_HL_(uint8_t opcode){
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	ram->setByte(HL.word,rrc(_HL_));
 }
 
 void Z80::rrc_IXd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
+	uint8_t _IXd_=ram->getByte(IXd);
+	ram->setByte(IXd,rrc(_IXd_));
 }
 
 void Z80::rrc_IYd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
+	uint8_t _IYd_=ram->getByte(IYd);
+	ram->setByte(IYd,rrc(_IYd_));
 }
 
 void Z80::rrR(uint8_t opcode){
-
+	uint8_t * r = regs[opcode&0x07];
+	*r=rr(*r);
 }
 
 void Z80::rr_HL_(uint8_t opcode){
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	ram->setByte(HL.word,rr(_HL_));
 }
 
 void Z80::rr_IXd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
+	uint8_t _IXd_=ram->getByte(IXd);
+	ram->setByte(IXd,rr(_IXd_));
 }
 
 void Z80::rr_IYd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
+	uint8_t _IYd_=ram->getByte(IYd);
+	ram->setByte(IYd,rr(_IYd_));
 }
 
 void Z80::slaR(uint8_t opcode){
-
+	uint8_t * r = regs[opcode&0x07];
+	*r=sla(*r);
 }
 
 void Z80::sla_HL_(uint8_t opcode){
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	ram->setByte(HL.word,sla(_HL_));
 }
 
 void Z80::sla_IXd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
+	uint8_t _IXd_=ram->getByte(IXd);
+	ram->setByte(IXd,sla(_IXd_));
 }
 
 void Z80::sla_IYd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
+	uint8_t _IYd_=ram->getByte(IYd);
+	ram->setByte(IYd,sla(_IYd_));
 }
 
 void Z80::sraR(uint8_t opcode){
-
+	uint8_t * r = regs[opcode&0x07];
+	*r=sra(*r);
 }
 
 void Z80::sra_HL_(uint8_t opcode){
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	ram->setByte(HL.word,sra(_HL_));
 }
 
 void Z80::sra_IXd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
+	uint8_t _IXd_=ram->getByte(IXd);
+	ram->setByte(IXd,sra(_IXd_));
 }
 
 void Z80::sra_IYd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
+	uint8_t _IYd_=ram->getByte(IYd);
+	ram->setByte(IYd,sra(_IYd_));
 }
 
 void Z80::srlR(uint8_t opcode){
-
+	uint8_t * r = regs[opcode&0x07];
+	*r=srl(*r);
 }
 
 void Z80::srl_HL_(uint8_t opcode){
-
+	uint8_t _HL_=ram->getByte(HL.word);
+	ram->setByte(HL.word,srl(_HL_));
 }
 
 void Z80::srl_IXd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
+	uint8_t _IXd_=ram->getByte(IXd);
+	ram->setByte(IXd,srl(_IXd_));
 }
 
 void Z80::srl_IYd_(uint8_t opcode){
-
+	int8_t d=(int8_t)ram->getByte(PC.word++);
+	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
+	uint8_t _IYd_=ram->getByte(IYd);
+	ram->setByte(IYd,srl(_IYd_));
 }
 
 void Z80::rld(uint8_t opcode){
-
+	uint8_t _HL_ = ram->getByte(HL.word);
+	/*
+	 * A_low_nibble is the low nibble of the A register
+	 * _HL_low_nibble is the low nibble of the memory location specified by HL, and _HL_high_nibble is the high nibble of that same location
+	 *
+	 * From the Z80 CPU User Manual:
+	 *
+	 * The contents of the low-order four bits (bits 3, 2, 1, and 0) of the memory location (HL)
+	 * are copied to the high-order four bits (7, 6, 5, and 4) of that same memory location; the
+	 * previous contents of those high-order four bits are copied to the low-order four bits of the
+	 * Accumulator (Register A); and the previous contents of the low-order four bits of the
+	 * Accumulator are copied to the low-order four bits of memory location (HL). The contents
+	 * of the high-order bits of the Accumulator are unaffected.
+	 */
+	uint8_t A_low_nibble=AF.B.h&0x0F;
+	uint8_t _HL_low_nibble=_HL_&0x0F;
+	uint8_t _HL_high_nibble=(_HL_&0xF0)>>4;
+	_HL_ = (_HL_low_nibble<<4) | A_low_nibble;
+	AF.B.h=(AF.B.h&0xF0)|_HL_high_nibble;
+	ram->setByte(HL.word,_HL_);
+	setS((AF.B.h&0x80)==0x80);
+	setZ(AF.B.h==0);
+	resetH();
+	setPV(!parity(AF.B.h));
+	resetN();
 }
 
 void Z80::rrd(uint8_t opcode){
-
+	uint8_t _HL_ = ram->getByte(HL.word);
+	/*
+	 * A_low_nibble is the low nibble of the A register
+	 * _HL_low_nibble is the low nibble of the memory location specified by HL, and _HL_high_nibble is the high nibble of that same location
+	 *
+	 * From the Z80 CPU User Manual:
+	 *
+	 * The contents of the low-order four bits (bits 3, 2, 1, and 0) of memory location (HL) are
+	 * copied to the low-order four bits of the Accumulator (Register A). The previous contents
+	 * of the low-order four bits of the Accumulator are copied to the high-order four bits (7, 6, 5,
+	 * and 4) of location (HL); and the previous contents of the high-order four bits of (HL) are
+	 * copied to the low-order four bits of (HL). The contents of the high-order bits of the Accu-
+	 * mulator are unaffected.
+	 */
+	uint8_t A_low_nibble=AF.B.h&0x0F;
+	uint8_t _HL_low_nibble=_HL_&0x0F;
+	uint8_t _HL_high_nibble=(_HL_&0xF0)>>4;
+	_HL_ = (A_low_nibble<<4)|_HL_high_nibble;
+	AF.B.h=(AF.B.h&0xF0)|_HL_low_nibble;
+	ram->setByte(HL.word,_HL_);
+	setS((AF.B.h&0x80)==0x80);
+	setZ(AF.B.h==0);
+	resetH();
+	setPV(!parity(AF.B.h));
+	resetN();
 }
 
 //jump group
@@ -1402,9 +1489,25 @@ inline uint8_t Z80::sla(uint8_t m){
 }
 
 inline uint8_t Z80::sra(uint8_t m){
-
+	setC(m&0x01);
+	uint8_t x = m&0x80;
+	m>>=1;
+	m|=x;
+	setS((m&0x80)==0x80);
+	setZ(m==0);
+	resetH();
+	setPV(!parity(m));
+	resetN();
+	return m;
 }
 
 inline uint8_t Z80::srl(uint8_t m){
-
+	setC(m&0x01);
+	m>>=1;
+	resetS();
+	setZ(m==0);
+	resetH();
+	setPV(!parity(m));
+	resetN();
+	return m;
 }

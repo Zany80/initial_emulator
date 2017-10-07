@@ -2,6 +2,9 @@
 void DD(uint8_t opcode);
 void FD(uint8_t opcode);
 void ED(uint8_t opcode);
+void CB(uint8_t opcode);
+void DDCB(uint8_t opcode);
+void FDCB(uint8_t opcode);
 //8-bit load group
 void ldRRx(uint8_t opcode);
 void ldRN(uint8_t opcode);

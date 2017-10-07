@@ -76,6 +76,9 @@ class Z80{
 		opcode * opcodesDD;
 		opcode * opcodesFD;
 		opcode * opcodesED;
+		opcode * opcodesCB;
+		opcode * opcodesDDCB;
+		opcode * opcodesFDCB;
 		#include <CPU/opcodes.hpp>
 		void initOpcodes();
 	public:

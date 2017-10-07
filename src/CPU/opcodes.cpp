@@ -20,6 +20,30 @@ void Z80::ED(uint8_t opcode){
 	(*this.*(opcodesED[secondary_opcode]))(secondary_opcode);
 }
 
+void Z80::CB(uint8_t opcode){
+	uint8_t secondary_opcode=ram->getOpcode(PC.word++);
+	SUPERDEBUG(hex(secondary_opcode));
+	(*this.*(opcodesCB[secondary_opcode]))(secondary_opcode);
+}
+
+void Z80::DDCB(uint8_t opcode){
+	uint16_t pPC=PC.word;
+	uint8_t secondary_opcode=ram->getOpcode(PC.word+1);
+	SUPERDEBUG("**"<<hex(secondary_opcode));
+	(*this.*(opcodesDDCB[secondary_opcode]))(secondary_opcode);
+	if(pPC==PC.word)
+		PC.word+=2;
+}
+
+void Z80::FDCB(uint8_t opcode){
+	uint16_t pPC=PC.word;
+	uint8_t secondary_opcode=ram->getOpcode(PC.word+1);
+	SUPERDEBUG("**"<<hex(secondary_opcode));
+	(*this.*(opcodesFDCB[secondary_opcode]))(secondary_opcode);
+	if(pPC==PC.word)
+		PC.word+=2;
+}
+
 //8-bit load group
 
 void Z80::ldRRx(uint8_t opcode){
@@ -1017,14 +1041,16 @@ void Z80::rlc_HL_(uint8_t opcode){
 }
 
 void Z80::rlc_IXd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	SUPERDEBUG(" (`rlc (IX+d)`)."<<endl);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
 	uint8_t _IXd_=ram->getByte(IXd);
 	ram->setByte(IXd,rlc(_IXd_));
 }
 
 void Z80::rlc_IYd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	SUPERDEBUG(" (`rlc (IY+d)`)."<<endl);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
 	uint8_t _IYd_=ram->getByte(IYd);
 	ram->setByte(IYd,rlc(_IYd_));
@@ -1041,14 +1067,14 @@ void Z80::rl_HL_(uint8_t opcode){
 }
 
 void Z80::rl_IXd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
 	uint8_t _IXd_=ram->getByte(IXd);
 	ram->setByte(IXd,rl(_IXd_));
 }
 
 void Z80::rl_IYd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
 	uint8_t _IYd_=ram->getByte(IYd);
 	ram->setByte(IYd,rl(_IYd_));
@@ -1065,14 +1091,14 @@ void Z80::rrc_HL_(uint8_t opcode){
 }
 
 void Z80::rrc_IXd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
 	uint8_t _IXd_=ram->getByte(IXd);
 	ram->setByte(IXd,rrc(_IXd_));
 }
 
 void Z80::rrc_IYd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
 	uint8_t _IYd_=ram->getByte(IYd);
 	ram->setByte(IYd,rrc(_IYd_));
@@ -1089,14 +1115,14 @@ void Z80::rr_HL_(uint8_t opcode){
 }
 
 void Z80::rr_IXd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
 	uint8_t _IXd_=ram->getByte(IXd);
 	ram->setByte(IXd,rr(_IXd_));
 }
 
 void Z80::rr_IYd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
 	uint8_t _IYd_=ram->getByte(IYd);
 	ram->setByte(IYd,rr(_IYd_));
@@ -1113,14 +1139,14 @@ void Z80::sla_HL_(uint8_t opcode){
 }
 
 void Z80::sla_IXd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
 	uint8_t _IXd_=ram->getByte(IXd);
 	ram->setByte(IXd,sla(_IXd_));
 }
 
 void Z80::sla_IYd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
 	uint8_t _IYd_=ram->getByte(IYd);
 	ram->setByte(IYd,sla(_IYd_));
@@ -1137,14 +1163,14 @@ void Z80::sra_HL_(uint8_t opcode){
 }
 
 void Z80::sra_IXd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
 	uint8_t _IXd_=ram->getByte(IXd);
 	ram->setByte(IXd,sra(_IXd_));
 }
 
 void Z80::sra_IYd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
 	uint8_t _IYd_=ram->getByte(IYd);
 	ram->setByte(IYd,sra(_IYd_));
@@ -1161,14 +1187,14 @@ void Z80::srl_HL_(uint8_t opcode){
 }
 
 void Z80::srl_IXd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IXd=(uint16_t)((int16_t)IX.word+d);
 	uint8_t _IXd_=ram->getByte(IXd);
 	ram->setByte(IXd,srl(_IXd_));
 }
 
 void Z80::srl_IYd_(uint8_t opcode){
-	int8_t d=(int8_t)ram->getByte(PC.word++);
+	int8_t d=(int8_t)ram->getByte(PC.word);
 	uint16_t IYd=(uint16_t)((int16_t)IY.word+d);
 	uint8_t _IYd_=ram->getByte(IYd);
 	ram->setByte(IYd,srl(_IYd_));

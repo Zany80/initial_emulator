@@ -37,6 +37,9 @@ void Z80::initOpcodes(){
 	#include "opcodes/DD.cpp"
 	#include "opcodes/ED.cpp"
 	#include "opcodes/FD.cpp"
+	#include "opcodes/CB.cpp"
+	#include "opcodes/DDCB.cpp"
+	#include "opcodes/FDCB.cpp"
 }
 
 Z80::~Z80(){
@@ -44,6 +47,7 @@ Z80::~Z80(){
 	delete opcodesDD;
 	delete opcodesFD;
 	delete opcodesED;
+	delete opcodesCB;
 }
 
 void Z80::reset(){

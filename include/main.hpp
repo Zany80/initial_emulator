@@ -38,6 +38,7 @@ class Main{
 		Z80 * cpu;
 		bool cpm_emu;
 		void putchar(char c);
+		void putint(int c);
 		void putmsg(string s);
 		uint8_t key();
 		void resetKeyBuffer();

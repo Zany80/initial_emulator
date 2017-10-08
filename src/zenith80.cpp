@@ -204,6 +204,13 @@ void Main::putchar(char ch){
 	putmsg(msg);
 }
 
+void Main::putint(int i){
+	string msg=termOut->getLine(termOut->getLineAmount()-1);
+	msg=msg+to_string(i);
+	termOut->removeLine(termOut->getLineAmount()-1);
+	putmsg(msg);
+}
+
 void Main::putmsg(string s){
 	termOut->addLine(s);
 }

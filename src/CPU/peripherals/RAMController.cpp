@@ -74,11 +74,11 @@ uint8_t RAMController::getOpcode(uint16_t address){
 				Main::instance->cpu->halt();
 				break;
 			case 2:
-				cout<<(char)DE.B.l;
+				Main::instance->putint((int)DE.B.l);
 				break;
 			case 9:
 				while(memory[DE.word]!='$')
-					cout<<(char)memory[DE.word++];
+					Main::instance->putchar((char)(memory[DE.word++]));
 				cout.flush();
 				break;
 			default:

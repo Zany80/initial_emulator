@@ -17,8 +17,8 @@ endif()
 
 set(TGUI_ROOT ${SFML_ROOT})
 
-if(NOT ZENITH_SUPERDEBUGMODE)
-	set(ZENITH_SUPERDEBUGMODE FALSE CACHE BOOL "Super debug mode (activates verbose debug logging to standard error)" FORCE)
+if(NOT ZENITH80_SUPERDEBUGMODE)
+	set(ZENITH80_SUPERDEBUGMODE FALSE CACHE BOOL "Super debug mode (activates verbose debug logging to standard error)" FORCE)
 endif()
 
 project(ZENITH80 VERSION 0.1.0.0 LANGUAGES C CXX)

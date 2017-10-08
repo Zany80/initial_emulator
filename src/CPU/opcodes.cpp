@@ -1304,8 +1304,11 @@ void Z80::callNN(uint8_t opcode){
 }
 
 void Z80::callCCNN(uint8_t opcode){
-	SUPERDEBUG(" "<<endl);
+	static string conditions[]={
+		"NZ","Z","NC","C","PO","PE","P","M"
+	};
 	uint16_t address=ram->getWord(PC.word);
+	SUPERDEBUG(" (`call "<<conditions[(opcode&0x38)>>3]<<", "<<address<<")."<<endl);
 	PC.word+=2;
 	uint8_t c=(opcode&0x38)>>3;
 	if(
@@ -1325,8 +1328,8 @@ void Z80::callCCNN(uint8_t opcode){
 }
 
 void Z80::ret(uint8_t opcode){
-	SUPERDEBUG(" "<<endl);
 	PC.word=pop();
+	SUPERDEBUG(" (`ret`). Returning to "<<(int)PC.word<<"."<<endl);
 }
 
 void Z80::retCC(uint8_t opcode){

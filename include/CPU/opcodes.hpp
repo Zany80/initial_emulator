@@ -171,6 +171,19 @@ void srl_IXd_(uint8_t opcode);
 void srl_IYd_(uint8_t opcode);
 void rld(uint8_t opcode);
 void rrd(uint8_t opcode);
+//bit manipulation group
+void bitBR(uint8_t opcode);
+void bitB_HL_(uint8_t opcode);
+void bitB_IXd_(uint8_t opcode);
+void bitB_IYd_(uint8_t opcode);
+void setBR(uint8_t opcode);
+void setB_HL_(uint8_t opcode);
+void setB_IXd_(uint8_t opcode);
+void setB_IYd_(uint8_t opcode);
+void resBR(uint8_t opcode);
+void resB_HL_(uint8_t opcode);
+void resB_IXd_(uint8_t opcode);
+void resB_IYd_(uint8_t opcode);
 //jump group
 void jpNN(uint8_t opcode);
 void jpCCNN(uint8_t opcode);

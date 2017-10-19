@@ -1205,15 +1205,6 @@ void Z80::rld(uint8_t opcode){
 	/*
 	 * A_low_nibble is the low nibble of the A register
 	 * _HL_low_nibble is the low nibble of the memory location specified by HL, and _HL_high_nibble is the high nibble of that same location
-	 *
-	 * From the Z80 CPU User Manual:
-	 *
-	 * The contents of the low-order four bits (bits 3, 2, 1, and 0) of the memory location (HL)
-	 * are copied to the high-order four bits (7, 6, 5, and 4) of that same memory location; the
-	 * previous contents of those high-order four bits are copied to the low-order four bits of the
-	 * Accumulator (Register A); and the previous contents of the low-order four bits of the
-	 * Accumulator are copied to the low-order four bits of memory location (HL). The contents
-	 * of the high-order bits of the Accumulator are unaffected.
 	 */
 	uint8_t A_low_nibble=AF.B.h&0x0F;
 	uint8_t _HL_low_nibble=_HL_&0x0F;
@@ -1233,15 +1224,6 @@ void Z80::rrd(uint8_t opcode){
 	/*
 	 * A_low_nibble is the low nibble of the A register
 	 * _HL_low_nibble is the low nibble of the memory location specified by HL, and _HL_high_nibble is the high nibble of that same location
-	 *
-	 * From the Z80 CPU User Manual:
-	 *
-	 * The contents of the low-order four bits (bits 3, 2, 1, and 0) of memory location (HL) are
-	 * copied to the low-order four bits of the Accumulator (Register A). The previous contents
-	 * of the low-order four bits of the Accumulator are copied to the high-order four bits (7, 6, 5,
-	 * and 4) of location (HL); and the previous contents of the high-order four bits of (HL) are
-	 * copied to the low-order four bits of (HL). The contents of the high-order bits of the Accu-
-	 * mulator are unaffected.
 	 */
 	uint8_t A_low_nibble=AF.B.h&0x0F;
 	uint8_t _HL_low_nibble=_HL_&0x0F;
@@ -1255,6 +1237,50 @@ void Z80::rrd(uint8_t opcode){
 	setPV(!parity(AF.B.h));
 	resetN();
 }
+
+//bit manipulation group
+
+static int bits[]={
+	0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80
+};
+
+void Z80::bitBR(uint8_t opcode){
+	uint8_t * r = regs[opcode&0x07];
+	uint8_t b=(opcode&0x38)>>3;
+	setZ(((*r)&bits[b])==0);
+	setH();
+	resetN();
+}
+
+void Z80::bitB_HL_(uint8_t opcode){
+	uint8_t _HL_ = ram->getWord(HL.word);
+	uint8_t b=(opcode&0x38)>>3;
+	setZ((_HL_&bits[b])==0);
+	setH();
+	resetN();
+}
+
+void Z80::bitB_IXd_(uint8_t opcode){
+	int8_t d=ram->getByte(PC.word++);
+	uint16_t IXd=IX.word+d;
+	uint8_t _IXd_=ram->getByte(IXd);
+	uint8_t b=(opcode&0x38)>>3;
+	setZ((_IXd_&bits[b])==0);
+	setH();
+	resetN();
+}
+
+void Z80::bitB_IYd_(uint8_t opcode){
+	int8_t d=ram->getByte(PC.word++);
+	uint16_t IYd=IY.word+d;
+	uint8_t _IYd_=ram->getByte(IYd);
+	uint8_t b=(opcode&0x38)>>3;
+	setZ((_IYd_&bits[b])==0);
+	setH();
+	resetN();
+}
+
+
 
 //jump group
 

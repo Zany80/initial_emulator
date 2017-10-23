@@ -2,19 +2,18 @@
 .include "data.inc"
 
 screen0:
+	call cls
 	ld hl, .strings
 	ld bc, 0
 	call indexed_print
 	inc bc
 	call indexed_print
+	inc bc
+	call indexed_print
 .loop:
-	call poll_character
+	call shared@screens
 	cp keyb
 	jp z, .begin
-	cp keyq
-	jp z, .quit
-	cp keys
-	call z, save
 	jr .loop
 
 .begin:
@@ -23,16 +22,8 @@ screen0:
 	ld (hl), 1
 	ret
 
-.quit:
-	ld a, 1
-	out (2), a
-	;//In case it doesn't work, halt
-.qloop:
-	halt
-	jr .qloop
-
-.strings: .dw mg1, mg2
-mg1:
+.strings: .dw string1@screen0, shared_options, options@screen0
+.string1:
 .db "The year is 1394. For years, the dark prince Algar has ruled the "
 .db "country of Vlarzel with an iron fist. Now, people are starting to "
 .db "fight back.\n"
@@ -44,11 +35,13 @@ mg1:
 .db "group of characters. You alternate between many different people "
 .db "with the job of coordinating them.\n"
 .db "\n"
-.db "Good luck."
-.db 0x0A,0x0A,0
+.db "However, there *are* still traditional RPG elements - exploring, "
+.db "fighting, character classes, levelling up - but the characters "
+.db "are premade, and each one has their own ",'"',"feel",'"',".\n"
+.db "\n"
+.db "Good luck.\n"
+.db 0x0A,0
 
-mg2:
-.db "Press 'b' to begin.\n"
-.db "Press 's' to save.\n"
-.db "Press 'q' to quit."
+.options:
+.db "'b' - begin.\n"
 .db 0

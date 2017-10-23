@@ -28,7 +28,11 @@ menu:
 	jr .poll
 
 .strings:
-.dw _1, _2
+.dw options@menu, invalid@menu
 
-_1: .db "Select option: \n",9,"'n' - New Game\n", 0
-_2: .db "Invalid key pressed!\n",0
+.options: .db "Select option: \n","\t'n' - New Game\n","\t'l' - Load Game\n","\t'a' - About page\n","\t's' - Settings screen\n", 0
+.invalid: .db "Invalid key pressed!\n",0
+
+to_menu:
+	ld a, 0
+	out (2), a

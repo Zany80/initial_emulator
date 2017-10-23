@@ -33,6 +33,7 @@ class Main{
 		Main(int argc,char ** argv);
 		~Main();
 		static int main(int argc,char** argv);
+		void shutdown();
 		int run();
 		static Main * instance;
 		Z80 * cpu;

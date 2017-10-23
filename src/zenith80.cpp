@@ -126,6 +126,7 @@ Main::Main(int argc,char ** argv){
 	default_font->loadFromMemory(&Famirids_ttf,Famirids_ttf_len);
 	termOut->addLine("");
 	termOut->addLine("");
+	cpu->reset();
 }
 
 Main::~Main(){
@@ -151,23 +152,7 @@ void Main::processEvents(){
 	while(this->window->pollEvent(e)){
 		switch(e.type){
 			case Event::Closed:
-				window->close();
-				cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
-				cout<<"Target speed: "<<clock_speed;
-				{
-					string s;
-					if(unit==MHz)
-						s="MHz";
-					if(unit==Hz)
-						s="Hz";
-					if(unit==GHz)
-						s="GHz";
-					if(unit==KHz)
-						s="KHz";
-					cout<<s<<endl;
-					uint64_t speed = ((cpu->getTStates())/accuracy_clock.getElapsedTime().asSeconds());
-					cout<<"Speed: "<<((float)speed/unit)<<s<<endl;
-				}
+				this->shutdown();
 				break;
 			case Event::MouseButtonPressed:
 				if(e.mouseButton.button==Mouse::Button::Left){
@@ -234,6 +219,26 @@ void Main::resetKeyBuffer(){
 
 void Main::resetClock(){
 	accuracy_clock.restart();
+}
+
+void Main::shutdown(){
+	window->close();
+	cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
+	cout<<"Target speed: "<<clock_speed;
+	{
+		string s;
+		if(unit==MHz)
+			s="MHz";
+		if(unit==Hz)
+			s="Hz";
+		if(unit==GHz)
+			s="GHz";
+		if(unit==KHz)
+			s="KHz";
+		cout<<s<<endl;
+		uint64_t speed = ((cpu->getTStates())/accuracy_clock.getElapsedTime().asSeconds());
+		cout<<"Speed: "<<((float)speed/unit)<<s<<endl;
+	}
 }
 
 ZENITH_FOOTER

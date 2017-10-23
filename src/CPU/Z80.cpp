@@ -32,6 +32,10 @@ Z80::Z80(Z80Memory * ram,DeviceController * io){
 	halted=true;
 }
 
+void Z80::savePMem(){
+	ram->savePMem();
+}
+
 void Z80::initOpcodes(){
 	#include "opcodes/main.cpp"
 	#include "opcodes/DD.cpp"
@@ -43,11 +47,14 @@ void Z80::initOpcodes(){
 }
 
 Z80::~Z80(){
+	savePMem();
 	delete opcodes;
 	delete opcodesDD;
 	delete opcodesFD;
 	delete opcodesED;
 	delete opcodesCB;
+	delete ram;
+	delete io;
 }
 
 void Z80::reset(){

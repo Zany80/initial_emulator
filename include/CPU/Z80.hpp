@@ -27,6 +27,7 @@ class Z80{
 		~Z80();
 		void executeOneInstruction();
 		void executeXInstructions(int64_t x);
+		void savePMem();
 		word getAF();
 		word getAF2();
 		word getBC();

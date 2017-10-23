@@ -222,6 +222,7 @@ void Main::resetClock(){
 }
 
 void Main::shutdown(){
+	cpu->savePMem();
 	window->close();
 	cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
 	cout<<"Target speed: "<<clock_speed;

@@ -13,6 +13,7 @@ class Z80Memory{
 		virtual void setByte(uint16_t address,uint8_t value)=0;
 		virtual uint16_t getWord(uint16_t address)=0;
 		virtual void setWord(uint16_t address,uint16_t value)=0;
+		virtual void savePMem()=0;
 };
 
 ZENITH_FOOTER

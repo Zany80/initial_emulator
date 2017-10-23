@@ -5,11 +5,8 @@ screen0:
 	call cls
 	ld hl, .strings
 	ld bc, 0
-	call indexed_print
-	inc bc
-	call indexed_print
-	inc bc
-	call indexed_print
+	ld a, 7
+	call looped_print
 .loop:
 	call shared@screens
 	cp keyb
@@ -22,10 +19,16 @@ screen0:
 	ld (hl), 1
 	ret
 
-.strings: .dw string1@screen0, shared_options, options@screen0
+.strings: .dw string1@screen0, dark_prince@shared_strings, string2@screen0
+.dw dark_country@shared_strings, string3@screen0, shared_options, options@screen0
 .string1:
-.db "The year is 1394. For years, the dark prince Algar has ruled the "
-.db "country of Vlarzel with an iron fist. Now, people are starting to "
+.db "The year is 1394. For years, the dark prince ",0
+
+.string2:
+.db " has ruled the country of ",0
+
+.string3:
+.db " with an iron fist. Now, people are starting to "
 .db "fight back.\n"
 .db "\n"
 .db "Your job as the player is to maintain a network of informants, "
@@ -43,5 +46,5 @@ screen0:
 .db 0x0A,0
 
 .options:
-.db "'b' - begin.\n"
+.db "'b' - Begin\n"
 .db 0

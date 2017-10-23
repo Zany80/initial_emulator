@@ -2,7 +2,7 @@
 
 screens:
 
-.dw screen0, screen1, screen2
+.dw screen0, screen1, screen2, screen3
 
 .shared:
 	call poll_character
@@ -12,4 +12,4 @@ screens:
 	jp z, to_menu
 	ret
 
-shared_options: .db "'q' - Quit\n'm' - Exit to main menu\n",0
+shared_options: .db "'q' - Quit\n'm' - exit to Main menu\n",0

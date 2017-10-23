@@ -36,3 +36,19 @@ indexed_print:
 	call puts
 	pop hl
 	ret
+
+;//looped_print [Display]
+;//Print indexed strings in a loop
+;//Inputs:
+;//	hl: array address
+;//	bc: starting index
+;//	a: number of strings to print
+looped_print:
+	push af
+	call indexed_print
+	pop af
+	inc bc
+	dec a
+	cp 0
+	jp nz, looped_print
+	ret

@@ -188,6 +188,7 @@ void resB_IYd_(uint8_t opcode);
 void jpNN(uint8_t opcode);
 void jpCCNN(uint8_t opcode);
 void djnzE(uint8_t opcode);
+void jrE(uint8_t opcode);
 //call and return group
 void callNN(uint8_t opcode);
 void callCCNN(uint8_t opcode);

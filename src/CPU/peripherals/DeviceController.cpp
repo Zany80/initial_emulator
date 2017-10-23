@@ -12,7 +12,7 @@ ZENITH_HEADER
 DeviceController::DeviceController(){
 	devices=new vector<Z80Device*>;
 	devices->push_back(new GenericDevice(&screenOutput,nullptr));
-	devices->push_back(new GenericDevice(nullptr,&keyboardInput));
+	devices->push_back(new GenericDevice(&integerOutput,&keyboardInput));
 	devices->push_back(new GenericDevice(&Z80Controller,nullptr));
 	int i=2;
 	for(;i<65535;i++)

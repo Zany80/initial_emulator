@@ -280,10 +280,11 @@ void Z80::ldSPIY(uint8_t opcode){
 }
 
 void Z80::pushQQ(uint8_t opcode){
-	SUPERDEBUG(" "<<endl);
 	//takes 11 tstates. opcode fetch=4, push=ram->setWord=2x ram->setByte=6, add 1
+	uint16_t pushing=*(regsQQ[(opcode&0x30)>>4]);
+	SUPERDEBUG(" (`push `). Pushing value "<<(int)pushing<<endl);
 	tstates++;
-	push(*(regsQQ[(opcode&0x30)>>4]));
+	push(pushing);
 }
 
 void Z80::pushIX(uint8_t opcode){
@@ -1280,8 +1281,6 @@ void Z80::bitB_IYd_(uint8_t opcode){
 	resetN();
 }
 
-
-
 //jump group
 
 void Z80::jpNN(uint8_t opcode){
@@ -1310,12 +1309,19 @@ void Z80::jpCCNN(uint8_t opcode){
 
 void Z80::djnzE(uint8_t opcode){
 	tstates++;
-	int8_t displacement=ram->getByte(PC.word++);
-	SUPERDEBUG(" "<<"(`djnz "<<(int)displacement<<"`)."<<endl);
+	int8_t e=ram->getByte(PC.word++);
+	SUPERDEBUG(" (`djnz "<<(int)e<<"`)."<<endl);
 	if(--BC.B.h!=0){
-		PC.word+=displacement;
+		PC.word+=e;
 		tstates+=5;
 	}
+}
+
+void Z80::jrE(uint8_t opcode){
+	int8_t e=ram->getByte(PC.word++);
+	SUPERDEBUG(" (`jr "<<(int)e<<"`)."<<endl);
+	PC.word+=e;
+	tstates+=5;
 }
 
 //call and return group

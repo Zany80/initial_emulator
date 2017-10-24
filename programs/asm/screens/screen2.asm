@@ -71,7 +71,8 @@ screen2:
 .string4:
 .db ".\n"
 .db "\n"
-.db "Your current mission was to steal a copy of the battle plans "
+.db "Your current mission is to steal a copy of the battle plans "
+.db 0
 
 .options: .db "'l' - Lay back down\n'o' - lOok around",0
 .nothappening: .db "Yeah, no. I don't have time to write up an amusing "

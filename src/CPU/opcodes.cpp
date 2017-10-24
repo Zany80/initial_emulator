@@ -1451,6 +1451,7 @@ inline void Z80::andA(uint8_t value){
 	setPV(!parity(result));
 	resetN();
 	resetC();
+	AF.B.h=result;
 }
 
 inline void Z80::orA(uint8_t value){
@@ -1461,6 +1462,7 @@ inline void Z80::orA(uint8_t value){
 	setPV(!parity(result));
 	resetN();
 	resetC();
+	AF.B.h=result;
 }
 
 inline void Z80::xorA(uint8_t value){
@@ -1471,6 +1473,7 @@ inline void Z80::xorA(uint8_t value){
 	setPV(!parity(result));
 	resetN();
 	resetC();
+	AF.B.h=result;
 }
 
 inline int Z80::parity(uint8_t x){

@@ -1,5 +1,6 @@
 start:
 	call cls
+	call check_first_run
 	ld hl, .strings
 	ld bc, 0
 	ld a, 3

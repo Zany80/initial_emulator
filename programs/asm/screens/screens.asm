@@ -2,7 +2,7 @@
 
 screens:
 
-.dw screen0, screen1, screen2, screen3
+.dw intro, awaken, toyourfeet, cell, numbskull1
 
 .shared:
 	call poll_character

@@ -2,6 +2,7 @@
 #include <zenith80.hpp>
 
 #include <fstream>
+#include <iostream>
 using namespace std;
 
 #include <main.hpp>
@@ -34,7 +35,7 @@ RAMController::RAMController(const char * name){
 		f.close();
 	}
 	else{
-		Main::instance->putmsg("Failed to load file!");
+		cerr<<"Failed to load file!"<<endl;
 		////memory=new uint8_t[256]{
 			////0x3E,0x00,0xD3,0x00,0x3E,'!',0xD3,0x00,0x76,0x18,0xFD
 		////};
@@ -47,8 +48,21 @@ RAMController::RAMController(const char * name){
 	}
 }
 
-uint8_t *RAMController::getBank(uint8_t index){
+uint8_t *RAMController::getBankByIndex(uint8_t index){
 	return memory+(banks[index]*0x4000);
+}
+
+uint8_t *RAMController::getBankFromAddress(uint16_t virt_address){
+	uint8_t bank;
+	if(virt_address<0x4000)
+		bank=0;
+	else if(virt_address<0x8000)
+		bank=1;
+	else if(virt_address<0xC000)
+		bank=2;
+	else
+		bank=3;
+	return getBankByIndex(bank);
 }
 
 uint8_t RAMController::getOpcode(uint16_t address){
@@ -67,7 +81,7 @@ uint8_t RAMController::getByte(uint16_t address){
 		bank=2;
 	else
 		bank=3;
-	return getBank(bank)[address%0x4000];
+	return getBankByIndex(bank)[address%0x4000];
 }
 
 void RAMController::setByte(uint16_t address,uint8_t value){
@@ -80,7 +94,7 @@ void RAMController::setByte(uint16_t address,uint8_t value){
 		bank=2;
 	else
 		bank=3;
-	getBank(bank)[address%0x4000]=value;
+	getBankByIndex(bank)[address%0x4000]=value;
 }
 
 uint16_t RAMController::getWord(uint16_t address){

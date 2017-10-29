@@ -25,6 +25,8 @@ typedef tgui::ChatBox TermOut;
 #include <SFML/System.hpp>
 using sf::Clock;
 
+#include <GPU/GR80.hpp>
+
 typedef const char * cstring;
 
 ZENITH_HEADER
@@ -38,6 +40,7 @@ class Main{
 		int run();
 		static Main * instance;
 		Z80 * cpu;
+		GR80 * gpu;
 		bool cpm_emu;
 		void putchar(char c);
 		void putint(int c);
@@ -45,12 +48,8 @@ class Main{
 		uint8_t key();
 		void resetKeyBuffer();
 		void resetClock();
-		void drawText(string text,float x,float y,float size,uint8_t color);
-		void clear(uint8_t color);
-		void display();
-		void drawRect(int x,int y,int w,int h, uint8_t color);
+		Font * default_font;
 	private:
-		Color * palette;
 		Clock accuracy_clock;
 		vector<uint8_t> key_buffer;
 		uint64_t unit;
@@ -60,11 +59,8 @@ class Main{
 		TermOut::Ptr termOut;
 		Canvas::Ptr canvas;
 		Color background;
-		Font * default_font;
 		void processEvents();
-		int canvas_y=0;
-		sf::Text lastMsg;
-
+		
 };
 
 ZENITH_FOOTER

@@ -64,9 +64,6 @@ Main::Main(int argc,char ** argv){
 	Main::instance=this;
 	clock_speed=4;
 	unit=MHz;
-	palette=new Color[16]{
-		{255,255,255},{0,0,0}
-	};
 	window=new RenderWindow(VideoMode(512,512),"Zenith80");
 	window->setIcon(80,80,icon);
 	window->setVerticalSyncEnabled(true);
@@ -81,8 +78,6 @@ Main::Main(int argc,char ** argv){
 	canvas->setPosition(0,0);
 	canvas->setSize(512,512);
 	gui->add(canvas);
-	termOut->addLine(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));
-	termOut->addLine("Loading...");
 	background=Color(3,225,197);
 	string name="zenith.bin";
 	bool name_changed=false;
@@ -92,22 +87,18 @@ Main::Main(int argc,char ** argv){
 		if(arg=="--file"){
 			if(i+1==argc){
 				cerr<<"No file specified! Ignoring option \"--file\"."<<endl;
-				termOut->addLine("No file specified! Ignoring option \"--file\".");
 				break;
 			}
 			if(name_changed){
-				termOut->addLine(((string)"Discarding previous --file argument \"")+name.c_str()+"\".");
 				cerr<<"Discarding previous --file argument \""<<name.c_str()<<"\".";
 			}
 			name=argv[++i];
-			termOut->addLine((string)"--file specified, loading \""+name+"\"...");
 			cout<<"--file specified, loading \""<<name<<"\"..."<<endl;
 			name_changed=true;
 		}
 		else if(arg=="--clock-speed"){
 			if(i+1==argc){
 				cerr<<"--clock-speed requires an argument!"<<endl;
-				termOut->addLine("--clock-speed requires an argument!");
 				break;
 			}
 			clock_speed=std::stoll(argv[++i]);
@@ -116,19 +107,17 @@ Main::Main(int argc,char ** argv){
 			cpm_emu=true;
 			cout<<"CP/M BDOS syscall emulation activated. Loading program into address 0x100."<<endl;
 			cout<<"Make sure that you have \".fill 0x100-$\" at the top of the .asm file"<<endl;
-			termOut->addLine("CP/M BDOS syscall emulation activated. Loading program into address 0x100.");
-			termOut->addLine("Make sure that you have \".fill 0x100-$\" at the top of the .asm file");
 		}
 		else{
 			cerr<<"Unrecognized option \""<<arg<<"\", ignoring..."<<endl;
-			termOut->addLine(((string)"Unrecognized option \"")+arg+"\", ignoring...");
 		}
 	}
 	if(!name_changed){
 		cout<<"No --file argument received, defaulting to \"zenith.bin\"..."<<endl;
-		termOut->addLine("No --file argument received, defaulting to \"zenith.bin\"...");
 	}
 	cpu=new Z80(new RAMController(name.c_str()),new DeviceController());
+	gpu=new GR80(canvas,cpu);
+	putmsg(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));
 	default_font=new Font;
 	default_font->loadFromMemory(&Pacifico_Regular_ttf,Pacifico_Regular_ttf_len);
 	termOut->addLine("");
@@ -139,8 +128,8 @@ Main::Main(int argc,char ** argv){
 Main::~Main(){
 	delete window;
 	delete cpu;
+	delete gpu;
 	delete default_font;
-	delete palette;
 }
 
 int Main::run(){
@@ -151,6 +140,7 @@ int Main::run(){
 		gui->draw();
 		window->display();
 		cpu->executeXInstructions(this->clock_speed*this->unit/60);
+		////gpu->execute();
 	}
 	return 0;
 }
@@ -191,8 +181,7 @@ void Main::processEvents(){
 
 void Main::putchar(char ch){
 	if(ch==0){
-		clear(0);
-		lastMsg.setString("");
+		gpu->clearText();
 		return termOut->removeAllLines();
 	}
 	string msg="";
@@ -201,37 +190,20 @@ void Main::putchar(char ch){
 		termOut->removeLine(termOut->getLineAmount()-1);
 	}
 	putmsg(msg);
-	drawText(lastMsg.getString()+ch,0,canvas_y,15,1);
+	gpu->appendText((string)""+ch);
 }
 
 void Main::putint(int i){
 	string msg=termOut->getLine(termOut->getLineAmount()-1);
 	msg=msg+to_string(i);
 	termOut->removeLine(termOut->getLineAmount()-1);
+	gpu->appendText(to_string(i));
 	putmsg(msg);
 }
 
 void Main::putmsg(string s){
 	termOut->addLine(s);
-	clear(0);
-}
-
-void Main::clear(uint8_t color){
-	canvas->clear(palette[color]);
-	canvas_y=0;
-}
-
-void Main::display(){
-	canvas->display();
-}
-
-void Main::drawText(string text,float x,float y,float size, uint8_t color){
-	sf::Text message(text,*default_font,size);
-	lastMsg=message;
-	message.setFillColor(palette[color]);
-	message.setPosition(x,y);
-	message.setString(tgui::Text::wordWrap(512,message.getString(),*default_font,size,false));
-	canvas->draw(message);
+	gpu->clear(0);
 }
 
 uint8_t Main::key(){

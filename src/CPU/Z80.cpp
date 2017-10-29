@@ -36,6 +36,10 @@ void Z80::savePMem(){
 	ram->savePMem();
 }
 
+void Z80::swapBanks(){
+	ram->swapBanks(DE.B.h,DE.B.l);
+}
+
 void Z80::initOpcodes(){
 	#include "opcodes/main.cpp"
 	#include "opcodes/DD.cpp"
@@ -94,7 +98,7 @@ void Z80::executeOneInstruction(){
 	else{
 		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
 		#ifdef SUPERDEBUGMODE
-		cerr<<"Executing opcode 0x"<<hex(opcode_value);
+		cerr<<"["<<PC.word-1<<"] Executing opcode 0x"<<hex(opcode_value);
 		#endif
 		(*this.*opcodes[opcode_value])(opcode_value);
 	}
@@ -195,6 +199,10 @@ word Z80::getDE(){
 
 void Z80::halt(){
 	halted=true;
+}
+
+void Z80::unhalt(){
+	halted=false;
 }
 
 ZENITH_FOOTER

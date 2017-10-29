@@ -1,15 +1,23 @@
 #include <main.hpp>
+#include <zenith80.hpp>
+
+ZENITH_HEADER
 
 void Z80Controller(uint8_t value){
 	switch(value){
 		case 0:
-			ZENITH::Main::instance->cpu->reset();
+			Main::instance->cpu->reset();
 			break;
 		case 1:
-			ZENITH::Main::instance->shutdown();
+			Main::instance->shutdown();
 			break;
 		case 2:
-			ZENITH::Main::instance->cpu->savePMem();
+			Main::instance->cpu->savePMem();
+			break;
+		case 3:
+			Main::instance->cpu->swapBanks();
 			break;
 	}
 }
+
+ZENITH_FOOTER

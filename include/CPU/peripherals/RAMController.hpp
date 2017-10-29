@@ -7,6 +7,9 @@
 #include <string>
 using std::string;
 
+#include <vector>
+using std::vector;
+
 ZENITH_HEADER
 
 class RAMController : public Z80Memory{
@@ -18,9 +21,10 @@ class RAMController : public Z80Memory{
 		uint16_t getWord(uint16_t address) override;
 		void setWord(uint16_t address,uint16_t value) override;
 		void savePMem() override;
+		void swapBanks(uint8_t from,uint8_t to) override;
 	private:
-		uint8_t * memory;
-		uint8_t * emu;
+		vector<uint8_t *> banks;
+		uint8_t bank;
 		string name;
 };
 

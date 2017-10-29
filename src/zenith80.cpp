@@ -159,6 +159,10 @@ void Main::processEvents(){
 					if(cpu->isHalted())
 						cpu->reset();
 				}
+				else{
+					if(cpu->isHalted())
+						cpu->unhalt();
+				}
 				break;
 			case Event::KeyPressed:
 				uint8_t key=keyCode(e.key);

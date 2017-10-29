@@ -67,6 +67,10 @@ RAMController::RAMController(const char * name){
 	}
 }
 
+void RAMController::swapBanks(uint8_t from,uint8_t to){
+	
+}
+
 void RAMController::savePMem(){
 	cout<<"Opening "<<name+".pmem"<<"as pmem file..."<<endl;
 	ofstream pMem(name+".pmem", ofstream::binary);

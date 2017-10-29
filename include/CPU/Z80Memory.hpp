@@ -14,6 +14,7 @@ class Z80Memory{
 		virtual uint16_t getWord(uint16_t address)=0;
 		virtual void setWord(uint16_t address,uint16_t value)=0;
 		virtual void savePMem()=0;
+		virtual void swapBanks(uint8_t from,uint8_t to)=0;
 };
 
 ZENITH_FOOTER

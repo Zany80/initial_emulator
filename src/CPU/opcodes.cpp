@@ -1281,6 +1281,14 @@ void Z80::bitB_IYd_(uint8_t opcode){
 	resetN();
 }
 
+void Z80::setB_HL_(uint8_t opcode){
+	SUPERDEBUG(" (`set `"<<((opcode&0x38)>>3)<<", (HL)`)."<<endl);
+	uint8_t _HL_=ram->getByte(HL.word);
+	_HL_ |= (1<<((opcode&0x30)>>3));
+	ram->setByte(HL.word,_HL_);
+	tstates++;
+}
+
 //jump group
 
 void Z80::jpNN(uint8_t opcode){
@@ -1322,6 +1330,22 @@ void Z80::jrE(uint8_t opcode){
 	SUPERDEBUG(" (`jr "<<(int)e<<"`)."<<endl);
 	PC.word+=e;
 	tstates+=5;
+}
+
+void Z80::jrCCE(uint8_t opcode){
+	int8_t e=ram->getByte(PC.word++);
+	SUPERDEBUG(" "<<"(`jr cc, "<<(int)e<<"`).");
+	uint8_t c=(opcode&0x18)>>3;
+	if(
+		(c==0&&!getZ())
+		|| (c==1 && getZ())
+		|| (c==2 && !getC())
+		|| (c==3 && getC())
+	){
+		PC.word+=e;
+		SUPERDEBUG(" Adjusting PC...");
+	}
+	SUPERDEBUG(endl);
 }
 
 //call and return group

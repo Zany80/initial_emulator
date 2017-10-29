@@ -28,6 +28,7 @@ class Z80{
 		void executeOneInstruction();
 		void executeXInstructions(int64_t x);
 		void savePMem();
+		void swapBanks();
 		word getAF();
 		word getAF2();
 		word getBC();
@@ -47,6 +48,7 @@ class Z80{
 		void add_tstates(uint64_t tstates);
 		bool isHalted();
 		void halt();
+		void unhalt();
 		void reset();
 	private:
 		bool halted;

@@ -65,7 +65,10 @@ Z80::~Z80(){
 }
 
 void Z80::reset(){
-	AF.word=AF2.word=BC.word=BC2.word=DE.word=DE2.word=HL.word=HL2.word=IX.word=IY.word=SP.word=PC.word=0;
+	((RAMController*)ram)->parseMetadata();
+	AF.word=AF2.word=BC.word=BC2.word=DE.word=DE2.word=HL.word=HL2.word=IX.word=IY.word=SP.word=0;
+	PC.word=start_address;
+	cout<<"[CPU] Reset. Start address: "<<PC.word<<endl;
 	R=I=0;
 	IFF1=IFF2=0;
 	tstates=0;

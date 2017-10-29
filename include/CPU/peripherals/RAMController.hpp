@@ -12,6 +12,11 @@ using std::vector;
 
 ZENITH_HEADER
 
+typedef struct{
+	const uint16_t title;
+	const uint16_t start_address;
+} __attribute__((packed)) metadata_t;
+
 class RAMController : public Z80Memory{
 	public:
 		RAMController(const char * name);
@@ -24,6 +29,7 @@ class RAMController : public Z80Memory{
 		void swapBanks(uint8_t index,uint8_t bank) override;
 		uint8_t *getBankByIndex(uint8_t index) override;
 		uint8_t *getBankFromAddress(uint16_t virt_address) override;
+		void parseMetadata();
 	private:
 		uint8_t banks[4];
 		uint8_t * memory;

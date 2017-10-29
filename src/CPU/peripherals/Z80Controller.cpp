@@ -34,10 +34,22 @@ void Z80Controller(uint8_t value){
 			Main::instance->gpu->clear(Main::instance->cpu->getBC().B.h);
 			break;
 		case 6:
-			////Upload sprite to GPU. HL contains address of sprite, B contains size, C contains index
-			word BC=Main::instance->cpu->getBC();
-			word HL=Main::instance->cpu->getHL();
-			////Main::instance->gpu->uploadSprite(BC.B.l,HL.word,(BC.B.h&240)>>4);
+			{
+				////Upload sprite to GPU. HL contains address of sprite, B contains size, C contains index
+				word BC=Main::instance->cpu->getBC();
+				uint16_t virt_address=Main::instance->cpu->getHL().word;
+				uint8_t *physical_address=Main::instance->cpu->ram->getBankFromAddress(virt_address)+(virt_address%0x4000);
+				Main::instance->gpu->uploadSprite(BC.B.l,physical_address,(BC.B.h&0xF0)>>4,BC.B.h&0x0F);
+			}
+			break;
+		case 7:
+			////Draw a sprite.
+			////Sprite index in H, transparent color in L, position in BC
+			{
+				word BC=Main::instance->cpu->getBC();
+				word HL=Main::instance->cpu->getHL();
+				Main::instance->gpu->drawSprite(HL.B.h,BC.B.h,BC.B.l,HL.B.l);
+			}
 			break;
 	}
 }

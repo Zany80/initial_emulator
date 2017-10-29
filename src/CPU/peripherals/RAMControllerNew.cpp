@@ -43,9 +43,15 @@ RAMController::RAMController(const char * name){
 		PREBUILT_ASM_PROG
 		#else
 		#warning PREBUILT_ASM_PROG not defined!
-		memory=new uint8_t[0x400000]{0x76,0x18,0xFD};
+		memory=new uint8_t[0x400000]{0x06,0x02,0x00,0x76,0x18,0xFD,'H','e','l','l','o',' ','W','o','r','l','d','!',0x00};
 		#endif
 	}
+}
+
+void RAMController::parseMetadata(){
+	metadata_t *metadata=(metadata_t*)getBankFromAddress(0x0000);
+	Main::instance->setTitle((const char*)(getBankFromAddress(metadata->title)+(metadata->title%0x4000)));
+	Main::instance->cpu->start_address=metadata->start_address;
 }
 
 uint8_t *RAMController::getBankByIndex(uint8_t index){

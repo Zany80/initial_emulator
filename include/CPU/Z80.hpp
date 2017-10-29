@@ -56,6 +56,7 @@ class Z80{
 		bool halted;
 		Z80Memory * ram;
 		DeviceController * io;
+		uint16_t start_address;
 		word AF;
 		word AF2;
 		word BC;

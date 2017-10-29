@@ -248,4 +248,8 @@ void Main::shutdown(){
 	}
 }
 
+void Main::setTitle(string s){
+	window->setTitle(s);
+}
+
 ZENITH_FOOTER

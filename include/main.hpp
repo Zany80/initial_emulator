@@ -49,6 +49,7 @@ class Main{
 		void resetKeyBuffer();
 		void resetClock();
 		Font * default_font;
+		void setTitle(string s);
 	private:
 		Clock accuracy_clock;
 		vector<uint8_t> key_buffer;

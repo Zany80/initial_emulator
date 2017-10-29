@@ -67,7 +67,7 @@ Main::Main(int argc,char ** argv){
 	palette=new Color[16]{
 		{255,255,255},{0,0,0}
 	};
-	window=new RenderWindow(VideoMode(800,600),"Zenith80");
+	window=new RenderWindow(VideoMode(512,512),"Zenith80");
 	window->setIcon(80,80,icon);
 	window->setVerticalSyncEnabled(true);
 	gui=new Gui(*window);
@@ -78,7 +78,7 @@ Main::Main(int argc,char ** argv){
 	termOut->setLineLimit(1000);
 	////gui->add(termOut);
 	canvas=Canvas::create();
-	canvas->setPosition((800-512)/2,(600-512)/2);
+	canvas->setPosition(0,0);
 	canvas->setSize(512,512);
 	gui->add(canvas);
 	termOut->addLine(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));

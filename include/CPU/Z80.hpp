@@ -24,6 +24,7 @@ string hex(uint8_t a);
 class Z80{
 	public:
 		typedef void (Z80::*opcode)(uint8_t);
+		friend void Z80Controller(uint8_t value);
 		Z80(Z80Memory * ram,DeviceController * io);
 		~Z80();
 		void executeOneInstruction();

@@ -22,7 +22,7 @@ class RAMController : public Z80Memory{
 		void setWord(uint16_t address,uint16_t value) override;
 		void savePMem() override;
 		void swapBanks(uint8_t index,uint8_t bank) override;
-		uint8_t *getBank(uint8_t index);
+		uint8_t *getBank(uint8_t index) override;
 	private:
 		uint8_t banks[4];
 		uint8_t * memory;

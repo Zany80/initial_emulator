@@ -197,6 +197,10 @@ word Z80::getDE(){
 	return this->DE;
 }
 
+word Z80::getHL(){
+	return this->HL;
+}
+
 void Z80::halt(){
 	halted=true;
 }

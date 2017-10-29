@@ -4,6 +4,7 @@ set(SOURCES
 	"${CMAKE_CURRENT_SOURCE_DIR}/AstronBoyWonder.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Famirids.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/NEUROPOL.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Pacifico-Regular.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/icon.cpp"
 	PARENT_SCOPE
 )

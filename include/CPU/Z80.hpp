@@ -5,6 +5,7 @@
 
 #include "Z80Memory.hpp"
 #include "peripherals/DeviceController.hpp"
+#include "peripherals/RAMController.hpp"
 
 #include <defines.hpp>
 #include <vector>
@@ -44,7 +45,7 @@ class Z80{
 		uint8_t getR();
 		uint8_t getI();
 		int64_t getTStates();
-		friend uint8_t Z80Memory::getByte(uint16_t address);
+		friend RAMController;
 		void add_tstates(uint64_t tstates);
 		bool isHalted();
 		void halt();

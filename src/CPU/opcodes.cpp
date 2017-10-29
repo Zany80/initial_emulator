@@ -280,10 +280,11 @@ void Z80::ldSPIY(uint8_t opcode){
 }
 
 void Z80::pushQQ(uint8_t opcode){
-	SUPERDEBUG(" "<<endl);
 	//takes 11 tstates. opcode fetch=4, push=ram->setWord=2x ram->setByte=6, add 1
+	uint16_t pushing=*(regsQQ[(opcode&0x30)>>4]);
+	SUPERDEBUG(" (`push `). Pushing value "<<(int)pushing<<endl);
 	tstates++;
-	push(*(regsQQ[(opcode&0x30)>>4]));
+	push(pushing);
 }
 
 void Z80::pushIX(uint8_t opcode){
@@ -1205,15 +1206,6 @@ void Z80::rld(uint8_t opcode){
 	/*
 	 * A_low_nibble is the low nibble of the A register
 	 * _HL_low_nibble is the low nibble of the memory location specified by HL, and _HL_high_nibble is the high nibble of that same location
-	 *
-	 * From the Z80 CPU User Manual:
-	 *
-	 * The contents of the low-order four bits (bits 3, 2, 1, and 0) of the memory location (HL)
-	 * are copied to the high-order four bits (7, 6, 5, and 4) of that same memory location; the
-	 * previous contents of those high-order four bits are copied to the low-order four bits of the
-	 * Accumulator (Register A); and the previous contents of the low-order four bits of the
-	 * Accumulator are copied to the low-order four bits of memory location (HL). The contents
-	 * of the high-order bits of the Accumulator are unaffected.
 	 */
 	uint8_t A_low_nibble=AF.B.h&0x0F;
 	uint8_t _HL_low_nibble=_HL_&0x0F;
@@ -1233,15 +1225,6 @@ void Z80::rrd(uint8_t opcode){
 	/*
 	 * A_low_nibble is the low nibble of the A register
 	 * _HL_low_nibble is the low nibble of the memory location specified by HL, and _HL_high_nibble is the high nibble of that same location
-	 *
-	 * From the Z80 CPU User Manual:
-	 *
-	 * The contents of the low-order four bits (bits 3, 2, 1, and 0) of memory location (HL) are
-	 * copied to the low-order four bits of the Accumulator (Register A). The previous contents
-	 * of the low-order four bits of the Accumulator are copied to the high-order four bits (7, 6, 5,
-	 * and 4) of location (HL); and the previous contents of the high-order four bits of (HL) are
-	 * copied to the low-order four bits of (HL). The contents of the high-order bits of the Accu-
-	 * mulator are unaffected.
 	 */
 	uint8_t A_low_nibble=AF.B.h&0x0F;
 	uint8_t _HL_low_nibble=_HL_&0x0F;
@@ -1254,6 +1237,56 @@ void Z80::rrd(uint8_t opcode){
 	resetH();
 	setPV(!parity(AF.B.h));
 	resetN();
+}
+
+//bit manipulation group
+
+static int bits[]={
+	0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80
+};
+
+void Z80::bitBR(uint8_t opcode){
+	uint8_t * r = regs[opcode&0x07];
+	uint8_t b=(opcode&0x38)>>3;
+	setZ(((*r)&bits[b])==0);
+	setH();
+	resetN();
+}
+
+void Z80::bitB_HL_(uint8_t opcode){
+	uint8_t _HL_ = ram->getWord(HL.word);
+	uint8_t b=(opcode&0x38)>>3;
+	setZ((_HL_&bits[b])==0);
+	setH();
+	resetN();
+}
+
+void Z80::bitB_IXd_(uint8_t opcode){
+	int8_t d=ram->getByte(PC.word++);
+	uint16_t IXd=IX.word+d;
+	uint8_t _IXd_=ram->getByte(IXd);
+	uint8_t b=(opcode&0x38)>>3;
+	setZ((_IXd_&bits[b])==0);
+	setH();
+	resetN();
+}
+
+void Z80::bitB_IYd_(uint8_t opcode){
+	int8_t d=ram->getByte(PC.word++);
+	uint16_t IYd=IY.word+d;
+	uint8_t _IYd_=ram->getByte(IYd);
+	uint8_t b=(opcode&0x38)>>3;
+	setZ((_IYd_&bits[b])==0);
+	setH();
+	resetN();
+}
+
+void Z80::setB_HL_(uint8_t opcode){
+	SUPERDEBUG(" (`set `"<<((opcode&0x38)>>3)<<", (HL)`)."<<endl);
+	uint8_t _HL_=ram->getByte(HL.word);
+	_HL_ |= (1<<((opcode&0x30)>>3));
+	ram->setByte(HL.word,_HL_);
+	tstates++;
 }
 
 //jump group
@@ -1284,12 +1317,35 @@ void Z80::jpCCNN(uint8_t opcode){
 
 void Z80::djnzE(uint8_t opcode){
 	tstates++;
-	int8_t displacement=ram->getByte(PC.word++);
-	SUPERDEBUG(" "<<"(`djnz "<<(int)displacement<<"`)."<<endl);
+	int8_t e=ram->getByte(PC.word++);
+	SUPERDEBUG(" (`djnz "<<(int)e<<"`)."<<endl);
 	if(--BC.B.h!=0){
-		PC.word+=displacement;
+		PC.word+=e;
 		tstates+=5;
 	}
+}
+
+void Z80::jrE(uint8_t opcode){
+	int8_t e=ram->getByte(PC.word++);
+	SUPERDEBUG(" (`jr "<<(int)e<<"`)."<<endl);
+	PC.word+=e;
+	tstates+=5;
+}
+
+void Z80::jrCCE(uint8_t opcode){
+	int8_t e=ram->getByte(PC.word++);
+	SUPERDEBUG(" "<<"(`jr cc, "<<(int)e<<"`).");
+	uint8_t c=(opcode&0x18)>>3;
+	if(
+		(c==0&&!getZ())
+		|| (c==1 && getZ())
+		|| (c==2 && !getC())
+		|| (c==3 && getC())
+	){
+		PC.word+=e;
+		SUPERDEBUG(" Adjusting PC...");
+	}
+	SUPERDEBUG(endl);
 }
 
 //call and return group
@@ -1421,6 +1477,7 @@ inline void Z80::andA(uint8_t value){
 	setPV(!parity(result));
 	resetN();
 	resetC();
+	AF.B.h=result;
 }
 
 inline void Z80::orA(uint8_t value){
@@ -1431,6 +1488,7 @@ inline void Z80::orA(uint8_t value){
 	setPV(!parity(result));
 	resetN();
 	resetC();
+	AF.B.h=result;
 }
 
 inline void Z80::xorA(uint8_t value){
@@ -1441,6 +1499,7 @@ inline void Z80::xorA(uint8_t value){
 	setPV(!parity(result));
 	resetN();
 	resetC();
+	AF.B.h=result;
 }
 
 inline int Z80::parity(uint8_t x){

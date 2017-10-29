@@ -41,7 +41,7 @@ using std::string;
 #include <defines.hpp>
 
 #include <assets/icon.hpp>
-#include <assets/fonts/Famirids.hpp>
+#include <assets/fonts/Pacifico.hpp>
 
 #include <CPU/peripherals/RAMController.hpp>
 #include <CPU/peripherals/DeviceController.hpp>
@@ -64,16 +64,23 @@ Main::Main(int argc,char ** argv){
 	Main::instance=this;
 	clock_speed=4;
 	unit=MHz;
-	window=new RenderWindow(VideoMode(800,600),"Zenith80");
+	palette=new Color[16]{
+		{255,255,255},{0,0,0}
+	};
+	window=new RenderWindow(VideoMode(512,512),"Zenith80");
 	window->setIcon(80,80,icon);
 	window->setVerticalSyncEnabled(true);
 	gui=new Gui(*window);
 	termOut=TermOut::create();
-	termOut->setPosition(0,0);
-	termOut->setSize(800,570);
+	termOut->setPosition(0,540);
+	termOut->setSize(800,200);
 	termOut->setLinesStartFromTop(true);
 	termOut->setLineLimit(1000);
-	gui->add(termOut);
+	////gui->add(termOut);
+	canvas=Canvas::create();
+	canvas->setPosition(0,0);
+	canvas->setSize(512,512);
+	gui->add(canvas);
 	termOut->addLine(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));
 	termOut->addLine("Loading...");
 	background=Color(3,225,197);
@@ -123,15 +130,17 @@ Main::Main(int argc,char ** argv){
 	}
 	cpu=new Z80(new RAMController(name.c_str()),new DeviceController());
 	default_font=new Font;
-	default_font->loadFromMemory(&Famirids_ttf,Famirids_ttf_len);
+	default_font->loadFromMemory(&Pacifico_Regular_ttf,Pacifico_Regular_ttf_len);
 	termOut->addLine("");
 	termOut->addLine("");
+	cpu->reset();
 }
 
 Main::~Main(){
 	delete window;
 	delete cpu;
 	delete default_font;
+	delete palette;
 }
 
 int Main::run(){
@@ -151,28 +160,16 @@ void Main::processEvents(){
 	while(this->window->pollEvent(e)){
 		switch(e.type){
 			case Event::Closed:
-				window->close();
-				cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
-				cout<<"Target speed: "<<clock_speed;
-				{
-					string s;
-					if(unit==MHz)
-						s="MHz";
-					if(unit==Hz)
-						s="Hz";
-					if(unit==GHz)
-						s="GHz";
-					if(unit==KHz)
-						s="KHz";
-					cout<<s<<endl;
-					uint64_t speed = ((cpu->getTStates())/accuracy_clock.getElapsedTime().asSeconds());
-					cout<<"Speed: "<<((float)speed/unit)<<s<<endl;
-				}
+				this->shutdown();
 				break;
 			case Event::MouseButtonPressed:
 				if(e.mouseButton.button==Mouse::Button::Left){
 					if(cpu->isHalted())
 						cpu->reset();
+				}
+				else{
+					if(cpu->isHalted())
+						cpu->unhalt();
 				}
 				break;
 			case Event::KeyPressed:
@@ -194,6 +191,8 @@ void Main::processEvents(){
 
 void Main::putchar(char ch){
 	if(ch==0){
+		clear(0);
+		lastMsg.setString("");
 		return termOut->removeAllLines();
 	}
 	string msg="";
@@ -202,6 +201,7 @@ void Main::putchar(char ch){
 		termOut->removeLine(termOut->getLineAmount()-1);
 	}
 	putmsg(msg);
+	drawText(lastMsg.getString()+ch,0,canvas_y,15,1);
 }
 
 void Main::putint(int i){
@@ -213,6 +213,24 @@ void Main::putint(int i){
 
 void Main::putmsg(string s){
 	termOut->addLine(s);
+	clear(0);
+}
+
+void Main::clear(uint8_t color){
+	canvas->clear(palette[color]);
+	canvas_y=0;
+}
+
+void Main::display(){
+	canvas->display();
+}
+
+void Main::drawText(string text,float x,float y,float size, uint8_t color){
+	sf::Text message(text,*default_font,size);
+	lastMsg=message;
+	message.setFillColor(palette[color]);
+	message.setPosition(x,y);
+	canvas->draw(message);
 }
 
 uint8_t Main::key(){
@@ -234,6 +252,27 @@ void Main::resetKeyBuffer(){
 
 void Main::resetClock(){
 	accuracy_clock.restart();
+}
+
+void Main::shutdown(){
+	cpu->savePMem();
+	window->close();
+	cout<<endl<<cpu->getTStates()<<" tstates"<<endl;
+	cout<<"Target speed: "<<clock_speed;
+	{
+		string s;
+		if(unit==MHz)
+			s="MHz";
+		if(unit==Hz)
+			s="Hz";
+		if(unit==GHz)
+			s="GHz";
+		if(unit==KHz)
+			s="KHz";
+		cout<<s<<endl;
+		uint64_t speed = ((cpu->getTStates())/accuracy_clock.getElapsedTime().asSeconds());
+		cout<<"Speed: "<<((float)speed/unit)<<s<<endl;
+	}
 }
 
 ZENITH_FOOTER

@@ -10,6 +10,7 @@ using namespace std;
 ZENITH_HEADER
 
 RAMController::RAMController(const char * name){
+	this->name=name;
 	//load data from zenith.bin
 	ifstream f(name, ios::in | ios::binary | ios::ate);
 	if(Main::instance->cpm_emu){
@@ -40,20 +41,46 @@ RAMController::RAMController(const char * name){
 		//};
 		return;
 	}
-	memory=new uint8_t[65536];
-	for(int i=0;i<65536;i++)
+	memory=new uint8_t[0x10000];
+	for(int i=0;i<0x10000;i++)
 		memory[i]=0;
 	cout<<"Loading program from "<<name<<endl;
 	Main::instance->putmsg((string)"Loading program from "+name);
 	streampos size=f.tellg();
     f.seekg(0x00);
     char* mem=(char*)memory;
-    if(Main::instance->cpm_emu){
+    if(Main::instance->cpm_emu)
 		mem+=0x100;
-		f.seekg(0x100);
-	}
-    f.read(mem,size);
+	if(size>0xF000)
+		size=0xF000;
+	f.read(mem,size);
     f.close();
+	ifstream pMem((string)name+".pmem", ios::in | ios::binary | ios::ate);
+	if(pMem.is_open()){
+		mem=(char*)memory+0xF000;
+		streampos size=pMem.tellg();
+		pMem.seekg(0x00);
+		if(size>0x1000)
+			size=0x1000;
+		pMem.read(mem,size);
+		pMem.close();
+	}
+}
+
+void RAMController::swapBanks(uint8_t from,uint8_t to){
+	
+}
+
+void RAMController::savePMem(){
+	cout<<"Opening "<<name+".pmem"<<"as pmem file..."<<endl;
+	ofstream pMem(name+".pmem", ofstream::binary);
+	if(pMem.is_open()){
+		char * mem=(char*)memory+0xF000;
+		pMem.write(mem,0x1000);
+		pMem.close();
+	}
+	else
+		cerr<<"Couldn't open pmem for writing!"<<endl;
 }
 
 uint8_t RAMController::getByte(uint16_t address){

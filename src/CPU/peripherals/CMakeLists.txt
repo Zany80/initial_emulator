@@ -1,6 +1,6 @@
 set(SOURCES
 	${SOURCES}
-	${CMAKE_CURRENT_SOURCE_DIR}/RAMController.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/RAMControllerNew.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/DeviceController.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/GenericDevice.cpp
 	PARENT_SCOPE

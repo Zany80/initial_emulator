@@ -19,6 +19,7 @@ using std::vector;
 
 #include <TGUI/TGUI.hpp>
 using tgui::Gui;
+using tgui::Canvas;
 typedef tgui::ChatBox TermOut;
 
 #include <SFML/System.hpp>
@@ -33,6 +34,7 @@ class Main{
 		Main(int argc,char ** argv);
 		~Main();
 		static int main(int argc,char** argv);
+		void shutdown();
 		int run();
 		static Main * instance;
 		Z80 * cpu;
@@ -43,7 +45,12 @@ class Main{
 		uint8_t key();
 		void resetKeyBuffer();
 		void resetClock();
+		void drawText(string text,float x,float y,float size,uint8_t color);
+		void clear(uint8_t color);
+		void display();
+		void drawRect(int x,int y,int w,int h, uint8_t color);
 	private:
+		Color * palette;
 		Clock accuracy_clock;
 		vector<uint8_t> key_buffer;
 		uint64_t unit;
@@ -51,9 +58,12 @@ class Main{
 		RenderWindow * window;
 		Gui * gui;
 		TermOut::Ptr termOut;
+		Canvas::Ptr canvas;
 		Color background;
 		Font * default_font;
 		void processEvents();
+		int canvas_y=0;
+		sf::Text lastMsg;
 
 };
 

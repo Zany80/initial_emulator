@@ -125,7 +125,7 @@ uint8_t keyCode(sf::Event::KeyEvent k){
 		case Keyboard::Slash:
 			v=0x28;break;
 		case Keyboard::SemiColon:
-			v=0x1D;break;
+			v=0x1E;break;
 		default:
 			break;
 	}

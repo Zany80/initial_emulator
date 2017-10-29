@@ -4,6 +4,12 @@
 #include <zenith80.hpp>
 #include <CPU/Z80Memory.hpp>
 
+#include <string>
+using std::string;
+
+#include <vector>
+using std::vector;
+
 ZENITH_HEADER
 
 class RAMController : public Z80Memory{
@@ -14,9 +20,13 @@ class RAMController : public Z80Memory{
 		void setByte(uint16_t address,uint8_t value) override;
 		uint16_t getWord(uint16_t address) override;
 		void setWord(uint16_t address,uint16_t value) override;
+		void savePMem() override;
+		void swapBanks(uint8_t index,uint8_t bank) override;
+		uint8_t *getBank(uint8_t index) override;
 	private:
+		uint8_t banks[4];
 		uint8_t * memory;
-		uint8_t * emu;
+		string name;
 };
 
 ZENITH_FOOTER

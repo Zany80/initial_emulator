@@ -35,6 +35,14 @@ Z80::Z80(Z80Memory * ram,DeviceController * io){
 	};
 }
 
+void Z80::savePMem(){
+	ram->savePMem();
+}
+
+void Z80::swapBanks(){
+	ram->swapBanks(DE.B.h,DE.B.l);
+}
+
 void Z80::initOpcodes(){
 	#include "opcodes/main.cpp"
 	#include "opcodes/DD.cpp"
@@ -46,11 +54,14 @@ void Z80::initOpcodes(){
 }
 
 Z80::~Z80(){
+	savePMem();
 	delete opcodes;
 	delete opcodesDD;
 	delete opcodesFD;
 	delete opcodesED;
 	delete opcodesCB;
+	delete ram;
+	delete io;
 }
 
 void Z80::reset(){
@@ -189,8 +200,16 @@ word Z80::getDE(){
 	return this->DE;
 }
 
+word Z80::getHL(){
+	return this->HL;
+}
+
 void Z80::halt(){
 	halted=true;
+}
+
+void Z80::unhalt(){
+	halted=false;
 }
 
 ZENITH_FOOTER

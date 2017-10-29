@@ -230,6 +230,7 @@ void Main::drawText(string text,float x,float y,float size, uint8_t color){
 	lastMsg=message;
 	message.setFillColor(palette[color]);
 	message.setPosition(x,y);
+	message.setString(tgui::Text::wordWrap(512,message.getString(),*default_font,size,false));
 	canvas->draw(message);
 }
 
@@ -238,7 +239,7 @@ uint8_t Main::key(){
 		//if there isn't anything in the key buffer, just return 0
 		return 0;
 	}
-	//fetch the value at the front,
+	//fetch the value at the front
 	uint8_t v=key_buffer.front();
 	//then remove it from the buffer
 	key_buffer.erase(key_buffer.begin());

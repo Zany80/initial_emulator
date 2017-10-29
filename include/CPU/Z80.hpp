@@ -79,6 +79,7 @@ class Z80{
 		opcode * opcodesCB;
 		opcode * opcodesDDCB;
 		opcode * opcodesFDCB;
+		vector<string> conditions;
 		#include <CPU/opcodes.hpp>
 		void initOpcodes();
 	public:

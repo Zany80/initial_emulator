@@ -30,6 +30,9 @@ Z80::Z80(Z80Memory * ram,DeviceController * io){
 	initOpcodes();
 	reset();
 	halted=true;
+	conditions={
+		"NZ","Z","NC","C","PO","PE","P","M"
+	};
 }
 
 void Z80::initOpcodes(){
@@ -87,7 +90,7 @@ void Z80::executeOneInstruction(){
 	else{
 		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
 		#ifdef SUPERDEBUGMODE
-		cerr<<"["<<PC.word<<"] Executing opcode 0x"<<hex(opcode_value);
+		cerr<<"["<<PC.word-1<<"] Executing opcode 0x"<<hex(opcode_value);
 		#endif
 		(*this.*opcodes[opcode_value])(opcode_value);
 	}

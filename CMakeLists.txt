@@ -13,12 +13,15 @@ endif()
 if(NOT DEFINED SFML_STATIC_LIBRARIES)
 	set(SFML_STATIC_LIBRARIES FALSE CACHE BOOL "Use static SFML libs" FORCE)
 	set(SFML_ROOT ${CMAKE_SOURCE_DIR}/libs/)
+	set(TGUI_ROOT ${SFML_ROOT})
 endif()
-
-set(TGUI_ROOT ${SFML_ROOT})
 
 if(NOT ZENITH80_SUPERDEBUGMODE)
 	set(ZENITH80_SUPERDEBUGMODE FALSE CACHE BOOL "Super debug mode (activates verbose debug logging to standard error)" FORCE)
+endif()
+
+if(NOT ZENITH80_DEBUGGER)
+	set(ZENITH80_DEBUGGER FALSE CACHE BOOL "Whether the debugger should be built" FORCE)
 endif()
 
 project(ZENITH80 VERSION 0.1.0.0 LANGUAGES C CXX)
@@ -33,10 +36,6 @@ configure_file(
   )
 include_directories("${ZENITH80_BINARY_DIR}" "${ZENITH80_SOURCE_DIR}/include")
 
-set(EXECUTABLE_NAME zenith80)
-add_subdirectory(src)
-add_executable(${EXECUTABLE_NAME} ${SOURCES})
-
 find_package(SFML 2 REQUIRED graphics window system )
 if(SFML_NOTFOUND)
 	message(FATAL_ERROR "SFML not found!")
@@ -47,10 +46,16 @@ if(TGUI_NOTFOUND)
 	message(FATAL_ERROR "TFUI not found!")
 endif()
 
-include_directories(${SFML_INCLUDE_DIR} ${TGUI_INCLUDE_DIR})
-target_link_libraries(${EXECUTABLE_NAME} ${TGUI_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+add_subdirectory(src)
+add_executable(zenith80 ${SOURCES})
 
-install(TARGETS ${EXECUTABLE_NAME} DESTINATION bin)
+include_directories(${SFML_INCLUDE_DIR} ${TGUI_INCLUDE_DIR})
+target_link_libraries(zenith80 ${TGUI_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+
+add_executable(zenith80_debugger ${DEBUGGER_SOURCES})
+target_link_libraries(zenith80_debugger ${TGUI_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+
+install(TARGETS zenith80 zenith80_debugger DESTINATION bin)
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")

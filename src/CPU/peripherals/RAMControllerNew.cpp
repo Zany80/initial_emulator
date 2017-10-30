@@ -25,16 +25,18 @@ RAMController::RAMController(const char * name){
 			char *contents=new char[size];
 			f.read(contents,size);
 			f.close();
-			cout<<"Searching image for Zenith80 ROM header..."<<endl;
+			cout<<"Searching image for Zenith80 ROM header...\n";
 			int start=-1;
 			for(int i=0;i<size;i++){
 				if(strncmp("ZENITH",contents+i,6)==0){
-					cout<<"ROM found! Loading..."<<endl;
 					start=i;
 					break;
 				}
 			}
 			if(start>-1){
+				metadata_t* metadata=(metadata_t*)(contents+start);
+				cout<<"ROM found! Title: \"";
+				cout<<(const char*)(contents+start+metadata->title)<<"\". Loading...\n";
 				int length=(int)size-(int)start;
 				memory=new uint8_t[0x400000];
 				for(int i=0;i<length;i++){
@@ -89,7 +91,7 @@ RAMController::~RAMController(){
 
 void RAMController::parseMetadata(){
 	metadata_t *metadata=(metadata_t*)getBankFromAddress(0x0000);
-	Main::instance->setTitle((const char*)(getBankFromAddress(metadata->title)+(metadata->title%0x4000)));
+	Main::instance->setTitle((string)"["+(const char*)(getBankFromAddress(metadata->title)+(metadata->title%0x4000))+"] - Zenith80");
 	Main::instance->cpu->start_address=metadata->start_address;
 }
 

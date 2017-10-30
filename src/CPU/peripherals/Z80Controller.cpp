@@ -35,11 +35,11 @@ void Z80Controller(uint8_t value){
 			break;
 		case 6:
 			{
-				////Upload sprite to GPU. HL contains address of sprite, B contains size, C contains index
-				word BC=Main::instance->cpu->getBC();
+				////Upload sprite to GPU. HL contains address of sprite, DE contains index
+				word DE=Main::instance->cpu->getDE();
 				uint16_t virt_address=Main::instance->cpu->getHL().word;
 				uint8_t *physical_address=Main::instance->cpu->ram->getBankFromAddress(virt_address)+(virt_address%0x4000);
-				Main::instance->gpu->uploadSprite(BC.B.l,physical_address,(BC.B.h&0xF0)>>4,BC.B.h&0x0F);
+				Main::instance->gpu->uploadSprite(DE.word,physical_address);
 			}
 			break;
 		case 7:

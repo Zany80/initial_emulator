@@ -14,7 +14,8 @@ GR80::GR80(tgui::Canvas::Ptr canvas,Z80* cpu){
 		{255,255,255},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},
 		{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
 	};
-	vram=new uint8_t[0x8000];
+	//vram structure: sprites follow one after another. Each one is 8x8, which at 2 pixels per byte takes 32 bytes. As there are 16KB of VRAM, there can be up to 512 sprites.
+	vram=new uint8_t[0x4000];
 	canvas_y=0;
 }
 
@@ -44,18 +45,14 @@ void GR80::clearText(){
 	lastMsg.setString("");
 }
 
-void GR80::uploadSprite(uint8_t index,uint8_t * sprite,uint8_t width,uint8_t height){
-	if(
-		(width!=8 && width != 16 && width != 32 && width != 64)
-		|| (height!=8 && height != 16 && height != 32 && height != 64)
-	){
-		cerr<<"[GPU] Fatal Error! Width and height must be a power of 2 between 8 and 64!"<<endl;
-		Main::instance->shutdown();
+void GR80::uploadSprite(uint16_t index,uint8_t * sprite){
+	uint8_t *sprite_address=vram+(index*32);
+	for(int i=0;i<32;i++){
+		*(sprite_address+i)=*(sprite+i);
 	}
-	
 }
 
-void GR80::drawSprite(uint8_t index,float x,float y,uint8_t transparent_color){
+void GR80::drawSprite(uint16_t index,float x,float y,uint8_t transparent_color){
 	
 }
 

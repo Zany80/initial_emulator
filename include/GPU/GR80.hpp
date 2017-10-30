@@ -13,8 +13,8 @@ class GR80{
 public:
 	GR80(tgui::Canvas::Ptr canvas,Z80 *cpu);
 	~GR80();
-	void uploadSprite(uint8_t index,uint8_t * sprite,uint8_t width,uint8_t height);
-	void drawSprite(uint8_t index,float x,float y,uint8_t transparent_color=0);
+	void uploadSprite(uint16_t index,uint8_t * sprite);
+	void drawSprite(uint16_t index,float x,float y,uint8_t transparent_color=0);
 	////void execute();
 	void drawText(string text,float x,float y,float size,uint8_t color);
 	void appendText(string s);

@@ -28,7 +28,6 @@ Z80::Z80(Z80Memory * ram,DeviceController * io){
 	r=vector<char>{'B','C','D','E','H','L',0,'A'};
 	dd=vector<string>{"BC","DE","HL","SP"};
 	initOpcodes();
-	reset();
 	halted=true;
 	conditions={
 		"NZ","Z","NC","C","PO","PE","P","M"
@@ -68,7 +67,7 @@ void Z80::reset(){
 	((RAMController*)ram)->parseMetadata();
 	AF.word=AF2.word=BC.word=BC2.word=DE.word=DE2.word=HL.word=HL2.word=IX.word=IY.word=SP.word=0;
 	PC.word=start_address;
-	cout<<"[CPU] Reset. Start address: "<<PC.word<<endl;
+	cout<<"[CPU] Reset."<<endl;
 	R=I=0;
 	IFF1=IFF2=0;
 	tstates=0;
@@ -88,10 +87,7 @@ void Z80::executeXInstructions(int64_t x){
 
 string hex(uint8_t a){
 	static char hex[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-	string h="";
-	h+=hex[(a&0xF0)>>4];
-	h+=hex[a&0x0F];
-	return h;
+	return (string)""+hex[(a&0xF0)>>4]+hex[a&0x0F];
 }
 
 void Z80::executeOneInstruction(){

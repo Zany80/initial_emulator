@@ -13,6 +13,7 @@ using std::vector;
 ZENITH_HEADER
 
 typedef struct{
+	char header[6];
 	const uint16_t title;
 	const uint16_t start_address;
 } __attribute__((packed)) metadata_t;
@@ -20,6 +21,7 @@ typedef struct{
 class RAMController : public Z80Memory{
 	public:
 		RAMController(const char * name);
+		~RAMController();
 		uint8_t getOpcode(uint16_t address) override;
 		uint8_t getByte(uint16_t address) override;
 		void setByte(uint16_t address,uint8_t value) override;

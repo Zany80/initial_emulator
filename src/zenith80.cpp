@@ -108,6 +108,10 @@ Main::Main(int argc,char ** argv){
 			cout<<"CP/M BDOS syscall emulation activated. Loading program into address 0x100."<<endl;
 			cout<<"Make sure that you have \".fill 0x100-$\" at the top of the .asm file"<<endl;
 		}
+		else if(arg=="--format=png"){
+			cout<<"Decrypting PNG..."<<endl;
+			format=PNG;
+		}
 		else{
 			cerr<<"Unrecognized option \""<<arg<<"\", ignoring..."<<endl;
 		}

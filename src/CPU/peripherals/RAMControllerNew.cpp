@@ -5,6 +5,8 @@
 #include <iostream>
 using namespace std;
 
+#include <cstring>
+
 #include <main.hpp>
 #include <program.hpp>
 
@@ -17,22 +19,55 @@ RAMController::RAMController(const char * name){
 	}
 	ifstream f(name,ios::binary|ios::ate);
 	if(f.is_open()){
-		memory=new uint8_t[0x400000];
 		streampos size=f.tellg();
-		if(size>0x3FC000)
-			size=0x3FC000;
 		f.seekg(0);
-		f.read((char*)memory,size);
-		ifstream pmem(this->name+".pmem",ios::binary|ios::ate);
-		if(pmem.is_open()){
-			streampos size=pmem.tellg();
-			if(size>0x4000)
-				size=0x4000;
-			pmem.seekg(0);
-			pmem.read((char*)memory+0x3FC000,size);
-			pmem.close();
+		if(Main::instance->format==PNG){
+			char *contents=new char[size];
+			f.read(contents,size);
+			f.close();
+			cout<<"Searching image for Zenith80 ROM header..."<<endl;
+			int start=-1;
+			for(int i=0;i<size;i++){
+				if(strncmp("ZENITH",contents+i,6)==0){
+					cout<<"ROM found! Loading..."<<endl;
+					start=i;
+					break;
+				}
+			}
+			if(start>-1){
+				int length=(int)size-(int)start;
+				memory=new uint8_t[0x400000];
+				for(int i=0;i<length;i++){
+					memory[i]=contents[start+i];
+				}
+			}
+			else{
+				cout<<"Unable to load ROM! Falling back to embedded program.\n";
+				#ifdef PREBUILT_ASM_PROG
+				PREBUILT_ASM_PROG
+				#else
+				#warning PREBUILT_ASM_PROG not defined!
+				memory=new uint8_t[0x400000]{0x06,0x02,0x00,0x76,0x18,0xFD,'H','e','l','l','o',' ','W','o','r','l','d','!',0x00};
+				#endif
+			}
+			delete[] contents;
 		}
-		f.close();
+		else{
+			memory=new uint8_t[0x400000];
+			if(size>0x3FC000)
+				size=0x3FC000;
+			f.read((char*)memory,size);
+			ifstream pmem(this->name+".pmem",ios::binary|ios::ate);
+			if(pmem.is_open()){
+				streampos size=pmem.tellg();
+				if(size>0x4000)
+					size=0x4000;
+				pmem.seekg(0);
+				pmem.read((char*)memory+0x3FC000,size);
+				pmem.close();
+			}
+			f.close();
+		}
 	}
 	else{
 		cerr<<"Failed to load file!"<<endl;
@@ -46,6 +81,10 @@ RAMController::RAMController(const char * name){
 		memory=new uint8_t[0x400000]{0x06,0x02,0x00,0x76,0x18,0xFD,'H','e','l','l','o',' ','W','o','r','l','d','!',0x00};
 		#endif
 	}
+}
+
+RAMController::~RAMController(){
+	delete[] memory;
 }
 
 void RAMController::parseMetadata(){

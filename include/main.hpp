@@ -31,6 +31,10 @@ typedef const char * cstring;
 
 ZENITH_HEADER
 
+typedef enum {
+	PNG,binary
+}ROM_format;
+
 class Main{
 	public:
 		Main(int argc,char ** argv);
@@ -42,6 +46,7 @@ class Main{
 		Z80 * cpu;
 		GR80 * gpu;
 		bool cpm_emu;
+		ROM_format format;
 		void putchar(char c);
 		void putint(int c);
 		void putmsg(string s);

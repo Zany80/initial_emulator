@@ -85,11 +85,6 @@ void Z80::executeXInstructions(int64_t x){
 	}
 }
 
-string hex(uint8_t a){
-	static char hex[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-	return (string)""+hex[(a&0xF0)>>4]+hex[a&0x0F];
-}
-
 void Z80::executeOneInstruction(){
 	uint8_t _R = R;
 	R++;

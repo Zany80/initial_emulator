@@ -69,6 +69,8 @@ class Main{
 		
 };
 
+string hex(uint8_t a);
+
 ZENITH_FOOTER
 
 #endif

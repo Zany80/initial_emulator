@@ -44,11 +44,12 @@ void Z80Controller(uint8_t value){
 			break;
 		case 7:
 			////Draw a sprite.
-			////Sprite index in H, transparent color in L, position in BC
+			////Sprite index in HL, X position in BC, Y position in DE. bits 10-15 are ignored, only 0-9 are used.
 			{
 				word BC=Main::instance->cpu->getBC();
+				word DE=Main::instance->cpu->getDE();
 				word HL=Main::instance->cpu->getHL();
-				Main::instance->gpu->drawSprite(HL.B.h,BC.B.h,BC.B.l,HL.B.l);
+				Main::instance->gpu->drawSprite(HL.word,BC.word,DE.word);
 			}
 			break;
 	}

@@ -64,7 +64,7 @@ Main::Main(int argc,char ** argv){
 	Main::instance=this;
 	clock_speed=4;
 	unit=MHz;
-	window=new RenderWindow(VideoMode(512,512),"Zenith80");
+	window=new RenderWindow(VideoMode(800,500),"Zenith80");
 	window->setIcon(80,80,icon);
 	window->setVerticalSyncEnabled(true);
 	gui=new Gui(*window);
@@ -76,7 +76,7 @@ Main::Main(int argc,char ** argv){
 	////gui->add(termOut);
 	canvas=Canvas::create();
 	canvas->setPosition(0,0);
-	canvas->setSize(512,512);
+	canvas->setSize(800,600);
 	gui->add(canvas);
 	background=Color(3,225,197);
 	string name="zenith.bin";
@@ -250,6 +250,11 @@ void Main::shutdown(){
 		uint64_t speed = ((cpu->getTStates())/accuracy_clock.getElapsedTime().asSeconds());
 		cout<<"Speed: "<<((float)speed/unit)<<s<<endl;
 	}
+}
+
+string hex(uint8_t a){
+	static char hex[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	return (string)""+hex[(a&0xF0)>>4]+hex[a&0x0F];
 }
 
 void Main::setTitle(string s){

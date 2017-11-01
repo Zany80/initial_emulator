@@ -70,6 +70,7 @@ class Main{
 };
 
 string hex(uint8_t a);
+string hex(int a);
 
 ZENITH_FOOTER
 

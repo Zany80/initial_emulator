@@ -95,7 +95,7 @@ void Z80::executeOneInstruction(){
 	else{
 		uint8_t opcode_value=this->ram->getOpcode(PC.word++);
 		#ifdef SUPERDEBUGMODE
-		cerr<<"["<<PC.word-1<<"] Executing opcode 0x"<<hex(opcode_value);
+		cerr<<"["<<hex(PC.word-1)<<"] Executing opcode 0x"<<hex(opcode_value);
 		#endif
 		(*this.*opcodes[opcode_value])(opcode_value);
 	}

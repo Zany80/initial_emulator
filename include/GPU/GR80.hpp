@@ -13,6 +13,7 @@ public:
 	GR80(tgui::Canvas::Ptr canvas,Z80 *cpu);
 	~GR80();
 	void uploadSprite(uint16_t index,uint8_t * sprite,uint8_t transparent_color=0);
+	void uploadGIMP(uint16_t index,uint8_t * sprite);
 	void drawSprite(uint16_t index,uint16_t x,uint16_t y);
 	////void execute();
 	void drawText(string text,float x,float y,float size,uint8_t color);

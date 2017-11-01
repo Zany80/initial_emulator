@@ -63,7 +63,7 @@ void GR80::clearText(){
 void GR80::uploadSprite(uint16_t index,uint8_t * sprite,uint8_t transparent_color){
 	std::cout<<"[GPU] Sprite uploaded. Index: "<<index<<", sprite contents: \"";
 	for(int i=0;i<32;i++){
-		std::cout<<hex(*(sprite+i));
+		std::cout<<hex((int)*(sprite+i));
 	}
 	std::cout<<"\"...\n";
 	//sprite structure: 8 pixel rows (4 bytes) follow one after another in 8 rows, giving an 8x8 sprite and taking 32 bytes in the ROM.
@@ -84,12 +84,22 @@ void GR80::uploadSprite(uint16_t index,uint8_t * sprite,uint8_t transparent_colo
 	texture_map[index%512].update(image);
 }
 
+void GR80::uploadGIMP(uint16_t index,uint8_t * sprite){
+	std::cout<<"[GPU] Sprite uploaded. Index: "<<index<<", contents: \"";
+	for(int i=0;i<8 * 8 * 4 + 1;i++){
+		std::cout<<hex(sprite[i]);
+	}
+	std::cout<<"\"...\n";
+	Main::instance->cpu->add_tstates(4000000);
+	texture_map[index].update(sprite);
+}
+
 void GR80::drawSprite(uint16_t index,uint16_t x,uint16_t y){
 	std::cout<<"[GPU] Drawing sprite.. Index: "<<index<<", x: "<<x<<", y: "<<y<<"...\n";
 	index=index%512;
 	sf::Sprite * sprite=&sprite_map[index];
-	sprite->setPosition(x*800/256,y*500/128);
-	sprite->setScale(800/256,500/128);
+	sprite->setPosition(x*(float)800/(float)256,y*(float)500/(float)128);
+	sprite->setScale(800/256,(float)500/(float)128);
 	canvas->draw(*sprite);
 }
 

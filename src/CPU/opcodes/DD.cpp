@@ -21,7 +21,7 @@ opcodesDD=new opcode[256]{
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldR_IXd_,&Z80::nop,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldR_IXd_,&Z80::nop,
 	//0x70
-	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,
+	&Z80::ld_IXd_R,&Z80::ld_IXd_R,&Z80::ld_IXd_R,&Z80::ld_IXd_R,&Z80::ld_IXd_R,&Z80::ld_IXd_R,&Z80::nop,&Z80::ld_IXd_R,
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::ldR_IXd_,&Z80::nop,
 	//0x80
 	&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::nop,&Z80::addA_IXd_,&Z80::nop,

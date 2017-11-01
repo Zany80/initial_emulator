@@ -252,6 +252,11 @@ void Main::shutdown(){
 	}
 }
 
+string hex(int a){
+	static char hex[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	return (string)""+hex[(a&0xF000)>>12]+hex[(a&0xF00)>>8]+hex[(a&0xF0)>>4]+hex[a&0x0F];
+}
+
 string hex(uint8_t a){
 	static char hex[16]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 	return (string)""+hex[(a&0xF0)>>4]+hex[a&0x0F];

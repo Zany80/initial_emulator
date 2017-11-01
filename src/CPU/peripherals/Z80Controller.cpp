@@ -52,6 +52,16 @@ void Z80Controller(uint8_t value){
 				Main::instance->gpu->drawSprite(HL.word,BC.word,DE.word);
 			}
 			break;
+		case 8:
+			{
+				////Upload sprite in GIMP image format to GPU. HL contains address of image, DE contains index, BC contains size
+				word DE=Main::instance->cpu->getDE();
+				word BC=Main::instance->cpu->getBC();
+				uint16_t virt_address=Main::instance->cpu->getHL().word;
+				uint8_t *physical_address=Main::instance->cpu->ram->getBankFromAddress(virt_address)+(virt_address%0x4000);
+				Main::instance->gpu->uploadGIMP(DE.word,physical_address);
+			}
+			break;
 	}
 }
 

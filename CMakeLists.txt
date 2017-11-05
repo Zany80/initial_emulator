@@ -52,10 +52,13 @@ add_executable(zenith80 ${SOURCES})
 include_directories(${SFML_INCLUDE_DIR} ${TGUI_INCLUDE_DIR})
 target_link_libraries(zenith80 ${TGUI_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 
-add_executable(zenith80_debugger ${DEBUGGER_SOURCES})
-target_link_libraries(zenith80_debugger ${TGUI_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
-
-install(TARGETS zenith80 zenith80_debugger DESTINATION bin)
+if(ZENITH80_DEBUGGER)
+	add_executable(zenith80_debugger ${DEBUGGER_SOURCES})
+	target_link_libraries(zenith80_debugger ${TGUI_LIBRARY} ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+	install(TARGETS zenith80 zenith80_debugger DESTINATION bin)
+else()
+	install(TARGETS zenith80 DESTINATION bin)
+endif()
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")

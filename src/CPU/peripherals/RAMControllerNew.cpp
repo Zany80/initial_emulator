@@ -17,6 +17,13 @@ RAMController::RAMController(const char * name){
 	for(int i=0;i<4;i++){
 		banks[i]=i;
 	}
+	if (Main::instance->phys_cart) {
+		string s="dd if=";
+		s+=name;
+		s+=" of=.zenith.png count=8000";
+		system(s.c_str());
+		name=".zenith.png";
+	}
 	ifstream f(name,ios::binary|ios::ate);
 	if(f.is_open()){
 		streampos size=f.tellg();
@@ -41,6 +48,15 @@ RAMController::RAMController(const char * name){
 				memory=new uint8_t[0x400000];
 				for(int i=0;i<length;i++){
 					memory[i]=contents[start+i];
+				}
+				ifstream pmem(this->name+".pmem",ios::binary|ios::ate);
+				if(pmem.is_open()){
+					streampos size=pmem.tellg();
+					if(size>0x4000)
+						size=0x4000;
+					pmem.seekg(0);
+					pmem.read((char*)memory+0x3FC000,size);
+					pmem.close();
 				}
 			}
 			else{
@@ -169,11 +185,12 @@ void RAMController::savePMem(){
 
 void RAMController::swapBanks(uint8_t index,uint8_t to){
 	if(index<4){
+		cout<<"[RAM] Swapping bank "<<(int)index<<"to "<<(int)to<<"...\n";
 		banks[index]=to;
-		Main::instance->cpu->AF.B.h=0;
+		Main::instance->cpu->HL.word=0;
 	}
 	else{
-		Main::instance->cpu->AF.B.h=1;
+		Main::instance->cpu->HL.word=1;
 	}
 }
 

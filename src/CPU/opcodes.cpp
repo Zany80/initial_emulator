@@ -1284,9 +1284,14 @@ void Z80::bitB_IYd_(uint8_t opcode){
 void Z80::setB_HL_(uint8_t opcode){
 	SUPERDEBUG(" (`set `"<<((opcode&0x38)>>3)<<", (HL)`)."<<endl);
 	uint8_t _HL_=ram->getByte(HL.word);
-	_HL_ |= (1<<((opcode&0x30)>>3));
+	_HL_ |= (1<<((opcode&0x38)>>3));
 	ram->setByte(HL.word,_HL_);
 	tstates++;
+}
+
+void Z80::setBR(uint8_t opcode){
+	SUPERDEBUG(" (`set `"<<((opcode&0x38)>>3)<<", "<<r[(opcode&0x07)]<<"`).\n");
+	*(regs[opcode&0x07] )|= (1<<((opcode&0x38)>>3));
 }
 
 //jump group

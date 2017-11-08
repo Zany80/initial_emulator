@@ -6,6 +6,7 @@
 using namespace std;
 
 #include <cstring>
+#include <cstdlib>
 
 #include <main.hpp>
 #include <program.hpp>
@@ -18,6 +19,7 @@ RAMController::RAMController(const char * name){
 		banks[i]=i;
 	}
 	if (Main::instance->phys_cart) {
+		system("rm .zenith.png -f");
 		string s="dd if=";
 		s+=name;
 		s+=" of=.zenith.png count=8000";
@@ -40,10 +42,40 @@ RAMController::RAMController(const char * name){
 					break;
 				}
 			}
-			if(start>-1){
+			if (start>-1) {
 				metadata_t* metadata=(metadata_t*)(contents+start);
 				cout<<"ROM found! Title: \"";
 				cout<<(const char*)(contents+start+metadata->title)<<"\". Loading...\n";
+				Main *m = Main::instance;
+				m->canvas->clear();
+				string title_msg="Cartridge found! Title: ";
+				title_msg+=(const char*)(contents+start+metadata->title);
+				sf::Text title(title_msg,*m->default_font,18);
+				title.setPosition(400-title.getGlobalBounds().width/2,150-title.getGlobalBounds().height/2);
+				sf::Text should_load("Load this cart? ('Y' to load, 'N' to shut down)",*m->default_font,12);
+				should_load.setPosition(400-should_load.getGlobalBounds().width/2,450-should_load.getGlobalBounds().height/2);
+				m->canvas->draw(title);
+				m->canvas->draw(should_load);
+				while (true) {
+					m->update();
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
+						sf::Event e;
+						while(m->window->pollEvent(e)){
+							/* Make sure that "y" isn't added to the key buffer */
+						}
+						break;
+					}
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::N)) {
+						m->canvas->clear();
+						sf::Text bye("Okay then. Shutting down...",*m->default_font,18);
+						bye.setPosition(400-bye.getGlobalBounds().width/2,150-bye.getGlobalBounds().height/2);
+						m->canvas->draw(bye);
+						m->update();
+						sf::sleep(sf::seconds(3));
+						exit(0);
+					}
+				}
+				Main::instance->resetKeyBuffer();
 				int length=(int)size-(int)start;
 				memory=new uint8_t[0x400000];
 				for(int i=0;i<length;i++){

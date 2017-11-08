@@ -61,10 +61,11 @@ int Main::main(int argc,char **argv){
 }
 
 Main::Main(int argc,char ** argv){
+	format=binary;
 	Main::instance=this;
 	clock_speed=4;
 	unit=MHz;
-	window=new RenderWindow(VideoMode(800,500),"Zenith80");
+	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setIcon(80,80,icon);
 	window->setVerticalSyncEnabled(true);
 	gui=new Gui(*window);
@@ -81,7 +82,10 @@ Main::Main(int argc,char ** argv){
 	background=Color(3,225,197);
 	string name="zenith.bin";
 	bool name_changed=false;
-	cpm_emu=false;
+	cpm_emu=phys_cart=false;
+	default_font=new Font;
+	default_font->loadFromMemory(&Pacifico_Regular_ttf,Pacifico_Regular_ttf_len);
+	bool waiting=false;
 	for(int i=1;i<argc;i++){
 		string arg=argv[i];
 		if(arg=="--file"){
@@ -95,6 +99,13 @@ Main::Main(int argc,char ** argv){
 			name=argv[++i];
 			cout<<"--file specified, loading \""<<name<<"\"..."<<endl;
 			name_changed=true;
+		}
+		else if (arg == "--real") {
+			phys_cart = true;
+			std::cout << "Loading as physical cart...\n";
+		}
+		else if (arg == "--wait") {
+			waiting=true;
 		}
 		else if(arg=="--clock-speed"){
 			if(i+1==argc){
@@ -119,11 +130,18 @@ Main::Main(int argc,char ** argv){
 	if(!name_changed){
 		cout<<"No --file argument received, defaulting to \"zenith.bin\"..."<<endl;
 	}
+	if (waiting) {
+		canvas->clear();
+		sf::Text insert("Insert cartridge...",*default_font,18);
+		insert.setPosition(400-insert.getGlobalBounds().width/2,300-insert.getGlobalBounds().height/2);
+		canvas->draw(insert);
+		while(!exists(name.c_str())){
+			update();
+		}
+	}
 	cpu=new Z80(new RAMController(name.c_str()),new DeviceController());
 	gpu=new GR80(canvas,cpu);
 	putmsg(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));
-	default_font=new Font;
-	default_font->loadFromMemory(&Pacifico_Regular_ttf,Pacifico_Regular_ttf_len);
 	termOut->addLine("");
 	termOut->addLine("");
 	cpu->reset();
@@ -136,13 +154,17 @@ Main::~Main(){
 	delete default_font;
 }
 
+void Main::update(){
+	this->processEvents();
+	window->clear(this->background);
+	gui->draw();
+	window->display();
+}
+
 int Main::run(){
 	accuracy_clock.restart();
 	while(window->isOpen()){
-		this->processEvents();
-		window->clear(this->background);
-		gui->draw();
-		window->display();
+		update();
 		cpu->executeXInstructions(this->clock_speed*this->unit/60);
 		////gpu->execute();
 	}
@@ -264,6 +286,11 @@ string hex(uint8_t a){
 
 void Main::setTitle(string s){
 	window->setTitle(s);
+}
+
+bool exists(const char *name){
+	ifstream f(name);
+	return f.good();
 }
 
 ZENITH_FOOTER

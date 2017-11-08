@@ -36,6 +36,7 @@ typedef enum {
 }ROM_format;
 
 class Main{
+	friend RAMController;
 	public:
 		Main(int argc,char ** argv);
 		~Main();
@@ -46,6 +47,7 @@ class Main{
 		Z80 * cpu;
 		GR80 * gpu;
 		bool cpm_emu;
+		bool phys_cart;
 		ROM_format format;
 		void putchar(char c);
 		void putint(int c);
@@ -55,6 +57,7 @@ class Main{
 		void resetClock();
 		Font * default_font;
 		void setTitle(string s);
+		void update();
 	private:
 		Clock accuracy_clock;
 		vector<uint8_t> key_buffer;
@@ -66,9 +69,9 @@ class Main{
 		Canvas::Ptr canvas;
 		Color background;
 		void processEvents();
-		
 };
 
+bool exists(const char *file_name);
 string hex(uint8_t a);
 string hex(int a);
 

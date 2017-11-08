@@ -48,12 +48,24 @@ RAMController::RAMController(const char * name){
 				cout<<(const char*)(contents+start+metadata->title)<<"\". Loading...\n";
 				Main *m = Main::instance;
 				m->canvas->clear();
-				string title_msg="Cartridge found! Title: ";
-				title_msg+=(const char*)(contents+start+metadata->title);
-				sf::Text title(title_msg,*m->default_font,18);
+				sf::Text title((const char*)(contents+start+metadata->title),*m->default_font,18);
 				title.setPosition(400-title.getGlobalBounds().width/2,150-title.getGlobalBounds().height/2);
-				sf::Text should_load("Load this cart? ('Y' to load, 'N' to shut down)",*m->default_font,12);
-				should_load.setPosition(400-should_load.getGlobalBounds().width/2,450-should_load.getGlobalBounds().height/2);
+				sf::Text should_load("Load this cart? ('Y' to load, 'N' to shut down)",*m->default_font,14);
+				should_load.setPosition(400-should_load.getGlobalBounds().width/2,300-should_load.getGlobalBounds().height/2);
+				sf::Texture icon;
+				sf::Sprite icon_sprite;
+				if (m->format==PNG) {
+					if (icon.loadFromMemory(contents,start)) {
+						icon_sprite.setTexture(icon);
+						icon_sprite.setPosition(400-icon_sprite.getGlobalBounds().width/2,title.getPosition().y+title.getGlobalBounds().height);
+						m->canvas->draw(icon_sprite);
+					}
+				}
+				else {
+					sf::Text no_image("(no icon provided)",*m->default_font,14);
+					no_image.setPosition(400-no_image.getGlobalBounds().width/2,title.getPosition().y+title.getGlobalBounds().height);
+					m->canvas->draw(no_image);
+				}
 				m->canvas->draw(title);
 				m->canvas->draw(should_load);
 				while (true) {

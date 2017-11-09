@@ -51,12 +51,28 @@ RAMController::RAMController(const char * name){
 				sf::Text title((const char*)(contents+start+metadata->title),*m->default_font,18);
 				title.setPosition(400-title.getGlobalBounds().width/2,150-title.getGlobalBounds().height/2);
 				sf::Text should_load("Load this cart? ('Y' to load, 'N' to shut down)",*m->default_font,14);
-				should_load.setPosition(400-should_load.getGlobalBounds().width/2,300-should_load.getGlobalBounds().height/2);
+				should_load.setPosition(400-should_load.getGlobalBounds().width/2,330-should_load.getGlobalBounds().height/2);
 				sf::Texture icon;
 				sf::Sprite icon_sprite;
 				if (m->format==PNG) {
 					if (icon.loadFromMemory(contents,start)) {
 						icon_sprite.setTexture(icon);
+						while (icon_sprite.getGlobalBounds().width < 128) {
+							sf::Vector2f s = icon_sprite.getScale();
+							icon_sprite.setScale(s.x + 0.25, s.y);
+						}
+						while (icon_sprite.getGlobalBounds().height < 128) {
+							sf::Vector2f s = icon_sprite.getScale();
+							icon_sprite.setScale(s.x, s.y + 0.25);
+						}
+						while (icon_sprite.getGlobalBounds().width > 160) {
+							sf::Vector2f s = icon_sprite.getScale();
+							icon_sprite.setScale(s.x - 0.1, s.y);
+						}
+						while (icon_sprite.getGlobalBounds().height > 160) {
+							sf::Vector2f s = icon_sprite.getScale();
+							icon_sprite.setScale(s.x, s.y - 0.1);
+						}
 						icon_sprite.setPosition(400-icon_sprite.getGlobalBounds().width/2,title.getPosition().y+title.getGlobalBounds().height);
 						m->canvas->draw(icon_sprite);
 					}

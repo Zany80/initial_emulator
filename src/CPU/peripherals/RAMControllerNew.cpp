@@ -119,6 +119,9 @@ RAMController::RAMController(const char * name){
 				for(int i=0;i<length;i++){
 					memory[i]=contents[start+i];
 				}
+				if (Main::instance->phys_cart) {
+					this->name = (const char*)(contents+start+metadata->title);
+				}
 				ifstream pmem(this->name+".pmem",ios::binary|ios::ate);
 				if(pmem.is_open()){
 					streampos size=pmem.tellg();

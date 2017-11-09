@@ -67,7 +67,6 @@ Main::Main(int argc,char ** argv){
 	unit=MHz;
 	window=new RenderWindow(VideoMode(800,600),"Zenith80");
 	window->setIcon(80,80,icon);
-	window->setVerticalSyncEnabled(true);
 	gui=new Gui(*window);
 	termOut=TermOut::create();
 	termOut->setPosition(0,540);
@@ -163,9 +162,10 @@ void Main::update(){
 
 int Main::run(){
 	accuracy_clock.restart();
+	precision_clock.restart();
 	while(window->isOpen()){
 		update();
-		cpu->executeXInstructions(this->clock_speed*this->unit/60);
+		cpu->executeXInstructions(this->clock_speed*this->unit*precision_clock.restart().asSeconds());
 		////gpu->execute();
 	}
 	return 0;

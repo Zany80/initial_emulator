@@ -18,17 +18,24 @@ RAMController::RAMController(const char * name){
 	for(int i=0;i<4;i++){
 		banks[i]=i;
 	}
+	ifstream f;
 	if (Main::instance->phys_cart) {
 		system("rm .zenith.png -f");
 		string s="dd if=";
 		s+=name;
 		s+=" of=.zenith.png count=8000";
 		system(s.c_str());
-		name=".zenith.png";
+		f = ifstream(".zenith.png",ios::binary | ios::ate);
 	}
-	ifstream f(name,ios::binary|ios::ate);
+	else {
+		f = ifstream(name,ios::binary | ios::ate);
+	}
 	if(f.is_open()){
 		streampos size=f.tellg();
+		if (size > 0x800000) {
+			// Make sure there's enough room for the cart, but not so much it can crash - image size has to be lower than 4MB
+			size = 0x800000;
+		}
 		f.seekg(0);
 		if(Main::instance->format==PNG){
 			char *contents=new char[size];
@@ -119,10 +126,18 @@ RAMController::RAMController(const char * name){
 				for(int i=0;i<length;i++){
 					memory[i]=contents[start+i];
 				}
+				ifstream pmem;
 				if (Main::instance->phys_cart) {
-					this->name = (const char*)(contents+start+metadata->title);
+					string command = "dd if=";
+					command += name;
+					command += " of=.zenith.pmem skip=8000 count=32";
+					system(command.c_str());
+					std::cout << "Executing `"<<command<<"`...\n";
+					pmem = ifstream(".zenith.pmem",ios::binary|ios::ate);
 				}
-				ifstream pmem(this->name+".pmem",ios::binary|ios::ate);
+				else {
+					pmem = ifstream(this->name+".pmem",ios::binary|ios::ate);
+				}
 				if(pmem.is_open()){
 					streampos size=pmem.tellg();
 					if(size>0x4000)
@@ -148,7 +163,18 @@ RAMController::RAMController(const char * name){
 			if(size>0x3FC000)
 				size=0x3FC000;
 			f.read((char*)memory,size);
-			ifstream pmem(this->name+".pmem",ios::binary|ios::ate);
+			ifstream pmem;
+			if (Main::instance->phys_cart) {
+				string command = "dd if=";
+				command += name;
+				command += " of=.zenith.pmem skip=8000 count=32";
+				system(command.c_str());
+				std::cout << "Executing `"<<command<<"`...\n";
+				pmem = ifstream(".zenith.pmem",ios::binary|ios::ate);
+			}
+			else {
+				pmem = ifstream(this->name+".pmem",ios::binary|ios::ate);
+			}
 			if(pmem.is_open()){
 				streampos size=pmem.tellg();
 				if(size>0x4000)
@@ -245,11 +271,24 @@ void RAMController::setWord(uint16_t address,uint16_t value){
 }
 
 void RAMController::savePMem(){
-	ofstream pmem_file(name+".pmem",ios::binary);
+	ofstream pmem_file;
+	if (Main::instance->phys_cart) {
+		pmem_file = ofstream(".zenith.pmem",ios::binary | ios::ate);
+	}
+	else {
+		pmem_file = ofstream(name+".pmem",ios::binary | ios::ate);
+	}
 	if(pmem_file.is_open()){
 		char *pmem=(char*)memory+(255*0x4000);
 		pmem_file.write(pmem,0x4000);
 		pmem_file.close();
+		if (Main::instance->phys_cart) {
+			string command = "dd if=.zenith.pmem of=";
+			command += name;
+			command += " seek=8000";
+			system(command.c_str());
+			std::remove(".zenith.pmem");
+		}
 	}
 	else{
 		cerr<<"[MMU] Couldn't save persistent memory!"<<endl;

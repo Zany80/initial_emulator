@@ -85,7 +85,17 @@ RAMController::RAMController(const char * name){
 				m->canvas->draw(title);
 				m->canvas->draw(should_load);
 				while (true) {
-					m->update();
+					m->window->clear(m->background);
+					m->gui->draw();
+					m->window->display();
+					sf::Event e;
+					while (m->window->pollEvent(e)) {
+						switch (e.type) {
+							case sf::Event::Closed:
+								exit(0);
+								return;
+						}
+					}
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) {
 						sf::Event e;
 						while(m->window->pollEvent(e)){

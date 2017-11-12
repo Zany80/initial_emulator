@@ -79,12 +79,12 @@ Main::Main(int argc,char ** argv){
 	canvas->setSize(800,600);
 	gui->add(canvas);
 	background=Color(3,225,197);
-	string name="zenith.bin";
+	name="zenith.bin";
 	bool name_changed=false;
 	cpm_emu=phys_cart=false;
 	default_font=new Font;
 	default_font->loadFromMemory(&Pacifico_Regular_ttf,Pacifico_Regular_ttf_len);
-	bool waiting=false;
+	waiting=false;
 	for(int i=1;i<argc;i++){
 		string arg=argv[i];
 		if(arg=="--file"){
@@ -93,7 +93,7 @@ Main::Main(int argc,char ** argv){
 				break;
 			}
 			if(name_changed){
-				cerr<<"Discarding previous --file argument \""<<name.c_str()<<"\".";
+				cerr<<"Discarding previous --file argument \""<<name<<"\".";
 			}
 			name=argv[++i];
 			cout<<"--file specified, loading \""<<name<<"\"..."<<endl;
@@ -129,15 +129,24 @@ Main::Main(int argc,char ** argv){
 	if(!name_changed){
 		cout<<"No --file argument received, defaulting to \"zenith.bin\"..."<<endl;
 	}
+	cpu=NULL;
+	initCPU();
+}
+
+void Main::initCPU(){
+	if (cpu) {
+		delete cpu;
+		cpu=0;
+	}
 	bool done=false;
 	RAMController *r=0;
 	DeviceController *d=0;
 	while (!done) {
 		try {
 			if(waiting) {
-				wait(name.c_str());
+				wait();
 			}
-			r=new RAMController(name.c_str());
+			r=new RAMController(name);
 			d=new DeviceController();
 			cpu=new Z80(r,d);
 			done=true;
@@ -160,12 +169,19 @@ Main::Main(int argc,char ** argv){
 	cpu->reset();
 }
 
-void Main::wait(const char *name){
+void Main::wait(){
 	canvas->clear();
 	sf::Text insert("Insert cartridge...",*default_font,18);
 	insert.setPosition(400-insert.getGlobalBounds().width/2,300-insert.getGlobalBounds().height/2);
 	canvas->draw(insert);
-	while(!exists(name)){
+	while (!exists(name)) {
+		sf::Event e;
+		while (window->pollEvent(e)) {
+			switch (e.type) {				
+				case sf::Event::Closed:
+					exit(0);
+			}
+		}
 		window->clear(this->background);
 		gui->draw();
 		window->display();
@@ -194,6 +210,9 @@ int Main::run(){
 		update();
 		cpu->executeXInstructions(this->clock_speed*this->unit*precision_clock.restart().asSeconds());
 		////gpu->execute();
+		if (!exists(name)) {
+			initCPU();
+		}
 	}
 	return 0;
 }

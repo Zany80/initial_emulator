@@ -59,9 +59,12 @@ class Main{
 		void setTitle(string s);
 		void update();
 	private:
+		const char *name;
 		Clock accuracy_clock;
 		Clock precision_clock;
-		void wait(const char *name);
+		void initCPU();
+		void wait();
+		bool waiting;
 		vector<uint8_t> key_buffer;
 		uint64_t unit;
 		uint64_t clock_speed;

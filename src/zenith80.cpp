@@ -138,7 +138,8 @@ Main::Main(int argc,char ** argv){
 				wait(name.c_str());
 			}
 			r=new RAMController(name.c_str());
-			cpu=new Z80(new RAMController(name.c_str()),new DeviceController());
+			d=new DeviceController();
+			cpu=new Z80(r,d);
 			done=true;
 		}
 		catch(int i) {
@@ -165,7 +166,8 @@ void Main::wait(const char *name){
 	insert.setPosition(400-insert.getGlobalBounds().width/2,300-insert.getGlobalBounds().height/2);
 	canvas->draw(insert);
 	while(!exists(name)){
-		update();
+		////update();
+		sf::sleep(sf::seconds(0.3));
 	}
 }
 

@@ -129,21 +129,44 @@ Main::Main(int argc,char ** argv){
 	if(!name_changed){
 		cout<<"No --file argument received, defaulting to \"zenith.bin\"..."<<endl;
 	}
-	if (waiting) {
-		canvas->clear();
-		sf::Text insert("Insert cartridge...",*default_font,18);
-		insert.setPosition(400-insert.getGlobalBounds().width/2,300-insert.getGlobalBounds().height/2);
-		canvas->draw(insert);
-		while(!exists(name.c_str())){
-			update();
+	bool done=false;
+	RAMController *r=0;
+	DeviceController *d=0;
+	while (!done) {
+		try {
+			if(waiting) {
+				wait(name.c_str());
+			}
+			r=new RAMController(name.c_str());
+			cpu=new Z80(new RAMController(name.c_str()),new DeviceController());
+			done=true;
+		}
+		catch(int i) {
+			if(r){
+				delete r;
+				r=0;
+			}
+			if(d){
+				delete d;
+				d=0;
+			}
 		}
 	}
-	cpu=new Z80(new RAMController(name.c_str()),new DeviceController());
 	gpu=new GR80(canvas,cpu);
 	putmsg(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));
 	termOut->addLine("");
 	termOut->addLine("");
 	cpu->reset();
+}
+
+void Main::wait(const char *name){
+	canvas->clear();
+	sf::Text insert("Insert cartridge...",*default_font,18);
+	insert.setPosition(400-insert.getGlobalBounds().width/2,300-insert.getGlobalBounds().height/2);
+	canvas->draw(insert);
+	while(!exists(name)){
+		update();
+	}
 }
 
 Main::~Main(){

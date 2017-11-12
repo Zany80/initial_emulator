@@ -119,6 +119,9 @@ RAMController::RAMController(const char * name){
 						sf::sleep(sf::seconds(3));
 						exit(0);
 					}
+					if(!exists(name)) {
+						throw 3;
+					}
 				}
 				Main::instance->resetKeyBuffer();
 				int length=(int)size-(int)start;

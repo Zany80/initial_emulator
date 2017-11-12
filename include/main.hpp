@@ -61,6 +61,7 @@ class Main{
 	private:
 		Clock accuracy_clock;
 		Clock precision_clock;
+		void wait(const char *name);
 		vector<uint8_t> key_buffer;
 		uint64_t unit;
 		uint64_t clock_speed;

@@ -166,7 +166,9 @@ void Main::wait(const char *name){
 	insert.setPosition(400-insert.getGlobalBounds().width/2,300-insert.getGlobalBounds().height/2);
 	canvas->draw(insert);
 	while(!exists(name)){
-		////update();
+		window->clear(this->background);
+		gui->draw();
+		window->display();
 		sf::sleep(sf::seconds(0.3));
 	}
 }

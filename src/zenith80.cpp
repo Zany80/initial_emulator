@@ -41,7 +41,7 @@ using std::string;
 #include <defines.hpp>
 
 #include <assets/icon.hpp>
-#include <assets/fonts/Pacifico.hpp>
+#include <assets/fonts/Serif.hpp>
 
 #include <CPU/peripherals/RAMController.hpp>
 #include <CPU/peripherals/DeviceController.hpp>
@@ -83,7 +83,7 @@ Main::Main(int argc,char ** argv){
 	bool name_changed=false;
 	cpm_emu=phys_cart=false;
 	default_font=new Font;
-	default_font->loadFromMemory(&Pacifico_Regular_ttf,Pacifico_Regular_ttf_len);
+	default_font->loadFromMemory(&Serif_ttf,Serif_ttf_len);
 	waiting=false;
 	for(int i=1;i<argc;i++){
 		string arg=argv[i];

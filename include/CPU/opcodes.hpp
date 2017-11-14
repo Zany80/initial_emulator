@@ -195,6 +195,7 @@ void callNN(uint8_t opcode);
 void callCCNN(uint8_t opcode);
 void ret(uint8_t opcode);
 void retCC(uint8_t opcode);
+void rstP(uint8_t opcode);
 //input and output group
 void inA_N_(uint8_t opcode);
 void out_N_A(uint8_t opcode);

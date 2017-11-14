@@ -20,3 +20,4 @@
 #endif
 
 #cmakedefine GIT_REVISION @GIT_REVISION@
+#cmakedefine UNIX @UNIX@

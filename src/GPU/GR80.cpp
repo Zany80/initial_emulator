@@ -52,8 +52,6 @@ void GR80::drawText(string text,float x,float y,float size, uint8_t color){
 	msg->getRenderer()->setTextColor(palette[color]);
 	msg->setTextSize(size);
 	gui->add(msg);
-	if(lastMsg)
-		gui->remove(lastMsg);
 	lastMsg = msg;
 	//const sf::Vector2u winSize = window->getSize();
 	//size = size * winSize.y;
@@ -74,8 +72,9 @@ void GR80::appendText(string s){
 }
 
 void GR80::clearText(){
-	if(lastMsg)
-		lastMsg->setText("");
+	gui->removeAllWidgets();
+	gui->add(canvas);
+	drawText("",0,0,8,1);
 	//lastMsg.setString("");
 }
 

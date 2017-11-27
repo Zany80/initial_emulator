@@ -65,19 +65,21 @@ Main::Main(int argc,char ** argv){
 	Main::instance=this;
 	clock_speed=4;
 	unit=MHz;
-	window=new RenderWindow(VideoMode(800,600),"Zenith80");
+	window=new RenderWindow(VideoMode(256,128),"Zenith80");
 	window->setIcon(80,80,icon);
 	gui=new Gui(*window);
 	termOut=TermOut::create();
-	termOut->setPosition(0,540);
-	termOut->setSize(800,200);
+	termOut->setPosition(0,0);
+	termOut->setSize("100%","100%");
+	termOut->getRenderer()->setBackgroundColor(sf::Color(0,0,0,0));
+	termOut->setTextColor(sf::Color(255,255,255,255));
 	termOut->setLinesStartFromTop(true);
 	termOut->setLineLimit(1000);
-	////gui->add(termOut);
 	canvas=Canvas::create();
 	canvas->setPosition(0,0);
-	canvas->setSize(800,600);
+	canvas->setSize("100%","100%");
 	gui->add(canvas);
+	//gui->add(termOut);
 	background=Color(3,225,197);
 	name="zenith.bin";
 	bool name_changed=false;
@@ -162,7 +164,7 @@ void Main::initCPU(){
 			}
 		}
 	}
-	gpu=new GR80(canvas,cpu);
+	gpu=new GR80(canvas,cpu,gui,window);
 	putmsg(((string)"Git revision: ")+STRINGIFY(GIT_REVISION));
 	termOut->addLine("");
 	termOut->addLine("");
@@ -200,19 +202,19 @@ void Main::update(){
 	this->processEvents();
 	window->clear(this->background);
 	gui->draw();
-	window->display();
 }
 
 int Main::run(){
 	accuracy_clock.restart();
 	precision_clock.restart();
 	while(window->isOpen()){
-		update();
-		cpu->executeXInstructions(this->clock_speed*this->unit*precision_clock.restart().asSeconds());
-		////gpu->execute();
 		if (!exists(name)) {
 			initCPU();
 		}
+		update();
+		cpu->executeXInstructions(this->clock_speed*this->unit*precision_clock.restart().asSeconds());
+		////gpu->execute();
+		window->display();
 	}
 	return 0;
 }
@@ -235,13 +237,18 @@ void Main::processEvents(){
 				}
 				break;
 			case Event::KeyPressed:
-				uint8_t key=keyCode(e.key);
-				if(key){
-					//limit buffer size to 32
-					if(key_buffer.size()<32){
-						key_buffer.push_back(key);
+				{
+					uint8_t key=keyCode(e.key);
+					if(key){
+						//limit buffer size to 32
+						if(key_buffer.size()<32){
+							key_buffer.push_back(key);
+						}
 					}
 				}
+				break;
+			case Event::Resized:
+				//window->setView(sf::View(sf::FloatRect(0, 0, e.size.width, e.size.height)));
 				break;
 			//default:
 			//	cout<<"[Event Manager] Received event of type "<<e.type<<endl;

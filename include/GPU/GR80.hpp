@@ -10,7 +10,7 @@ ZENITH_HEADER
 
 class GR80{
 public:
-	GR80(tgui::Canvas::Ptr canvas,Z80 *cpu);
+	GR80(tgui::Canvas::Ptr canvas,Z80 *cpu,tgui::Gui * gui,sf::RenderWindow * window);
 	~GR80();
 	void uploadSprite(uint16_t index,uint8_t * sprite,uint8_t transparent_color=0);
 	void drawSprite(uint16_t index,uint16_t x,uint16_t y);
@@ -22,11 +22,14 @@ public:
 private:
 	bool disable_sprites;
 	tgui::Canvas::Ptr canvas;
+	tgui::Gui * gui;
+	sf::RenderWindow * window;
 	Z80 *cpu;
 	sf::Color * palette;
 	//text printing
 	int canvas_y;
-	sf::Text lastMsg;
+	tgui::Label::Ptr lastMsg;
+	//sf::Text lastMsg;
 	//sprites
 	sf::Texture *texture_map;
 	sf::Sprite *sprite_map;

@@ -26,6 +26,7 @@ void Z80Controller(uint8_t value){
 				uint8_t * physical_address=Main::instance->cpu->ram->getBankFromAddress(virt_address)+(virt_address%0x4000);
 				word BC=Main::instance->cpu->getBC();
 				word DE=Main::instance->cpu->getDE();
+				std::cout << "Printing: "<<(char*)physical_address<<" to "<<(int)BC.B.h<<","<<(int)BC.B.l<<" with size"<<(int)DE.B.h<<"\n";
 				Main::instance->gpu->drawText((char*)physical_address,BC.B.h,BC.B.l,DE.B.h,DE.B.l);
 			}
 			break;

@@ -11,13 +11,12 @@ using sf::Image;
 
 ZENITH_HEADER
 
-GR80::GR80(tgui::Canvas::Ptr canvas,Z80* cpu,tgui::Gui * gui,sf::RenderWindow * window){
+GR80::GR80(tgui::Canvas::Ptr canvas,Z80* cpu,tgui::Gui * gui){
 	this->disable_sprites=false;
 	this->canvas=canvas;
 	this->cpu=cpu;
 	this->gui=gui;
-	this->window=window;
-	//lastMsg = 0;
+	lastMsg = 0;
 	palette=new Color[16]{
 		{0,0,0},{255,255,255},{255,0,0},{0,255,0},{0,0,255},{255,255,0},{255,0,255},{0,255,255},
 		{3,224,187},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
@@ -50,25 +49,15 @@ void GR80::drawText(string text,float x,float y,float size, uint8_t color){
 	tgui::Label::Ptr msg = tgui::Label::create(text);
 	msg->setPosition(x,y);
 	msg->getRenderer()->setTextColor(palette[color]);
-	msg->setTextSize(size);
 	gui->add(msg);
 	if(lastMsg)
 		gui->remove(lastMsg);
 	lastMsg = msg;
-	//const sf::Vector2u winSize = window->getSize();
-	//size = size * winSize.y;
-	//sf::Text message(text,*Main::instance->default_font,size);
-	//lastMsg=message;
-	//message.setFillColor(palette[color]);
-	//message.setPosition(x,y);
-	//message.setString(tgui::Text::wordWrap(256,message.getString(),*Main::instance->default_font,size,false));
-	//canvas->draw(message);
 }
 
 void GR80::appendText(string s){
-	//drawText(lastMsg.getString()+s,0,canvas_y,0.1f,1);
 	if (!lastMsg) {
-		drawText("",0,0,8,1);
+		drawText("",0,0,0,1);
 	}
 	lastMsg->setText(lastMsg->getText()+s);
 }
@@ -76,7 +65,6 @@ void GR80::appendText(string s){
 void GR80::clearText(){
 	if(lastMsg)
 		lastMsg->setText("");
-	//lastMsg.setString("");
 }
 
 void GR80::uploadSprite(uint16_t index,uint8_t * sprite,uint8_t transparent_color){

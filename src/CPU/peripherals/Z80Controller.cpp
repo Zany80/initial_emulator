@@ -1,5 +1,6 @@
 #include <main.hpp>
 #include <zenith80.hpp>
+#include <iostream>
 
 ZENITH_HEADER
 
